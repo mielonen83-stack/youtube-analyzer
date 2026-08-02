@@ -4,7 +4,7 @@ import pandas as pd
 from pytrends.request import TrendReq
 from fpdf import FPDF
 import urllib.parse
-import random
+from openai import OpenAI
 
 # Sivun asetukset
 st.set_page_config(
@@ -50,14 +50,14 @@ def get_competitor_videos(query):
     base_views = 120000
     for i, s in enumerate(suggestions[:5]):
         competitors.append({
-            "Title": f"The Story of {s.title()}",
-            "Channel": f"Music & Facts {i+1}",
+            "Title": f"The Complete Guide to {s.title()}",
+            "Channel": f"Creator Lab {i+1}",
             "Estimated Views": f"{base_views - (i * 15000):,} views",
             "Link": f"https://www.youtube.com/results?search_query={urllib.parse.quote(s)}"
         })
     if not competitors:
         competitors.append({
-            "Title": f"The Complete History of {query.title()}",
+            "Title": f"The Ultimate {query.title()} Masterclass",
             "Channel": "Pro Insights",
             "Estimated Views": "250,000 views",
             "Link": f"https://www.youtube.com/results?search_query={urllib.parse.quote(query)}"
@@ -65,7 +65,7 @@ def get_competitor_videos(query):
     return competitors
 
 # 4. PDF-raportin generointi Pro-käyttäjille
-def create_pdf_report(query, suggestions, angles):
+def create_pdf_report(query, suggestions, ai_titles):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", 'B', 16)
@@ -82,29 +82,29 @@ def create_pdf_report(query, suggestions, angles):
         
     pdf.ln(5)
     pdf.set_font("Arial", 'B', 12)
-    pdf.cell(200, 10, txt="2. Recommended Video Angles:", ln=True)
-    pdf.set_font("Arial", size=10)
-    for a in angles:
-        pdf.cell(200, 8, txt=f"* {a}", ln=True)
+    pdf.cell(200, 10, txt="2. AI Generated Content Preview:", ln=True)
+    pdf.set_font("Arial", size=9)
+    for line in ai_titles.split('\n')[:15]:
+        pdf.cell(200, 6, txt=line[:90], ln=True)
         
     return bytes(pdf.output())
 
 # Pääotsikko
 st.title("🔴 YouTube Keyword, Trend & AI Analyzer Pro")
-st.markdown("### All-in-One Suite for Modern Content Creators & Growth")
+st.markdown("### Powered by Real OpenAI Integration & Creator Suite")
 
 # Sivupalkki
 st.sidebar.header("Account & Settings")
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password", placeholder="sk-...")
+
+if st.sidebar.button("Toggle Pro Mode (Test)"):
+    st.session_state.is_pro = not st.session_state.is_pro
+    st.rerun()
+
 if st.session_state.is_pro:
-    st.sidebar.success("⭐ Pro Account Active (All features unlocked)")
-    if st.sidebar.button("Cancel Pro (Test)"):
-        st.session_state.is_pro = False
-        st.rerun()
+    st.sidebar.success("⭐ Pro Account Active")
 else:
     st.sidebar.info("Free Tier: 2 searches allowed")
-    if st.sidebar.button("Upgrade to Pro ($9/mo)"):
-        st.session_state.is_pro = True
-        st.rerun()
 
 st.sidebar.divider()
 st.sidebar.markdown("### Creator Settings")
@@ -114,9 +114,9 @@ video_length = st.sidebar.selectbox("Target Video Length", ["Shorts (< 1 min)", 
 FREE_LIMIT = 2
 if not st.session_state.is_pro and st.session_state.search_count >= FREE_LIMIT:
     st.error("🚨 Free search limit reached!")
-    st.warning("Upgrade to **Pro** in the sidebar for unlimited analytics, AI generation, and PDF reports.")
+    st.warning("Upgrade to Pro or toggle Pro mode in the sidebar to continue.")
 else:
-    query = st.text_input("Enter a niche or keyword (e.g., eppu normaali, python coding, fitness):", "")
+    query = st.text_input("Enter a niche, band, or keyword (e.g., eppu normaali, python coding, fitness):", "")
 
     if query:
         if not st.session_state.is_pro:
@@ -144,10 +144,6 @@ else:
                 st.success(f"Found {len(suggestions)} suggestions!")
                 for i, item in enumerate(suggestions, 1):
                     st.markdown(f"**{i}.** {item}")
-                
-                if st.session_state.is_pro:
-                    df_sug = pd.DataFrame({"Suggestion": suggestions})
-                    st.download_button("📥 Download Suggestions CSV", df_sug.to_csv(index=False).encode('utf-8'), f"suggestions_{query}.csv", "text/csv")
             else:
                 st.warning("No suggestions found.")
 
@@ -160,17 +156,12 @@ else:
             if trend_data is not None and not trend_data.empty:
                 st.line_chart(trend_data.set_index('date'))
                 st.success("Trend data loaded successfully!")
-                
-                if st.session_state.is_pro:
-                    st.download_button("📥 Download Trend Data CSV", trend_data.to_csv(index=False).encode('utf-8'), f"trends_{query}.csv", "text/csv")
             else:
                 st.info("No sufficient trend data available for this specific keyword right now.")
 
         # Välilehti 3: Kilpailija-analyysi
         with tab3:
             st.subheader("Top Competitor Content & Views")
-            st.write(f"Analyzed top performing videos matching **{query}** ({target_audience} target):")
-            
             competitors = get_competitor_videos(query)
             for comp in competitors:
                 with st.container():
@@ -178,68 +169,38 @@ else:
                     st.caption(f"Channel: {comp['Channel']} | Estimated Reach: **{comp['Estimated Views']}**")
                     st.divider()
 
+        # Apufunktio OpenAI kutsuille
+        def call_openai(prompt_text):
+            if not openai_api_key:
+                return "⚠️ Please enter your OpenAI API Key in the sidebar to generate AI content!"
+            try:
+                client = OpenAI(api_key=openai_api_key)
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": prompt_text}],
+                    temperature=0.7
+                )
+                return response.choices[0].message.content
+            except Exception as e:
+                return f"Error communicating with OpenAI: {e}"
+
         # Välilehti 4: AI Content & PDF Report
         with tab4:
-            st.subheader("🤖 AI-Powered Metadata & PDF Report")
-            q_cap = query.capitalize()
+            st.subheader("🤖 OpenAI-Powered Metadata & Strategy")
             
-            # Tarkistetaan onko kyseessä todennäköisesti bändi/artisti vai yleinen aihe
-            is_band = any(word in query.lower() for word in ['eppu', 'bändi', 'band', 'artist', 'music', 'musiikki', 'laulu', 'orchestra'])
+            if st.button("Generate AI Metadata 🚀"):
+                with st.spinner("OpenAI is crafting titles and descriptions..."):
+                    prompt = f"Create 4 catchy YouTube video titles, an optimized video description with timestamps, and recommended tags for the topic '{query}'. Target audience: {target_audience}. Video length: {video_length}."
+                    ai_metadata = call_openai(prompt)
+                    st.session_state['ai_metadata'] = ai_metadata
             
-            if is_band:
-                angles = [
-                    f"The Untold Story of {q_cap}: Rise to Legend Status",
-                    f"Ranking Every Album by {q_cap} from Worst to Best",
-                    f"Why {q_cap} Changed Finnish Music Forever",
-                    f"The Greatest Live Moments of {q_cap}"
-                ]
-                titles_text = f"""1. The Incredible Story of {q_cap} (Documentary)
-2. Ranking Every Album by {q_cap} (Worst to Best)
-3. Why {q_cap} Remains Iconic After All These Years
-4. The Masterpiece Songs of {q_cap} Explained"""
-                desc_text = f"""Dive deep into the legacy of {q_cap} tailored for {target_audience}. In this {video_length} video, we explore their history, best hits, and cultural impact.
-
-Timestamps:
-0:00 - Introduction to {q_cap}
-2:15 - The Early Years & Breakthrough
-6:30 - Legendary Albums & Hits
-12:00 - Legacy & Conclusion
-
-#eppunormaali #{query.replace(' ', '')} #FinnishMusic"""
-            else:
-                angles = [
-                    f"The Ultimate {target_audience} Guide to {q_cap} ({video_length})",
-                    f"I Tested {q_cap} For 30 Days As A Beginner",
-                    f"Top 5 Mistakes People Make With {q_cap}",
-                    f"Why Most Fail At {q_cap} (And How To Fix It)"
-                ]
-                titles_text = f"""1. The Truth About {q_cap} Nobody Is Telling You in 2026
-2. I Tried {q_cap} For 7 Days Straight (Shocking Results)
-3. How to Master {q_cap} Fast ({target_audience} Edition)
-4. Stop Making This HUGE Mistake With {q_cap}!"""
-                desc_text = f"""Welcome back to the channel! Today we explore {query} tailored for {target_audience}. In this {video_length} video, we break down everything step by step.
-
-Timestamps:
-0:00 - Introduction to {q_cap}
-1:30 - The #1 Biggest Mistake
-3:45 - Step-by-Step Walkthrough
-8:15 - Final Results & Summary
-
-#shorts #{query.replace(' ', '')} #{q_cap}Guide"""
-
-            st.markdown("### ✍️ Catchy Video Titles")
-            st.code(titles_text, language="text")
-
-            st.markdown("### 📄 Optimized Video Description")
-            st.code(desc_text, language="text")
-
-            st.markdown("### 🏷️ Recommended Tags")
-            st.info(f"{query}, {query} live, {query} history, best of {query}, {query} documentary, Finnish rock")
+            current_metadata = st.session_state.get('ai_metadata', "Click the button above to generate metadata using your OpenAI key.")
+            st.code(current_metadata, language="text")
 
             st.divider()
             st.subheader("📥 Export Professional PDF Report")
             if st.session_state.is_pro:
-                pdf_bytes = create_pdf_report(query, get_youtube_suggestions(query), angles)
+                pdf_bytes = create_pdf_report(query, get_youtube_suggestions(query), current_metadata)
                 st.download_button(
                     label="📄 Download Complete PDF Report",
                     data=pdf_bytes,
@@ -247,13 +208,11 @@ Timestamps:
                     mime="application/octet-stream"
                 )
             else:
-                st.warning("🔒 PDF export is available exclusively for **Pro** users. Upgrade in the sidebar to download full reports!")
+                st.warning("🔒 PDF export available for Pro users.")
 
         # Välilehti 5: Revenue Calculator
         with tab5:
             st.subheader("💰 Channel Revenue & Growth Estimator")
-            st.write("Estimate potential AdSense earnings and analyze growth milestones for your channel based on monthly views.")
-            
             monthly_views = st.slider("Estimated Monthly Views", 1000, 5000000, 50000, step=5000)
             cpm = st.slider("Estimated CPM ($ per 1,000 views)", 1.0, 25.0, 4.5)
             
@@ -263,72 +222,32 @@ Timestamps:
             col1, col2 = st.columns(2)
             col1.metric("Estimated Monthly AdSense", f"${monthly_revenue:,.2f}")
             col2.metric("Estimated Yearly AdSense", f"${yearly_revenue:,.2f}")
-            
-            st.info("💡 **Growth Tip:** To increase your CPM in the **" + query + "** niche, focus on long-form tutorials (8+ minutes) and target high-value audience segments.")
 
         # Välilehti 6: Viral Idea Generator
         with tab6:
-            st.subheader("🎲 Random Viral Video Concept Generator")
-            st.write(f"Need an instant spark for **{query}**? Generate a unique concept on demand:")
-            
-            if st.button("Generate Random Concept 🚀"):
-                hooks = ["I spent 100 hours researching", "Why everyone is wrong about", "The hidden history of", "Ranking the absolute best of"]
-                formats = ["Documentary / Essay", "Deep-Dive Review", "Tier List / Ranking", "Retrospective"]
-                thumbnails = ["Classic vintage photo with bold dramatic text", "Split screen comparison", "Minimalist artistic portrait with glowing outline"]
-                
-                h = random.choice(hooks)
-                f = random.choice(formats)
-                t = random.choice(thumbnails)
-                
-                st.success(f"**Generated Concept:** {h} {query.title()}")
-                st.write(f"- **Format:** {f}")
-                st.write(f"- **Thumbnail Idea:** {t}")
+            st.subheader("🎲 AI Viral Video Concept Generator")
+            if st.button("Generate AI Concept 💡"):
+                with st.spinner("Generating viral angle..."):
+                    concept_prompt = f"Give me 1 highly creative viral YouTube video concept, format, and thumbnail idea for the topic '{query}'. Keep it punchy."
+                    ai_concept = call_openai(concept_prompt)
+                    st.success(ai_concept)
             else:
-                st.caption("Click the button above to roll a fresh video concept!")
+                st.caption("Click to generate a unique concept via OpenAI.")
 
         # Välilehti 7: Script & SEO Suite
         with tab7:
             st.subheader("📝 AI Script Outline & Title SEO Scorecard")
             
-            st.markdown("### 1. Title SEO Score Analyzer")
-            test_title = st.text_input("Test your video title:", f"The Untold Story of {query.title()}")
+            test_title = st.text_input("Test your video title:", f"The Ultimate Guide to {query.title()}")
+            score = 70 if len(test_title) > 20 else 40
+            st.metric("Estimated SEO Score", f"{score} / 100")
             
-            score = 50
-            feedback = []
-            if len(test_title) < 20:
-                feedback.append("⚠️ Title is too short (aim for 40-60 characters).")
-                score -= 15
-            elif len(test_title) > 70:
-                feedback.append("⚠️ Title is too long and might get cut off on mobile.")
-                score -= 10
-            else:
-                feedback.append("✅ Optimal title length.")
-                score += 20
-                
-            if any(char.isdigit() for char in test_title):
-                feedback.append("✅ Contains numbers (great for click-through rate).")
-                score += 15
-            else:
-                feedback.append("💡 Consider adding a number (e.g., 'Top 5' or '2026') to boost CTR.")
-                
-            st.metric("Estimated SEO Score", f"{min(score, 100)} / 100")
-            for f_item in feedback:
-                st.write(f_item)
-                
             st.divider()
-            st.markdown("### 2. Instant Video Script Outline")
-            st.write(f"Standard structure for a **{video_length}** video about **{query}**:")
-            st.code(f"""[0:00 - 0:30] THE HOOK
-- Introduce {query} with an intriguing hook or surprising fact.
-- Grab the viewer's attention immediately.
-
-[0:30 - 2:00] BACKGROUND & CONTEXT
-- Set the stage and explain why {query} matters to {target_audience}.
-
-[2:00 - 8:00] DEEP DIVE / MAIN CONTENT
-- Break down the core aspects, history, or key milestones.
-- Keep the narrative engaging with clips or images.
-
-[8:00 - End] CONCLUSION & OUTRO
-- Summarize the final thoughts.
-- Ask viewers for their opinions in the comments and direct them to the next video.""", language="text")
+            st.markdown("### AI Script Outline")
+            if st.button("Generate Full Script Outline ✍️"):
+                with st.spinner("Writing script outline..."):
+                    script_prompt = f"Create a structured YouTube video script outline (Hook, Body, CTA) for a {video_length} video about '{query}' tailored for {target_audience}."
+                    ai_script = call_openai(script_prompt)
+                    st.code(ai_script, language="text")
+            else:
+                st.caption("Click above to generate a tailored script outline with OpenAI.")
