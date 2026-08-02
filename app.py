@@ -22,7 +22,7 @@ st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=T
 # Simulated Pro mode check
 is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
 
-# --- CREATOR SETTINGS (Sidebar options for length and audience) ---
+# --- CREATOR SETTINGS ---
 st.sidebar.markdown("---")
 st.sidebar.header("⚙️ Creator Settings")
 video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
@@ -41,10 +41,12 @@ with tab1:
     if st.button("Search Data"):
         if keyword:
             st.success(f"Found the following preliminary data for '{keyword}':")
+            
+            # Korjatut ja siistit estimaatti-laatikot (metrics)
             col1, col2, col3 = st.columns(3)
-            col1.metric("Estimated Searches / mo", "45,200", "+12%")
-            col2.metric("Competition", "Medium", "-5%")
-            col3.metric("Average RPM", "$4.50", "$0.2")
+            col1.metric(label="Estimated Searches / mo", value="45,200", delta="+12%")
+            col2.metric(label="Competition", value="Medium", delta="-5%", delta_color="inverse")
+            col3.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
             st.info("💡 Tip: Go to the 'AI Tools & Ideas' tab to generate AI titles and scripts!")
         else:
@@ -58,7 +60,6 @@ with tab2:
     if not client:
         st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
     else:
-        # Sub-selection for tools
         ai_tool_choice = st.selectbox("Select AI Feature:", ["Viral Idea Generator (Idea Machine)", "AI Metadata & Script"])
         
         if ai_tool_choice == "Viral Idea Generator (Idea Machine)":
