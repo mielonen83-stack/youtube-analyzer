@@ -15,12 +15,18 @@ except Exception:
 st.sidebar.header("🚀 Pro Version")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe payment link (Replace with your actual Stripe Payment Link URL)
+# Stripe payment link
 stripe_link = "https://buy.stripe.com/test_placeholder"
 st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=True)
 
-# Simulated Pro mode check (User can test by checking the box)
+# Simulated Pro mode check
 is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
+
+# --- CREATOR SETTINGS (Valikko vasemmalla pituuksille ja yleisölle!) ---
+st.sidebar.markdown("---")
+st.sidebar.header("⚙️ Creator Settings")
+video_length = st.sidebar.selectbox("Videon pituus / Tyyppi", ["Shorts (< 60 sek)", "Normaali video (8-15 min)", "Syväluotaus / Dokumentti (> 20 min)"])
+target_audience = st.sidebar.selectbox("Kohdeyleisö", ["Aloittelijat", "Edistyneet / Pro", "Viihde / Kaikki"])
 
 # --- MAIN MENU (Tabs) ---
 tab1, tab2, tab3 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator"])
@@ -47,6 +53,7 @@ with tab1:
 # --- TAB 2: AI Tools & Viral Ideas ---
 with tab2:
     st.title("🤖 AI-Powered Tools")
+    st.write(f"Nykyiset asetukset: **{video_length}** | Kohdeyleisö: **{target_audience}**")
     
     if not client:
         st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
@@ -70,7 +77,7 @@ with tab2:
                                 model="gpt-4o",
                                 messages=[
                                     {"role": "system", "content": "You are a top-tier YouTube strategist."},
-                                    {"role": "user", "content": f"Create 5 highly engaging and original viral video concepts for the niche '{niche}'. Give each idea a catchy title and a short explanation of why it would work."}
+                                    {"role": "user", "content": f"Create 5 highly engaging viral video concepts for the niche '{niche}' tailored for a {video_length} video targeting {target_audience}. Give each idea a catchy title and a short explanation."}
                                 ],
                                 temperature=0.7
                             )
@@ -95,7 +102,7 @@ with tab2:
                                 model="gpt-4o",
                                 messages=[
                                     {"role": "system", "content": "You are a professional YouTube scriptwriter."},
-                                    {"role": "user", "content": f"Create 3 click-worthy titles, an engaging description, and a short video introduction (hook) for the video '{video_topic}'."}
+                                    {"role": "user", "content": f"Create 3 click-worthy titles, an engaging description, and a short video introduction (hook) for a {video_length} video about '{video_topic}' targeted at {target_audience}."}
                                 ],
                                 temperature=0.7
                             )
