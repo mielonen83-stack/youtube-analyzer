@@ -1,145 +1,145 @@
 import streamlit as st
 from openai import OpenAI
 
-# Sivuston asetukset
+# Page configuration
 st.set_page_config(page_title="YouTube Pro Analyzer", page_icon="🎬", layout="wide")
 
-# Haetaan OpenAI API-avain Streamlitin Secretsistä turvallisesti
+# Fetch OpenAI API key securely from Streamlit Secrets
 try:
     openai_api_key = st.secrets["OPENAI_API_KEY"]
     client = OpenAI(api_key=openai_api_key)
 except Exception:
     client = None
 
-# --- SIVUPALKKI: Hallinta & Maksu ---
-st.sidebar.header("🚀 Pro-versio")
-st.sidebar.write("Avaa kaikki tekoälytyökalut ja rajoittamattomat haut!")
+# --- SIDEBAR: Management & Payments ---
+st.sidebar.header("🚀 Pro Version")
+st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe-maksulinkki (Vaihda tähän oma oikea Stripe Payment Link -osoitteesi)
+# Stripe payment link (Replace with your actual Stripe Payment Link URL)
 stripe_link = "https://buy.stripe.com/test_placeholder"
-st.sidebar.markdown(f"[Osta Pro-oikeudet (9€)]({stripe_link})", unsafe_allow_html=True)
+st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=True)
 
-# Simuloitu Pro-tilan tarkistus (Käyttäjä voi testata laittamalla rasti)
-is_pro = st.sidebar.checkbox("Olen maksanut Pro-version (Testitila)")
+# Simulated Pro mode check (User can test by checking the box)
+is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
 
-# --- PÄÄVALIKKO (Välilehdet) ---
-tab1, tab2, tab3 = st.tabs(["📊 Perushaut & Trendit", "✨ AI Työkalut & Ideat", "🎯 Pienoiskuvat (Thumbnails)"])
+# --- MAIN MENU (Tabs) ---
+tab1, tab2, tab3 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator"])
 
-# --- VÄLILEHTI 1: Perushaut & Trendit ---
+# --- TAB 1: Basic Searches & Trends ---
 with tab1:
-    st.title("🎬 YouTube Sisällöntuottajan Työkalu")
-    st.write("Hae hakusanoja, tutki trendejä ja arvioi tuottoja ilmaiseksi.")
+    st.title("🎬 YouTube Content Creator Tool")
+    st.write("Search keywords, explore trends, and estimate earnings for free.")
     
-    keyword = st.text_input("Syötä hakusana tai aihe (esim. pelit, keittiö):")
+    keyword = st.text_input("Enter a keyword or topic (e.g., gaming, cooking):")
     
-    if st.button("Hae tiedot"):
+    if st.button("Search Data"):
         if keyword:
-            st.success(f"Hakusanalle '{keyword}' löytyi seuraavat alustavat tiedot:")
+            st.success(f"Found the following preliminary data for '{keyword}':")
             col1, col2, col3 = st.columns(3)
-            col1.metric("Arvioidut haut / kk", "45,200", "+12%")
-            col2.metric("Kilpailu", "Keskitaso", "-5%")
-            col3.metric("Keskimääräinen RPM", "4.50 €", "0.2 €")
+            col1.metric("Estimated Searches / mo", "45,200", "+12%")
+            col2.metric("Competition", "Medium", "-5%")
+            col3.metric("Average RPM", "$4.50", "$0.2")
             
-            st.info("💡 Vinkki: Siirry 'AI Työkalut' -välilehdelle luodaksesi tekoälyllä otsikoita ja skriptejä!")
+            st.info("💡 Tip: Go to the 'AI Tools & Ideas' tab to generate AI titles and scripts!")
         else:
-            st.warning("Kirjoita ensin hakusana.")
+            st.warning("Please enter a keyword first.")
 
-# --- VÄLILEHTI 2: AI Työkalut & Viraaliideat ---
+# --- TAB 2: AI Tools & Viral Ideas ---
 with tab2:
-    st.title("🤖 Tekoälypohjaiset Työkalut")
+    st.title("🤖 AI-Powered Tools")
     
     if not client:
-        st.error("OpenAI API-avain puuttuu! Aseta se Streamlit Cloudin Secrets-asetuksiin.")
+        st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
     else:
-        # Alavalinta työkaluille
-        ai_tool_choice = st.selectbox("Valitse tekoälytoiminto:", ["Viraaliideoiden Generaattori (Idea Machine)", "AI Metatiedot & Skripti"])
+        # Sub-selection for tools
+        ai_tool_choice = st.selectbox("Select AI Feature:", ["Viral Idea Generator (Idea Machine)", "AI Metadata & Script"])
         
-        if ai_tool_choice == "Viraaliideoiden Generaattori (Idea Machine)":
-            st.subheader("💡 Viraaliideoiden Generaattori")
-            niche = st.text_input("Mikä on kanavasi aihepiiri/niche? (esim. Talous, Pelaaminen, Hyvinvointi)")
+        if ai_tool_choice == "Viral Idea Generator (Idea Machine)":
+            st.subheader("💡 Viral Idea Generator")
+            niche = st.text_input("What is your channel niche/topic? (e.g., Finance, Gaming, Wellness)")
             
-            if st.button("Generoi viraaliideoita"):
+            if st.button("Generate Viral Ideas"):
                 if not is_pro:
-                    st.warning("🔒 Tämä on Pro-ominaisuus. Osta Pro-oikeudet sivupalkin kautta tai laita testitila päälle!")
+                    st.warning("🔒 This is a Pro feature. Buy Pro access via the sidebar or enable test mode!")
                 elif not niche:
-                    st.warning("Kirjoita ensin aihepiiri.")
+                    st.warning("Please enter a niche first.")
                 else:
-                    with st.spinner("Tekoäly keittelee viraaliideoita..."):
+                    with st.spinner("AI is brainstorming viral ideas..."):
                         try:
                             response = client.chat.completions.create(
                                 model="gpt-4o",
                                 messages=[
-                                    {"role": "system", "content": "Olet huippuluokan YouTube-strategi."},
-                                    {"role": "user", "content": f"Luo 5 erittäin koukuttavaa ja omaperäistä viraaliidea-aihiota aiheelle '{niche}'. Anna jokaiselle idealle catchy otsikko ja lyhyt perustelu miksi se toimisi."}
+                                    {"role": "system", "content": "You are a top-tier YouTube strategist."},
+                                    {"role": "user", "content": f"Create 5 highly engaging and original viral video concepts for the niche '{niche}'. Give each idea a catchy title and a short explanation of why it would work."}
                                 ],
                                 temperature=0.7
                             )
-                            st.success("Viraaliideat luotu onnistuneesti!")
+                            st.success("Viral ideas generated successfully!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
-                            st.error(f"Virhe tekoälypyynnössä: {e}")
+                            st.error(f"Error in AI request: {e}")
 
         else:
-            st.subheader("✍️ AI Metatiedot & Käsikirjoitus")
-            video_topic = st.text_input("Videon tarkka aihe:")
+            st.subheader("✍️ AI Metadata & Scriptwriter")
+            video_topic = st.text_input("Exact video topic:")
             
-            if st.button("Luo otsikot ja skripti"):
+            if st.button("Generate Titles and Script"):
                 if not is_pro:
-                    st.warning("🔒 Tämä on Pro-ominaisuus. Osta Pro-oikeudet sivupalkin kautta!")
+                    st.warning("🔒 This is a Pro feature. Buy Pro access via the sidebar!")
                 elif not video_topic:
-                    st.warning("Syötä videon aihe.")
+                    st.warning("Please enter a video topic.")
                 else:
-                    with st.spinner("Kirjoitetaan sisältöä..."):
+                    with st.spinner("Writing content..."):
                         try:
                             response = client.chat.completions.create(
                                 model="gpt-4o",
                                 messages=[
-                                    {"role": "system", "content": "Olet ammattimainen YouTube-käsikirjoittaja."},
-                                    {"role": "user", "content": f"Luo videolle '{video_topic}' 3 klikkausystävällistä otsikkoa, houkutteleva kuvaus ja lyhyt videon aloitus (hook)."}
+                                    {"role": "system", "content": "You are a professional YouTube scriptwriter."},
+                                    {"role": "user", "content": f"Create 3 click-worthy titles, an engaging description, and a short video introduction (hook) for the video '{video_topic}'."}
                                 ],
                                 temperature=0.7
                             )
-                            st.success("Metatiedot ja skripti luotu onnistuneesti!")
+                            st.success("Metadata and script generated successfully!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
-                            st.error(f"Virhe: {e}")
+                            st.error(f"Error: {e}")
 
-# --- VÄLILEHTI 3: Thumbnail-ideoiden kuvailija ---
+# --- TAB 3: Thumbnail Concept Generator ---
 with tab3:
-    st.title("🎯 Pienoiskuva-suunnittelija (Thumbnail Generator)")
-    st.write("Saat tekoälyltä tarkan visuaalisen reseptin sille, millainen pikkukuva pysäyttää selaamisen.")
+    st.title("🎯 Thumbnail Concept Generator")
+    st.write("Get a precise visual recipe from AI for a thumbnail that stops the scroll.")
     
-    thumb_topic = st.text_input("Mikä on videon pääidea tai yllättävä käänne?")
-    thumb_style = st.selectbox("Visuaalinen tyyli", ["Shokeeraava / Yllättävä", "Minimalistinen ja tyylikäs", "Meemi / Hauska", "Vertailu (Ennen vs Jälkeen)"])
+    thumb_topic = st.text_input("What is the core idea or surprising twist of the video?")
+    thumb_style = st.selectbox("Visual Style", ["Shocking / Surprising", "Minimalist & Clean", "Meme / Funny", "Comparison (Before vs After)"])
     
-    if st.button("Generoi Thumbnail-ideat"):
+    if st.button("Generate Thumbnail Ideas"):
         if not is_pro:
-            st.warning("🔒 Tämä vaatii Pro-version!")
+            st.warning("🔒 This requires a Pro version!")
         elif not thumb_topic:
-            st.warning("Syötä ensin videon idea.")
+            st.warning("Please enter your video idea first.")
         elif not client:
-            st.error("OpenAI avain puuttuu asetuksista.")
+            st.error("OpenAI key is missing from settings.")
         else:
-            with st.spinner("Suunnitellaan klikkausmagneetteja..."):
+            with st.spinner("Designing click magnets..."):
                 try:
                     prompt = f"""
-                    Toimi YouTube-pienoiskuva-asiantuntijana. Luo 3 erilaista visuaalista ideaa pikkukuvalle (thumbnail) aiheesta: '{thumb_topic}'.
-                    Valittu tyyli: {thumb_style}.
-                    Jokaisesta ideasta tulee ilmetä:
-                    1. Visuaalinen sommittelu ja tausta
-                    2. Teksti kuvassa (maksimissaan 3 sanaa, isot kirjaimet)
-                    3. Päävärit
+                    Act as a YouTube thumbnail expert. Create 3 different visual ideas for a thumbnail based on the topic: '{thumb_topic}'.
+                    Selected style: {thumb_style}.
+                    Each idea must specify:
+                    1. Visual composition and background
+                    2. Text on image (maximum 3 words, all caps)
+                    3. Primary colors
                     """
                     response = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
-                            {"role": "system", "content": "Olet graafinen suunnittelija ja YouTube CTR-ekspertti."},
+                            {"role": "system", "content": "You are a graphic designer and YouTube CTR expert."},
                             {"role": "user", "content": prompt}
                         ],
                         temperature=0.7
                     )
                     tulo = response.choices[0].message.content
-                    st.success("Thumbnail-ideat luotu onnistuneesti!")
+                    st.success("Thumbnail ideas generated successfully!")
                     st.write(tulo)
                 except Exception as e:
-                    st.error(f"Virhe: {e}")
+                    st.error(f"Error: {e}")
