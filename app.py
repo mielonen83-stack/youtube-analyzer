@@ -64,7 +64,7 @@ def get_competitor_videos(query):
         })
     return competitors
 
-# 4. PDF-raportin generointi Pro-käyttäjille
+# 4. PDF-raportin generointi (Unicode-turvallisella koodauksella)
 def create_pdf_report(query, suggestions, ai_titles):
     pdf = FPDF()
     pdf.add_page()
@@ -78,14 +78,16 @@ def create_pdf_report(query, suggestions, ai_titles):
     pdf.cell(200, 10, txt="1. Top Autocomplete Keywords:", ln=True)
     pdf.set_font("Arial", size=10)
     for s in suggestions[:10]:
-        pdf.cell(200, 8, txt=f"- {s}", ln=True)
+        clean_s = s.encode('latin-1', 'ignore').decode('latin-1')
+        pdf.cell(200, 8, txt=f"- {clean_s}", ln=True)
         
     pdf.ln(5)
     pdf.set_font("Arial", 'B', 12)
     pdf.cell(200, 10, txt="2. AI Generated Content Preview:", ln=True)
     pdf.set_font("Arial", size=9)
     for line in ai_titles.split('\n')[:15]:
-        pdf.cell(200, 6, txt=line[:90], ln=True)
+        clean_line = line.encode('latin-1', 'ignore').decode('latin-1')
+        pdf.cell(200, 6, txt=clean_line[:90], ln=True)
         
     return bytes(pdf.output())
 
