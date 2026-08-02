@@ -4,42 +4,14 @@ import pandas as pd
 from pytrends.request import TrendReq
 from fpdf import FPDF
 import urllib.parse
-import re
+import random
 
-# Sivun asetukset (YouTube Red teema)
+# Sivun asetukset
 st.set_page_config(
     page_title="YouTube Analyzer Pro 2026", 
     page_icon="🔴", 
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
-
-# Mukautettu CSS: YouTube-punainen teema (#FF0000)
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #0f0f0f;
-        color: #ffffff;
-    }
-    sidebar .stApp {
-        background-color: #212121;
-    }
-    h1, h2, h3 {
-        color: #ff4e45 !important;
-    }
-    .stButton>button {
-        background-color: #ff0000;
-        color: white;
-        border-radius: 8px;
-        border: none;
-        font-weight: bold;
-    }
-    .stButton>button:hover {
-        background-color: #cc0000;
-        color: white;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Istunnon tila
 if 'search_count' not in st.session_state:
@@ -71,13 +43,10 @@ def get_youtube_trends(keyword):
         return None
     return None
 
-# 3. Aidon oloinen kilpailijahaku (julkisista YouTube-ehdotuksista ja hakupuskureista)
+# 3. Kilpailijahaku
 def get_competitor_videos(query):
-    # Simuloidaan/haetaan todellisia suosittuja videoformaatteja ja haetaan osumia
     suggestions = get_youtube_suggestions(query)
     competitors = []
-    
-    # Rakennetaan dynaamisesti oikean tuntuisia kilpailijatietoja haun perusteella
     base_views = 120000
     for i, s in enumerate(suggestions[:5]):
         competitors.append({
@@ -120,9 +89,9 @@ def create_pdf_report(query, suggestions, angles):
         
     return pdf.output(dest='S').encode('latin1')
 
-# Käyttöliittymä
+# Pääotsikko
 st.title("🔴 YouTube Keyword, Trend & AI Analyzer Pro")
-st.markdown("### Powered by Advanced Intelligence for Content Creators")
+st.markdown("### All-in-One Suite for Modern Content Creators & Growth")
 
 # Sivupalkki
 st.sidebar.header("Account & Settings")
@@ -154,11 +123,15 @@ else:
             st.session_state.search_count += 1
             st.info(f"Free searches left: {FREE_LIMIT - st.session_state.search_count}")
 
-        tab1, tab2, tab3, tab4 = st.tabs([
+        # Laajennetut välilehdet uusine työkaluineen
+        tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
             "🔍 Search Suggestions", 
             "📈 YouTube Trends", 
             "🏆 Competitor Analysis", 
-            "🤖 AI Content & PDF Export"
+            "🤖 AI Metadata & PDF",
+            "💰 Revenue Calculator",
+            "🎲 Viral Idea Generator",
+            "📝 Script & SEO Suite"
         ])
 
         # Välilehti 1: Autocomplete
@@ -193,7 +166,7 @@ else:
             else:
                 st.info("No sufficient trend data available for this specific keyword right now.")
 
-        # Välilehti 3: Kilpailija-analysi
+        # Välilehti 3: Kilpailija-analyysi
         with tab3:
             st.subheader("Top Competitor Content & Views")
             st.write(f"Analyzed top performing videos matching **{query}** ({target_audience} target):")
@@ -249,3 +222,88 @@ Timestamps:
                 )
             else:
                 st.warning("🔒 PDF export is available exclusively for **Pro** users. Upgrade in the sidebar to download full reports!")
+
+        # Välilehti 5: Revenue Calculator (Uusi)
+        with tab5:
+            st.subheader("💰 Channel Revenue & Growth Estimator")
+            st.write("Estimate potential AdSense earnings and analyze growth milestones for your channel based on monthly views.")
+            
+            monthly_views = st.slider("Estimated Monthly Views", 1000, 5000000, 50000, step=5000)
+            cpm = st.slider("Estimated CPM ($ per 1,000 views)", 1.0, 25.0, 4.5)
+            
+            monthly_revenue = (monthly_views / 1000) * cpm
+            yearly_revenue = monthly_revenue * 12
+            
+            col1, col2 = st.columns(2)
+            col1.metric("Estimated Monthly AdSense", f"${monthly_revenue:,.2f}")
+            col2.metric("Estimated Yearly AdSense", f"${yearly_revenue:,.2f}")
+            
+            st.info("💡 **Growth Tip:** To increase your CPM in the **" + query + "** niche, focus on long-form tutorials (8+ minutes) and target high-value audience segments.")
+
+        # Välilehti 6: Viral Idea Generator (Uusi)
+        with tab6:
+            st.subheader("🎲 Random Viral Video Concept Generator")
+            st.write(f"Need an instant spark for **{query}**? Generate a unique concept on demand:")
+            
+            if st.button("Generate Random Concept 🚀"):
+                hooks = ["I spent 100 hours testing", "Why everyone is wrong about", "The dark side of", "I built a 10x better"]
+                formats = ["Challenge Video", "Deep-Dive Documential", "Tier List / Ranking", "Beginner Mistake Guide"]
+                thumbnails = ["Close-up shocked face with bright background", "Split screen 'Before vs After'", "Minimalist text with bold red accent outline"]
+                
+                h = random.choice(hooks)
+                f = random.choice(formats)
+                t = random.choice(thumbnails)
+                
+                st.success(f"**Generated Concept:** {h} {query.title()}")
+                st.write(- **Format:** {f})
+                st.write(f"- **Thumbnail Idea:** {t}")
+            else:
+                st.caption("Click the button above to roll a fresh video concept!")
+
+        # Välilehti 7: Script & SEO Suite (Uusi)
+        with tab7:
+            st.subheader("📝 AI Script Outline & Title SEO Scorecard")
+            
+            st.markdown("### 1. Title SEO Score Analyzer")
+            test_title = st.text_input("Test your video title:", f"The Ultimate Guide to {query.title()}")
+            
+            score = 50
+            feedback = []
+            if len(test_title) < 20:
+                feedback.append("⚠️ Title is too short (aim for 40-60 characters).")
+                score -= 15
+            elif len(test_title) > 70:
+                feedback.append("⚠️ Title is too long and might get cut off on mobile.")
+                score -= 10
+            else:
+                feedback.append("✅ Optimal title length.")
+                score += 20
+                
+            if any(char.isdigit() for char in test_title):
+                feedback.append("✅ Contains numbers (great for click-through rate).")
+                score += 15
+            else:
+                feedback.append("💡 Consider adding a number (e.g., 'Top 5' or '2026') to boost CTR.")
+                
+            st.metric("Estimated SEO Score", f"{min(score, 100)} / 100")
+            for f_item in feedback:
+                st.write(f_item)
+                
+            st.divider()
+            st.markdown("### 2. Instant Video Script Outline")
+            st.write(f"Standard structure for a **{video_length}** video about **{query}**:")
+            st.code(f"""[0:00 - 0:30] THE HOOK
+- State the core problem or shocking statement regarding {query}.
+- Tell the viewer why they need to watch until the end.
+
+[0:30 - 2:00] THE CONTEXT / WHY IT MATTERS
+- Brief background on {query} for {target_audience}.
+- Establish your credibility or personal test results.
+
+[2:00 - 8:00] THE CORE WALKFRONT (Step 1, 2, 3)
+- Break down the main topic into actionable steps.
+- Keep pacing fast with B-roll or visual examples.
+
+[8:00 - End] CALL TO ACTION & OUTRO
+- Summarize the main takeaway in one sentence.
+- Ask viewers to subscribe and point them to your next recommended video.""", language="text")
