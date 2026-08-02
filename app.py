@@ -70,10 +70,11 @@ with tab2:
                                 model="gpt-4o",
                                 messages=[
                                     {"role": "system", "content": "Olet huippuluokan YouTube-strategi."},
-                                    {"role": "user", "content": f"Luo 5 erittäin koukuttavaa ja omaperäistä viraaliidea-aihiota aiheelle '{niche}'. Anna jokaiselle ideallecatchy otsikko ja lyhyt perustelu miksi se toimisi."}
+                                    {"role": "user", "content": f"Luo 5 erittäin koukuttavaa ja omaperäistä viraaliidea-aihiota aiheelle '{niche}'. Anna jokaiselle idealle catchy otsikko ja lyhyt perustelu miksi se toimisi."}
                                 ],
                                 temperature=0.7
                             )
+                            st.success("Viraaliideat luotu onnistuneesti!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
                             st.error(f"Virhe tekoälypyynnössä: {e}")
@@ -98,6 +99,7 @@ with tab2:
                                 ],
                                 temperature=0.7
                             )
+                            st.success("Metatiedot ja skripti luotu onnistuneesti!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
                             st.error(f"Virhe: {e}")
@@ -136,7 +138,8 @@ with tab3:
                         ],
                         temperature=0.7
                     )
-                    st.success tulo = response.choices[0].message.content
+                    tulo = response.choices[0].message.content
+                    st.success("Thumbnail-ideat luotu onnistuneesti!")
                     st.write(tulo)
                 except Exception as e:
                     st.error(f"Virhe: {e}")
