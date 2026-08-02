@@ -19,6 +19,12 @@ if 'search_count' not in st.session_state:
 if 'is_pro' not in st.session_state:
     st.session_state.is_pro = False
 
+# Haetaan keskitetty OpenAI API-avain turvallisesti Streamlitin salaisuuksista
+try:
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+except:
+    OPENAI_API_KEY = None
+
 # 1. Autocomplete-haku
 def get_youtube_suggestions(query):
     url = f"https://suggestqueries.google.com/complete/search?client=firefox&q={urllib.parse.quote(query)}"
@@ -64,7 +70,7 @@ def get_competitor_videos(query):
         })
     return competitors
 
-# 4. PDF-raportin generointi (Unicode-turvallisella koodauksella)
+# 4. PDF-raportin generointi
 def create_pdf_report(query, suggestions, ai_titles):
     pdf = FPDF()
     pdf.add_page()
@@ -93,20 +99,39 @@ def create_pdf_report(query, suggestions, ai_titles):
 
 # Pääotsikko
 st.title("🔴 YouTube Keyword, Trend & AI Analyzer Pro")
-st.markdown("### Powered by Real OpenAI Integration & Creator Suite")
+st.markdown("### Powered by Centralized AI & Creator Suite")
 
 # Sivupalkki
-st.sidebar.header("Account & Settings")
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password", placeholder="sk-...")
+st.sidebar.header("Account & Subscription")
 
-if st.sidebar.button("Toggle Pro Mode (Test)"):
-    st.session_state.is_pro = not st.session_state.is_pro
-    st.rerun()
+# Tarkistetaan palasiko käyttäjä maksun jälkeen (Stripe Integration Hook -simulaatio)
+query_params = st.query_params
+if "success" in query_params:
+    st.session_state.is_pro = True
 
 if st.session_state.is_pro:
-    st.sidebar.success("⭐ Pro Account Active")
+    st.sidebar.success("⭐ Pro Subscription Active")
+    if st.sidebar.button("Simulate Logout / Cancel"):
+        st.session_state.is_pro = False
+        st.rerun()
 else:
-    st.sidebar.info("Free Tier: 2 searches allowed")
+    st.sidebar.info("Free Tier: Limited features")
+    st.sidebar.markdown("### Upgrade to Pro ($9/mo)")
+    
+    # Esimerkki Stripe-maksulinkistä (vaihda tähän oma Stripen Payment Linkisi)
+    stripe_checkout_url = "https://buy.stripe.com/test_placeholder"
+    
+    st.sidebar.markdown(f"""
+        <a href="{stripe_checkout_url}" target="_blank">
+            <button style="background-color:#FF4B4B; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; width:100%; font-weight:bold;">
+                ⚡ Unlock Pro Features
+            </button>
+        </a>
+    """, unsafe_allow_html=True)
+    
+    if st.sidebar.button("Test Enable Pro (Demo Mode)"):
+        st.session_state.is_pro = True
+        st.rerun()
 
 st.sidebar.divider()
 st.sidebar.markdown("### Creator Settings")
@@ -116,7 +141,7 @@ video_length = st.sidebar.selectbox("Target Video Length", ["Shorts (< 1 min)", 
 FREE_LIMIT = 2
 if not st.session_state.is_pro and st.session_state.search_count >= FREE_LIMIT:
     st.error("🚨 Free search limit reached!")
-    st.warning("Upgrade to Pro or toggle Pro mode in the sidebar to continue.")
+    st.warning("Upgrade to **Pro** in the sidebar to get unlimited AI generation and deep analytics.")
 else:
     query = st.text_input("Enter a niche, band, or keyword (e.g., eppu normaali, python coding, fitness):", "")
 
@@ -171,12 +196,12 @@ else:
                     st.caption(f"Channel: {comp['Channel']} | Estimated Reach: **{comp['Estimated Views']}**")
                     st.divider()
 
-        # Apufunktio OpenAI kutsuille
+        # Apufunktio keskitetylle OpenAI-kutsulle
         def call_openai(prompt_text):
-            if not openai_api_key:
-                return "⚠️ Please enter your OpenAI API Key in the sidebar to generate AI content!"
+            if not OPENAI_API_KEY:
+                return "⚠️ OpenAI API key is missing on the server backend configuration!"
             try:
-                client = OpenAI(api_key=openai_api_key)
+                client = OpenAI(api_key=OPENAI_API_KEY)
                 response = client.chat.completions.create(
                     model="gpt-4o-mini",
                     messages=[{"role": "user", "content": prompt_text}],
@@ -188,20 +213,20 @@ else:
 
         # Välilehti 4: AI Content & PDF Report
         with tab4:
-            st.subheader("🤖 OpenAI-Powered Metadata & Strategy")
+            st.subheader("🤖 AI-Powered Metadata & Strategy")
             
-            if st.button("Generate AI Metadata 🚀"):
-                with st.spinner("OpenAI is crafting titles and descriptions..."):
-                    prompt = f"Create 4 catchy YouTube video titles, an optimized video description with timestamps, and recommended tags for the topic '{query}'. Target audience: {target_audience}. Video length: {video_length}."
-                    ai_metadata = call_openai(prompt)
-                    st.session_state['ai_metadata'] = ai_metadata
-            
-            current_metadata = st.session_state.get('ai_metadata', "Click the button above to generate metadata using your OpenAI key.")
-            st.code(current_metadata, language="text")
-
-            st.divider()
-            st.subheader("📥 Export Professional PDF Report")
             if st.session_state.is_pro:
+                if st.button("Generate AI Metadata 🚀"):
+                    with st.spinner("OpenAI is crafting titles and descriptions..."):
+                        prompt = f"Create 4 catchy YouTube video titles, an optimized video description with timestamps, and recommended tags for the topic '{query}'. Target audience: {target_audience}. Video length: {video_length}."
+                        ai_metadata = call_openai(prompt)
+                        st.session_state['ai_metadata'] = ai_metadata
+                
+                current_metadata = st.session_state.get('ai_metadata', "Click the button above to generate metadata.")
+                st.code(current_metadata, language="text")
+
+                st.divider()
+                st.subheader("📥 Export Professional PDF Report")
                 pdf_bytes = create_pdf_report(query, get_youtube_suggestions(query), current_metadata)
                 st.download_button(
                     label="📄 Download Complete PDF Report",
@@ -210,7 +235,7 @@ else:
                     mime="application/octet-stream"
                 )
             else:
-                st.warning("🔒 PDF export available for Pro users.")
+                st.warning("🔒 AI Metadata generation and PDF exports are exclusive **Pro** features. Upgrade in the sidebar to unlock!")
 
         # Välilehti 5: Revenue Calculator
         with tab5:
@@ -228,13 +253,16 @@ else:
         # Välilehti 6: Viral Idea Generator
         with tab6:
             st.subheader("🎲 AI Viral Video Concept Generator")
-            if st.button("Generate AI Concept 💡"):
-                with st.spinner("Generating viral angle..."):
-                    concept_prompt = f"Give me 1 highly creative viral YouTube video concept, format, and thumbnail idea for the topic '{query}'. Keep it punchy."
-                    ai_concept = call_openai(concept_prompt)
-                    st.success(ai_concept)
+            if st.session_state.is_pro:
+                if st.button("Generate AI Concept 💡"):
+                    with st.spinner("Generating viral angle..."):
+                        concept_prompt = f"Give me 1 highly creative viral YouTube video concept, format, and thumbnail idea for the topic '{query}'. Keep it punchy."
+                        ai_concept = call_openai(concept_prompt)
+                        st.success(ai_concept)
+                else:
+                    st.caption("Click to generate a unique concept via OpenAI.")
             else:
-                st.caption("Click to generate a unique concept via OpenAI.")
+                st.warning("🔒 Upgrade to Pro to access the Viral Idea Generator.")
 
         # Välilehti 7: Script & SEO Suite
         with tab7:
@@ -246,10 +274,13 @@ else:
             
             st.divider()
             st.markdown("### AI Script Outline")
-            if st.button("Generate Full Script Outline ✍️"):
-                with st.spinner("Writing script outline..."):
-                    script_prompt = f"Create a structured YouTube video script outline (Hook, Body, CTA) for a {video_length} video about '{query}' tailored for {target_audience}."
-                    ai_script = call_openai(script_prompt)
-                    st.code(ai_script, language="text")
+            if st.session_state.is_pro:
+                if st.button("Generate Full Script Outline ✍️"):
+                    with st.spinner("Writing script outline..."):
+                        script_prompt = f"Create a structured YouTube video script outline (Hook, Body, CTA) for a {video_length} video about '{query}' tailored for {target_audience}."
+                        ai_script = call_openai(script_prompt)
+                        st.code(ai_script, language="text")
+                else:
+                    st.caption("Click above to generate a tailored script outline.")
             else:
-                st.caption("Click above to generate a tailored script outline with OpenAI.")
+                st.warning("🔒 Upgrade to Pro to generate complete script outlines.")
