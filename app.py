@@ -22,11 +22,11 @@ st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=T
 # Simulated Pro mode check
 is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
 
-# --- CREATOR SETTINGS (Valikko vasemmalla pituuksille ja yleisölle!) ---
+# --- CREATOR SETTINGS (Sidebar options for length and audience) ---
 st.sidebar.markdown("---")
 st.sidebar.header("⚙️ Creator Settings")
-video_length = st.sidebar.selectbox("Videon pituus / Tyyppi", ["Shorts (< 60 sek)", "Normaali video (8-15 min)", "Syväluotaus / Dokumentti (> 20 min)"])
-target_audience = st.sidebar.selectbox("Kohdeyleisö", ["Aloittelijat", "Edistyneet / Pro", "Viihde / Kaikki"])
+video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
+target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- MAIN MENU (Tabs) ---
 tab1, tab2, tab3 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator"])
@@ -53,7 +53,7 @@ with tab1:
 # --- TAB 2: AI Tools & Viral Ideas ---
 with tab2:
     st.title("🤖 AI-Powered Tools")
-    st.write(f"Nykyiset asetukset: **{video_length}** | Kohdeyleisö: **{target_audience}**")
+    st.write(f"Current Settings: **{video_length}** | Target Audience: **{target_audience}**")
     
     if not client:
         st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
