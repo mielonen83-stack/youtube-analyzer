@@ -16,7 +16,7 @@ st.sidebar.header("🚀 Pro Version")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
 # Stripe payment link
-stripe_link = "https://buy.stripe.com/test_placeholder"
+stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=True)
 
 # Simulated Pro mode check
