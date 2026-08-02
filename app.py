@@ -123,7 +123,7 @@ else:
             st.session_state.search_count += 1
             st.info(f"Free searches left: {FREE_LIMIT - st.session_state.search_count}")
 
-        # Laajennetut välilehdet uusine työkaluineen
+        # Välilehdet
         tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
             "🔍 Search Suggestions", 
             "📈 YouTube Trends", 
@@ -223,7 +223,7 @@ Timestamps:
             else:
                 st.warning("🔒 PDF export is available exclusively for **Pro** users. Upgrade in the sidebar to download full reports!")
 
-        # Välilehti 5: Revenue Calculator (Uusi)
+        # Välilehti 5: Revenue Calculator
         with tab5:
             st.subheader("💰 Channel Revenue & Growth Estimator")
             st.write("Estimate potential AdSense earnings and analyze growth milestones for your channel based on monthly views.")
@@ -240,7 +240,7 @@ Timestamps:
             
             st.info("💡 **Growth Tip:** To increase your CPM in the **" + query + "** niche, focus on long-form tutorials (8+ minutes) and target high-value audience segments.")
 
-        # Välilehti 6: Viral Idea Generator (Uusi)
+        # Välilehti 6: Viral Idea Generator
         with tab6:
             st.subheader("🎲 Random Viral Video Concept Generator")
             st.write(f"Need an instant spark for **{query}**? Generate a unique concept on demand:")
@@ -255,12 +255,12 @@ Timestamps:
                 t = random.choice(thumbnails)
                 
                 st.success(f"**Generated Concept:** {h} {query.title()}")
-                st.write(- **Format:** {f})
+                st.write(f"- **Format:** {f}")
                 st.write(f"- **Thumbnail Idea:** {t}")
             else:
                 st.caption("Click the button above to roll a fresh video concept!")
 
-        # Välilehti 7: Script & SEO Suite (Uusi)
+        # Välilehti 7: Script & SEO Suite
         with tab7:
             st.subheader("📝 AI Script Outline & Title SEO Scorecard")
             
@@ -300,7 +300,7 @@ Timestamps:
 - Brief background on {query} for {target_audience}.
 - Establish your credibility or personal test results.
 
-[2:00 - 8:00] THE CORE WALKFRONT (Step 1, 2, 3)
+[2:00 - 8:00] THE CORE WALKTHROUGH (Step 1, 2, 3)
 - Break down the main topic into actionable steps.
 - Keep pacing fast with B-roll or visual examples.
 
