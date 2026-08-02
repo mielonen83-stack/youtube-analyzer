@@ -28,8 +28,8 @@ st.sidebar.header("⚙️ Creator Settings")
 video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
-# --- MAIN MENU (Tabs) ---
-tab1, tab2, tab3 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator"])
+# --- MAIN MENU (Tabs - 4 kpl nyt mukana!) ---
+tab1, tab2, tab3, tab4 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator", "📄 PDF Analyzer"])
 
 # --- TAB 1: Basic Searches & Trends ---
 with tab1:
@@ -42,7 +42,6 @@ with tab1:
         if keyword:
             st.success(f"Found the following preliminary data for '{keyword}':")
             
-            # Korjatut ja siistit estimaatti-laatikot (metrics)
             col1, col2, col3 = st.columns(3)
             col1.metric(label="Estimated Searches / mo", value="45,200", delta="+12%")
             col2.metric(label="Competition", value="Medium", delta="-5%", delta_color="inverse")
@@ -151,3 +150,18 @@ with tab3:
                     st.write(tulo)
                 except Exception as e:
                     st.error(f"Error: {e}")
+
+# --- TAB 4: PDF Analyzer ---
+with tab4:
+    st.title("📄 PDF Script & Document Analyzer")
+    st.write("Upload a script or outline PDF, and let AI review it for pacing and engagement.")
+    
+    uploaded_file = st.file_uploader("Upload PDF file", type=["pdf"])
+    
+    if uploaded_file is not None:
+        if not is_pro:
+            st.warning("🔒 PDF analysis is a Pro feature. Unlock it via the sidebar!")
+        else:
+            st.success("PDF uploaded successfully!")
+            if st.button("Analyze Script"):
+                st.info("Tähän voidaan kytkeä PDF-tekstin luku ja tekoälyanalyysi (esim. PyPDF / pdfplumber -kirjastoilla).")
