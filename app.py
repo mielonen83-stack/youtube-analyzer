@@ -50,21 +50,21 @@ def get_competitor_videos(query):
     base_views = 120000
     for i, s in enumerate(suggestions[:5]):
         competitors.append({
-            "Title": f"How to {s.title()} (Complete Masterclass)",
-            "Channel": f"Creator Lab {i+1}",
+            "Title": f"The Story of {s.title()}",
+            "Channel": f"Music & Facts {i+1}",
             "Estimated Views": f"{base_views - (i * 15000):,} views",
             "Link": f"https://www.youtube.com/results?search_query={urllib.parse.quote(s)}"
         })
     if not competitors:
         competitors.append({
-            "Title": f"The Ultimate {query.title()} Guide for 2026",
+            "Title": f"The Complete History of {query.title()}",
             "Channel": "Pro Insights",
             "Estimated Views": "250,000 views",
             "Link": f"https://www.youtube.com/results?search_query={urllib.parse.quote(query)}"
         })
     return competitors
 
-# 4. PDF-raportin generointi Pro-käyttäjille (korjattu versio fpdf2:lle)
+# 4. PDF-raportin generointi Pro-käyttäjille
 def create_pdf_report(query, suggestions, angles):
     pdf = FPDF()
     pdf.add_page()
@@ -116,7 +116,7 @@ if not st.session_state.is_pro and st.session_state.search_count >= FREE_LIMIT:
     st.error("🚨 Free search limit reached!")
     st.warning("Upgrade to **Pro** in the sidebar for unlimited analytics, AI generation, and PDF reports.")
 else:
-    query = st.text_input("Enter a niche or keyword (e.g., python coding, fitness, gaming):", "")
+    query = st.text_input("Enter a niche or keyword (e.g., eppu normaali, python coding, fitness):", "")
 
     if query:
         if not st.session_state.is_pro:
@@ -183,21 +183,41 @@ else:
             st.subheader("🤖 AI-Powered Metadata & PDF Report")
             q_cap = query.capitalize()
             
-            angles = [
-                f"The Ultimate {target_audience} Guide to {q_cap} ({video_length})",
-                f"I Tested {q_cap} For 30 Days As A Beginner",
-                f"Top 5 Mistakes People Make With {q_cap}",
-                f"Why Most Fail At {q_cap} (And How To Fix It)"
-            ]
+            # Tarkistetaan onko kyseessä todennäköisesti bändi/artisti vai yleinen aihe
+            is_band = any(word in query.lower() for word in ['eppu', 'bändi', 'band', 'artist', 'music', 'musiikki', 'laulu', 'orchestra'])
+            
+            if is_band:
+                angles = [
+                    f"The Untold Story of {q_cap}: Rise to Legend Status",
+                    f"Ranking Every Album by {q_cap} from Worst to Best",
+                    f"Why {q_cap} Changed Finnish Music Forever",
+                    f"The Greatest Live Moments of {q_cap}"
+                ]
+                titles_text = f"""1. The Incredible Story of {q_cap} (Documentary)
+2. Ranking Every Album by {q_cap} (Worst to Best)
+3. Why {q_cap} Remains Iconic After All These Years
+4. The Masterpiece Songs of {q_cap} Explained"""
+                desc_text = f"""Dive deep into the legacy of {q_cap} tailored for {target_audience}. In this {video_length} video, we explore their history, best hits, and cultural impact.
 
-            st.markdown("### ✍️ Catchy Video Titles")
-            st.code(f"""1. The Truth About {q_cap} Nobody Is Telling You in 2026
+Timestamps:
+0:00 - Introduction to {q_cap}
+2:15 - The Early Years & Breakthrough
+6:30 - Legendary Albums & Hits
+12:00 - Legacy & Conclusion
+
+#eppunormaali #{query.replace(' ', '')} #FinnishMusic"""
+            else:
+                angles = [
+                    f"The Ultimate {target_audience} Guide to {q_cap} ({video_length})",
+                    f"I Tested {q_cap} For 30 Days As A Beginner",
+                    f"Top 5 Mistakes People Make With {q_cap}",
+                    f"Why Most Fail At {q_cap} (And How To Fix It)"
+                ]
+                titles_text = f"""1. The Truth About {q_cap} Nobody Is Telling You in 2026
 2. I Tried {q_cap} For 7 Days Straight (Shocking Results)
 3. How to Master {q_cap} Fast ({target_audience} Edition)
-4. Stop Making This HUGE Mistake With {q_cap}!""", language="text")
-
-            st.markdown("### 📄 Optimized Video Description")
-            st.code(f"""Welcome back to the channel! Today we explore {query} tailored for {target_audience}. In this {video_length} video, we break down everything step by step.
+4. Stop Making This HUGE Mistake With {q_cap}!"""
+                desc_text = f"""Welcome back to the channel! Today we explore {query} tailored for {target_audience}. In this {video_length} video, we break down everything step by step.
 
 Timestamps:
 0:00 - Introduction to {q_cap}
@@ -205,10 +225,16 @@ Timestamps:
 3:45 - Step-by-Step Walkthrough
 8:15 - Final Results & Summary
 
-#shorts #{query.replace(' ', '')} #{q_cap}Guide""", language="text")
+#shorts #{query.replace(' ', '')} #{q_cap}Guide"""
+
+            st.markdown("### ✍️ Catchy Video Titles")
+            st.code(titles_text, language="text")
+
+            st.markdown("### 📄 Optimized Video Description")
+            st.code(desc_text, language="text")
 
             st.markdown("### 🏷️ Recommended Tags")
-            st.info(f"{query}, {query} tutorial, how to {query}, best {query} 2026, {query} tips, {query} guide")
+            st.info(f"{query}, {query} live, {query} history, best of {query}, {query} documentary, Finnish rock")
 
             st.divider()
             st.subheader("📥 Export Professional PDF Report")
@@ -246,9 +272,9 @@ Timestamps:
             st.write(f"Need an instant spark for **{query}**? Generate a unique concept on demand:")
             
             if st.button("Generate Random Concept 🚀"):
-                hooks = ["I spent 100 hours testing", "Why everyone is wrong about", "The dark side of", "I built a 10x better"]
-                formats = ["Challenge Video", "Deep-Dive Documential", "Tier List / Ranking", "Beginner Mistake Guide"]
-                thumbnails = ["Close-up shocked face with bright background", "Split screen 'Before vs After'", "Minimalist text with bold red accent outline"]
+                hooks = ["I spent 100 hours researching", "Why everyone is wrong about", "The hidden history of", "Ranking the absolute best of"]
+                formats = ["Documentary / Essay", "Deep-Dive Review", "Tier List / Ranking", "Retrospective"]
+                thumbnails = ["Classic vintage photo with bold dramatic text", "Split screen comparison", "Minimalist artistic portrait with glowing outline"]
                 
                 h = random.choice(hooks)
                 f = random.choice(formats)
@@ -265,7 +291,7 @@ Timestamps:
             st.subheader("📝 AI Script Outline & Title SEO Scorecard")
             
             st.markdown("### 1. Title SEO Score Analyzer")
-            test_title = st.text_input("Test your video title:", f"The Ultimate Guide to {query.title()}")
+            test_title = st.text_input("Test your video title:", f"The Untold Story of {query.title()}")
             
             score = 50
             feedback = []
@@ -293,17 +319,16 @@ Timestamps:
             st.markdown("### 2. Instant Video Script Outline")
             st.write(f"Standard structure for a **{video_length}** video about **{query}**:")
             st.code(f"""[0:00 - 0:30] THE HOOK
-- State the core problem or shocking statement regarding {query}.
-- Tell the viewer why they need to watch until the end.
+- Introduce {query} with an intriguing hook or surprising fact.
+- Grab the viewer's attention immediately.
 
-[0:30 - 2:00] THE CONTEXT / WHY IT MATTERS
-- Brief background on {query} for {target_audience}.
-- Establish your credibility or personal test results.
+[0:30 - 2:00] BACKGROUND & CONTEXT
+- Set the stage and explain why {query} matters to {target_audience}.
 
-[2:00 - 8:00] THE CORE WALKTHROUGH (Step 1, 2, 3)
-- Break down the main topic into actionable steps.
-- Keep pacing fast with B-roll or visual examples.
+[2:00 - 8:00] DEEP DIVE / MAIN CONTENT
+- Break down the core aspects, history, or key milestones.
+- Keep the narrative engaging with clips or images.
 
-[8:00 - End] CALL TO ACTION & OUTRO
-- Summarize the main takeaway in one sentence.
-- Ask viewers to subscribe and point them to your next recommended video.""", language="text")
+[8:00 - End] CONCLUSION & OUTRO
+- Summarize the final thoughts.
+- Ask viewers for their opinions in the comments and direct them to the next video.""", language="text")
