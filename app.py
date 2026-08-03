@@ -81,8 +81,8 @@ try:
 except Exception:
     client = None
 
-# Stripe-kertamaksun linkki (Luo Stripessä Product hintaan 5 € tyypillä "One-time" ja laita linkki tähän)
-stripe_link = "https://buy.stripe.com/TÄHÄN_OMA_KERTAMAKSU_LINKKI"
+# Stripe-kertamaksun linkki päivitettynä
+stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
 # Kielen valinta (Oletuksena englanti)
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
