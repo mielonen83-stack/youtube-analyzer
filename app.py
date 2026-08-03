@@ -70,7 +70,7 @@ video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)",
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- MAIN MENU (Tabs) ---
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
     "📊 Basic", 
     "💡 Ideas & Hooks", 
     "✍️ Scripts", 
@@ -79,7 +79,8 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
     "💬 Comments",
     "♻️ Repurpose",
     "🤝 Sponsorship",
-    "🌍 Translator"
+    "🌍 Translator",
+    "🏆 Competitor Audit"
 ])
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
@@ -101,7 +102,7 @@ with tab1:
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Unlock Pro to use all advanced AI tools!")
+            st.info("💡 Tip: Unlock Pro to use all 10 advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -110,7 +111,7 @@ with tab1:
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to 9 advanced AI generators, including global translation tools!</p>
+            <p>Upgrading gives you complete access to 10 advanced AI generators, including competitor and strategy audits!</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -350,4 +351,30 @@ with tab9:
                     temperature=0.7
                 )
                 st.success("Done!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 10: Competitor & Strategy Audit (PRO) ---
+with tab10:
+    st.title("🏆 Competitor & Algorithm Audit")
+    st.markdown("Analyze a topic or competitor angle to find the gap and make your video stand out.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        audit_topic = st.text_input("Enter the topic or what competitors are currently covering:")
+        competitor_style = st.text_input("What is the standard approach everyone else uses? (optional):")
+        
+        if st.button("Run Strategy Audit", type="primary") and audit_topic:
+            with st.spinner("Analyzing competition and algorithm trends..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are an elite YouTube growth strategist and algorithm expert."},
+                        {"role": "user", "content": f"Perform a strategic competitor audit for a video about '{audit_topic}'. Standard approach to beat: '{competitor_style}'. Provide: 1) What is missing in current videos, 2) A unique angle to outsmart competitors, and 3) Recommendations for higher CTR and retention."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Audit completed!")
                 st.write(res.choices[0].message.content)
