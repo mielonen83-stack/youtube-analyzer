@@ -44,6 +44,42 @@ def verify_pro_password(password):
 # Sivun asetukset
 str_module.set_page_config(page_title="YouTube Pro Suite", page_icon="🎬", layout="wide")
 
+# --- YLLÄPITO / ADMIN TARKISTUS ---
+query_params = str_module.query_params
+admin_key = query_params.get("admin")
+
+if admin_key == "youtubeadmin123":
+    str_module.title("🛠️ Admin Dashboard: Tietokannanhallinta")
+    str_module.warning("Olet ylläpitonäkymässä. Tässä näkyvät tietokantaan tallennetut käyttäjien salasanojen tiivisteet (hashit turvallisuuden vuoksi).")
+    
+    conn = sqlite3.connect("pro_users.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, password_hash FROM users")
+    all_users = cursor.fetchall()
+    conn.close()
+    
+    str_module.write(f"Rekisteröityneitä Pro-tilejä yhteensä: **{len(all_users)}**")
+    
+    if all_users:
+        import pandas as pd
+        df = pd.DataFrame(all_users, columns=["ID", "Salasanan Hash (SHA-256)"])
+        str_module.dataframe(df, use_container_width=True)
+    
+    if str_module.button("⚠️ Tyhjennä koko tietokanta (Poista kaikki käyttäjät)", type="primary"):
+        conn = sqlite3.connect("pro_users.db")
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM users")
+        conn.commit()
+        conn.close()
+        str_module.success("Tietokanta tyhjennetty!")
+        str_module.rerun()
+        
+    if str_module.button("⬅️ Palaa takaisin sovellukseen"):
+        str_module.query_params.clear()
+        str_module.rerun()
+        
+    str_module.stop()
+
 # --- KUSTOMOITU ERITTÄIN MODERNI JA HIOTTU CSS ---
 str_module.markdown("""
     <style>
@@ -318,8 +354,8 @@ texts = translations[lang_code]
 if "is_pro" not in str_module.session_state:
     str_module.session_state.is_pro = False
 
-query_params = str_module.query_params
-is_paid_url = query_params.get("pro") == "true"
+url_params = str_module.query_params
+is_paid_url = url_params.get("pro") == "true"
 
 # Jos tullaan Stripestä (?pro=true)
 if is_paid_url and not str_module.session_state.is_pro:
