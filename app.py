@@ -28,8 +28,14 @@ st.sidebar.header("⚙️ Creator Settings")
 video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
-# --- MAIN MENU (Tabs - 4 kpl nyt mukana!) ---
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Basic Searches & Trends", "✨ AI Tools & Ideas", "🎯 Thumbnail Generator", "📄 PDF Analyzer"])
+# --- MAIN MENU (Tabs - 5 kpl nyt mukana!) ---
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "📊 Basic Searches & Trends", 
+    "✨ AI Tools & Ideas", 
+    "🎯 Thumbnail Generator", 
+    "📄 PDF Analyzer",
+    "🏷️ YouTube Tags & SEO"
+])
 
 # --- TAB 1: Basic Searches & Trends ---
 with tab1:
@@ -51,6 +57,18 @@ with tab1:
         else:
             st.warning("Please enter a keyword first.")
 
+    # Lisätty: Myyntiä vauhdittava "How Pro Works" -esittely ilmaispuolelle
+    st.markdown("---")
+    with st.expander("🚀 Miksi päivittää Pro-versioon? (Katso ominaisuudet)"):
+        st.write("""
+        Ilmaisversio auttaa sinua alkuun perustietojen ja hakusanojen kanssa, mutta **Pro-versio** avaa täyden arsenaalin sisällöntuotannon tekoälytyökaluja:
+        * **Viral Idea Generator:** Luo rajattomasti viraaliideoita kohderyhmällesi.
+        * **AI Metadata & Scriptwriter:** Kirjoittaa puolestasi klikkiotsikot, kuvaukset ja aloituskoukut.
+        * **Thumbnail Generator:** Antaa tarkat visuaaliset reseptit pikkukuville, jotka pysäyttävät selailun.
+        * **PDF Analyzer:** Analysoi käsikirjoitukset ja antaa parannusehdotuksia.
+        * **YouTube Tags & SEO:** Generoi valmiit optimoidut hakutagit suoraan YouTubeen sekunneissa!
+        """)
+
 # --- TAB 2: AI Tools & Viral Ideas ---
 with tab2:
     st.title("🤖 AI-Powered Tools")
@@ -59,7 +77,12 @@ with tab2:
     if not client:
         st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
     else:
-        ai_tool_choice = st.selectbox("Select AI Feature:", ["Viral Idea Generator (Idea Machine)", "AI Metadata & Script"])
+        # Päivitetty: Lisätty kolmas vaihtoehto valikkoon ("Video Title Improver")
+        ai_tool_choice = st.selectbox("Select AI Feature:", [
+            "Viral Idea Generator (Idea Machine)", 
+            "AI Metadata & Script", 
+            "Video Title Improver / Roster"
+        ])
         
         if ai_tool_choice == "Viral Idea Generator (Idea Machine)":
             st.subheader("💡 Viral Idea Generator")
@@ -86,7 +109,7 @@ with tab2:
                         except Exception as e:
                             st.error(f"Error in AI request: {e}")
 
-        else:
+        elif ai_tool_choice == "AI Metadata & Script":
             st.subheader("✍️ AI Metadata & Scriptwriter")
             video_topic = st.text_input("Exact video topic:")
             
@@ -107,6 +130,32 @@ with tab2:
                                 temperature=0.7
                             )
                             st.success("Metadata and script generated successfully!")
+                            st.write(response.choices[0].message.content)
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+
+        else:
+            # Uusi ominaisuus: Video Title Improver
+            st.subheader("🔥 Video Title Improver & Roster")
+            existing_title = st.text_input("Syötä olemassa oleva tai suunnittelemasi otsikko:")
+            
+            if st.button("Paranna otsikkoa"):
+                if not is_pro:
+                    st.warning("🔒 Tämä on Pro-ominaisuus. Osta Pro sivupalkista tai kytke testitila päälle!")
+                elif not existing_title:
+                    st.warning("Syötä ensin jokin otsikko.")
+                else:
+                    with st.spinner("Analysoidaan ja parannetaan otsikkoa..."):
+                        try:
+                            response = client.chat.completions.create(
+                                model="gpt-4o",
+                                messages=[
+                                    {"role": "system", "content": "You are a YouTube CTR and headline optimization expert."},
+                                    {"role": "user", "content": f"Analyze this YouTube title: '{existing_title}'. Give 3-5 improved, high-CTR alternative versions designed to make it 50% more clickable, and explain briefly why they work better."}
+                                ],
+                                temperature=0.7
+                            )
+                            st.success("Otsikkoehdotukset luotu!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
                             st.error(f"Error: {e}")
@@ -164,4 +213,32 @@ with tab4:
         else:
             st.success("PDF uploaded successfully!")
             if st.button("Analyze Script"):
-                st.info("Tähän voidaan kytkeä PDF-tekstin luku ja tekoälyanalyysi (esim. PyPDF / pdfplumber -kirjastoilla).")
+                st.info("Tähän voidaan kytkeä PDF-tekstin luku ja tekoälyanalyysi.")
+
+# --- TAB 5: YouTube Tags & SEO Generator ---
+with tab5:
+    st.title("🏷️ YouTube Tags & SEO Generator")
+    st.write("Hanki optimoidut hakutagit ja avainsanat videollesi sekunneissa.")
+    
+    tag_topic = st.text_input("Mistä aiheesta tai videosta haluat luoda tagit?")
+    
+    if st.button("Generoi tagit"):
+        if not is_pro:
+            st.warning("🔒 Tagien generointi on Pro-ominaisuus. Osta Pro sivupalkista tai kytke testitila päälle!")
+        elif not tag_topic:
+            st.warning("Syötä ensin videon aihe.")
+        else:
+            with st.spinner("Luodaan hakutageja ja SEO-avainsanoja..."):
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a YouTube SEO expert who specializes in keyword tagging and search optimization."},
+                            {"role": "user", "content": f"Generate a comprehensive list of high-performing YouTube search tags and comma-separated keywords for a video about: '{tag_topic}'. Provide both broad and long-tail tags that can be copied directly into YouTube Studio."}
+                        ],
+                        temperature=0.7
+                    )
+                    st.success("Tagit generoitu onnistuneesti!")
+                    st.write(response.choices[0].message.content)
+                except Exception as e:
+                    st.error(f"Error: {e}")
