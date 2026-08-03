@@ -56,7 +56,19 @@ st.sidebar.write("Unlock all AI tools and unlimited searches!")
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access (9 €)</a>', unsafe_allow_html=True)
 
-is_pro = False 
+# --- SALASANA-TARKISTUS (TESTAUSVAIHE) ---
+st.sidebar.markdown("---")
+st.sidebar.subheader("🔐 Developer / Owner Access")
+entered_password = st.sidebar.text_input("Enter Pro Password:", type="password")
+
+# Määritä tästä oma salasanasi (voit vaihtaa sen halutessasi)
+SECRET_PASSWORD = "tubepro2026"
+
+# Tarkistetaan onko salasana oikein
+is_pro = (entered_password == SECRET_PASSWORD)
+
+if is_pro:
+    st.sidebar.success("✅ Pro Access Unlocked (Dev Mode)")
 
 # --- MOBIILIYSTÄVÄLLINEN VALIKKO SIVUPALKISSA ---
 st.sidebar.markdown("---")
@@ -122,7 +134,7 @@ elif menu_choice == "💡 Ideas & Hooks":
     st.markdown("Brainstorm high-CTR concepts and powerful 3-second opening hooks.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -179,7 +191,7 @@ elif menu_choice == "✍️ Scripts & Shorts":
     st.markdown("Generate full minute-by-minute video scripts or viral short-form scripts.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -206,7 +218,7 @@ elif menu_choice == "🎯 Thumbnails":
     st.markdown("Get a precise visual recipe for a high-CTR thumbnail.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -232,7 +244,7 @@ elif menu_choice == "🏷️ SEO & Tags":
     st.markdown("Get optimized search tags and keywords ready to copy into YouTube Studio.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -256,7 +268,7 @@ elif menu_choice == "💬 Comments":
     st.markdown("Generate engaging, community-building replies to viewer comments.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -282,7 +294,7 @@ elif menu_choice == "♻️ Repurpose":
     st.markdown("Convert your video script into community posts, X (Twitter) threads, or short summaries.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -308,7 +320,7 @@ elif menu_choice == "🤝 Sponsorship":
     st.markdown("Pitch brands professionally to land lucrative sponsorships.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -334,7 +346,7 @@ elif menu_choice == "🌍 Translator":
     st.markdown("Translate and optimize your video titles, descriptions, and tags for international audiences.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -360,7 +372,7 @@ elif menu_choice == "🏆 Competitor Audit":
     st.markdown("Analyze a topic or competitor angle to find the gap and make your video stand out.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -386,7 +398,7 @@ elif menu_choice == "⚡ Bulk Edit Tools":
     st.markdown("Generate mass templates, description disclaimers, or unified tag structures for multiple videos at once.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -412,7 +424,7 @@ elif menu_choice == "📈 Data & Analytics":
     st.markdown("Get strategic guidance on how to interpret your CTR, retention rates, and channel analytics.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -444,7 +456,7 @@ elif menu_choice == "🎨 Channel Branding":
     st.markdown("Input your interests and audience to generate a full visual and verbal branding package.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -470,7 +482,7 @@ elif menu_choice == "⏱️ Timestamp Generator":
     st.markdown("Paste your video script or rough notes to instantly generate SEO-friendly timestamps.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
@@ -495,7 +507,7 @@ elif menu_choice == "🧠 Title A/B Matrix":
     st.markdown("Generate 10 psychologically optimized video title angles to maximize CTR.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
