@@ -81,7 +81,7 @@ texts = {
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
         "paywall": "🔒 **Pro-ominaisuus:** Tarvitset Pro-oikeudet käyttääksesi tätä työkalua.",
-        "unlock_all": "🔥 Avaa kaikki 18 työkalua hintaan 9 €"
+        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 9 €"
     },
     "🇬🇧": {
         "dev_access": "🔐 Developer / Owner Access",
@@ -91,7 +91,7 @@ texts = {
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
         "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-        "unlock_all": "🔥 Unlock All 18 Tools for 9 €"
+        "unlock_all": "🔥 Unlock All Tools for 9 €"
     },
     "🇸🇪": {
         "dev_access": "🔐 Utvecklar / Ägaråtkomst",
@@ -101,7 +101,7 @@ texts = {
         "v_len": "Videons längd / Typ",
         "aud": "Målgrupp",
         "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda det här verktyget.",
-        "unlock_all": "🔥 Lås upp alla 18 verktyg för 9 €"
+        "unlock_all": "🔥 Lås upp alla verktyg för 9 €"
     },
     "🇪🇸": {
         "dev_access": "🔐 Acceso de Desarrollador",
@@ -111,7 +111,7 @@ texts = {
         "v_len": "Duración / Tipo de video",
         "aud": "Público objetivo",
         "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquea las 18 herramientas por 9 €"
+        "unlock_all": "🔥 Desbloquea todas las herramientas por 9 €"
     },
     "🇩🇪": {
         "dev_access": "🔐 Entwickler / Owner Zugriff",
@@ -121,7 +121,7 @@ texts = {
         "v_len": "Videolänge / Typ",
         "aud": "Zielgruppe",
         "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugriff, um dieses Tool zu nutzen.",
-        "unlock_all": "🔥 Schalte alle 18 Tools für 9 € frei"
+        "unlock_all": "🔥 Schalte alle Tools für 9 € frei"
     },
     "🇫🇷": {
         "dev_access": "🔐 Accès Développeur",
@@ -131,7 +131,7 @@ texts = {
         "v_len": "Durée / Type de vidéo",
         "aud": "Public cible",
         "paywall": "🔒 **Fonctionnalité Pro:** Vous avez besoin d'un accès Pro pour utiliser cet outil.",
-        "unlock_all": "🔥 Déverrouillez les 18 outils pour 9 €"
+        "unlock_all": "🔥 Déverrouillez tous les outils pour 9 €"
     },
     "🇯🇵": {
         "dev_access": "🔐 開発者 / オーナーアクセス",
@@ -141,7 +141,7 @@ texts = {
         "v_len": "動画の長さ / タイプ",
         "aud": "ターゲット視聴者",
         "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
-        "unlock_all": "🔥 18個のツールすべてを9€でアンロック"
+        "unlock_all": "🔥 すべてのツールを9€でアンロック"
     }
 }[lang_code]
 
@@ -163,24 +163,29 @@ video_length = st.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Stand
 target_audience = st.sidebar.selectbox(texts["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- PÄÄVALIKKO (YLÄVALIKKO KAHDESSA RIVISSÄ) ---
-st.markdown("### 📱 Työkalut / Tools Navigation")
-row1_tools = [
+st.markdown("### 🛠️ Työkalut / Tools Navigation")
+
+row1_options = [
     "📊 Basic Search", "💡 Ideas & Hooks", "✍️ Scripts & Shorts", 
     "🎯 Thumbnails", "🏷️ SEO & Tags", "💬 Comments", 
     "♻️ Repurpose", "🤝 Sponsorship", "🌍 Translator"
 ]
-row2_tools = [
+row2_options = [
     "🏆 Competitor Audit", "⚡ Bulk Edit Tools", "📈 Data & Analytics", 
     "🎨 Channel Branding", "⏱️ Timestamp Generator", "🧠 Title A/B Matrix", 
     "🎨 AI Image Prompts", "🎙️ Script Voice Optimizer", "💰 Growth & ROI Simulator"
 ]
 
-menu_row = st.radio("Valitse kategoria / Select category:", ["Päävalikko 1 (Perustyökalut & Ideat)", "Päävalikko 2 (Optimointi & Strategia)"], horizontal=True)
+# Käytetään sessiotilaa (session_state) muistamaan kummalta riviltä työkalu on valittu
+if "active_row" not in st.session_state:
+    st.session_state.active_row = "Rivi 1: Perustyökalut & Ideat"
 
-if menu_row == "Päävalikko 1 (Perustyökalut & Ideat)":
-    menu_choice = st.selectbox("Valitse työkalu (1/2):", row1_tools)
+row_choice = st.radio("Valitse kategoria / Select category:", ["Rivi 1: Perustyökalut & Ideat", "Rivi 2: Optimointi & Strategia"], horizontal=True)
+
+if row_choice == "Rivi 1: Perustyökalut & Ideat":
+    menu_choice = st.radio("Työkalut (Rivi 1):", row1_options, horizontal=True)
 else:
-    menu_choice = st.selectbox("Valitse työkalu (2/2):", row2_tools)
+    menu_choice = st.radio("Työkalut (Rivi 2):", row2_options, horizontal=True)
 
 st.markdown("---")
 
@@ -208,7 +213,7 @@ if menu_choice == "📊 Basic Search":
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Unlock Pro to use all 18 advanced AI tools!")
+            st.info("💡 Tip: Unlock Pro to use all advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -216,7 +221,7 @@ if menu_choice == "📊 Basic Search":
     st.markdown(f"""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to all 18 advanced AI generators and optimization suites!</p>
+            <p>Upgrading gives you complete access to all advanced AI generators and optimization suites!</p>
             <a href="{stripe_link}" target="_blank" style="color: #FF0000; font-weight: bold; text-decoration: underline;">Upgrade to Pro Now &rarr;</a>
         </div>
     """, unsafe_allow_html=True)
