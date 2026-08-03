@@ -81,7 +81,7 @@ try:
 except Exception:
     client = None
 
-# Stripe-maksulinkki
+# Stripe-maksulinkki (5 euroa)
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
 # --- SIVUPALKKI (Sidebar) ---
@@ -109,9 +109,9 @@ lang_code = selected_language.split()[0]
 # --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
 translations = {
     "🇬🇧": {
-        "dev_access": "🔐 Developer / Owner Access",
-        "pass_label": "Enter Pro Password:",
-        "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
+        "dev_access": "🔑 Pro License Activation",
+        "pass_label": "Enter Pro Password (from receipt):",
+        "success_pro": "✅ Pro Access Unlocked!",
         "settings": "⚙️ Creator Settings",
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
@@ -166,9 +166,9 @@ translations = {
         }
     },
     "🇫🇮": {
-        "dev_access": "🔐 Kehittäjä / Omistaja",
-        "pass_label": "Syötä Pro-salasana:",
-        "success_pro": "✅ Pro-oikeudet avattu (Dev Mode)",
+        "dev_access": "🔑 Pro-käyttöoikeuden aktivointi",
+        "pass_label": "Syötä Pro-salasana (saatu kuitista):",
+        "success_pro": "✅ Pro-oikeudet aktivoitu!",
         "settings": "⚙️ Sisällöntuottajan Asetukset",
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
@@ -230,7 +230,7 @@ if lang_code not in translations:
 texts = translations[lang_code]
 c_texts = texts["content"]
 
-# Salasana-tarkistus (Dev mode)
+# Salasana-tarkistus (Asiakkaat syöttävät tähän kuitista saadun salasanan)
 str_module.sidebar.markdown("---")
 str_module.sidebar.subheader(texts["dev_access"])
 entered_password = str_module.sidebar.text_input(texts["pass_label"], type="password")
