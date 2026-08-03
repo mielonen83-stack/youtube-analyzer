@@ -34,7 +34,7 @@ str_module.markdown("""
         box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.1);
     }
     
-    /* Tyylikäs Osta-painike */
+    /* Tyylikäs Tilaa-painike */
     .buy-button {
         display: block;
         width: 100%;
@@ -81,8 +81,8 @@ try:
 except Exception:
     client = None
 
-# Stripe-maksulinkki (5 euroa)
-stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
+# Stripe-kertamaksun linkki (Luo Stripessä Product hintaan 5 € tyypillä "One-time" ja laita linkki tähän)
+stripe_link = "https://buy.stripe.com/TÄHÄN_OMA_KERTAMAKSU_LINKKI"
 
 # Kielen valinta (Oletuksena englanti)
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
@@ -97,16 +97,16 @@ lang_code = selected_language.split()[0]
 # --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
 translations = {
     "🇬🇧": {
-        "sidebar_text": "Unlock all AI tools and unlimited search!",
-        "sidebar_btn": "🔥 Get Pro Access (5 €)",
+        "sidebar_text": "Unlock all AI tools with a one-time payment of 5 €!",
+        "sidebar_btn": "🔥 Get Lifetime Pro (5 €)",
         "dev_access": "🔑 Pro License Activation",
-        "pass_label": "Enter Pro Password (from receipt):",
+        "pass_label": "Enter Pro Password (from purchase):",
         "success_pro": "✅ Pro Access Unlocked!",
         "settings": "⚙️ Creator Settings",
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
-        "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools for 5 €",
+        "paywall": "🔒 **Pro Feature:** One-time purchase required to use this tool.",
+        "unlock_all": "🔥 Unlock All Tools (5 € One-Time)",
         "nav_title": "🛠️ Tools Navigation",
         "cat_label": "Select category:",
         "cat_basics": "💡 Basics, Ideas & Scripts",
@@ -114,16 +114,16 @@ translations = {
         "tool_prompt": "Select tool:",
     },
     "🇫🇮": {
-        "sidebar_text": "Avaa kaikki tekoälytyökalut ja rajaton haku!",
-        "sidebar_btn": "🔥 Hanki Pro Access (5 €)",
+        "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä 5 € kertamaksulla!",
+        "sidebar_btn": "🔥 Osta Pro-pääsy (5 €)",
         "dev_access": "🔑 Pro-käyttöoikeuden aktivointi",
-        "pass_label": "Syötä Pro-salasana (saatu kuitista):",
+        "pass_label": "Syötä Pro-salasana (ostosta):",
         "success_pro": "✅ Pro-oikeudet aktivoitu!",
         "settings": "⚙️ Sisällöntuottajan Asetukset",
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
-        "paywall": "🔒 **Pro-ominaisuus:** Tarvitset Pro-oikeudet käyttääksesi tätä työkalua.",
-        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 5 €",
+        "paywall": "🔒 **Pro-ominaisuus:** Vaatii 5 € kertamaksun tämän työkalun käyttämiseen.",
+        "unlock_all": "🔥 Avaa kaikki työkalut (5 € kertamaksu)",
         "nav_title": "🛠️ Työkalujen Hallinta",
         "cat_label": "Valitse toiminta-alue:",
         "cat_basics": "💡 Perustyökalut, Ideat & Käsikirjoitukset",
@@ -131,16 +131,16 @@ translations = {
         "tool_prompt": "Valitse työkalu:",
     },
     "🇸🇪": {
-        "sidebar_text": "Lås upp alla AI-verktyg och obegränsad sökning!",
-        "sidebar_btn": "🔥 Skaffa Pro Access (5 €)",
+        "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning på 5 €!",
+        "sidebar_btn": "🔥 Köp Pro (5 €)",
         "dev_access": "🔑 Aktivering av Pro-licens",
-        "pass_label": "Ange Pro-lösenord (från kvitto):",
+        "pass_label": "Ange Pro-lösenord (från köp):",
         "success_pro": "✅ Pro-åtkomst upplåst!",
         "settings": "⚙️ Skaparinställningar",
         "v_len": "Videon längd / typ",
         "aud": "Målgrupp",
-        "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda detta verktyg.",
-        "unlock_all": "🔥 Lås upp alla verktyg för 5 €",
+        "paywall": "🔒 **Pro-funktion:** Kräver en engångsbetalning för att använda detta verktyg.",
+        "unlock_all": "🔥 Lås upp alla verktyg (5 € engångskostnad)",
         "nav_title": "🛠️ Verktygsnavigering",
         "cat_label": "Välj kategori:",
         "cat_basics": "💡 Grunderna, idéer & manus",
@@ -148,16 +148,16 @@ translations = {
         "tool_prompt": "Välj verktyg:",
     },
     "🇪🇸": {
-        "sidebar_text": "¡Desbloquea todas las herramientas de IA y búsqueda ilimitada!",
-        "sidebar_btn": "🔥 Obtener Pro Access (5 €)",
+        "sidebar_text": "¡Desbloquea todas las herramientas con un pago único de 5 €!",
+        "sidebar_btn": "🔥 Obtener Pro (5 €)",
         "dev_access": "🔑 Activación de Licencia Pro",
-        "pass_label": "Introduce contraseña Pro (del recibo):",
+        "pass_label": "Introduce contraseña Pro (de la compra):",
         "success_pro": "✅ ¡Acceso Pro desbloqueado!",
         "settings": "⚙️ Configuración del Creador",
         "v_len": "Duración / Tipo de video",
         "aud": "Público objetivo",
-        "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquear todas las herramientas por 5 €",
+        "paywall": "🔒 **Función Pro:** Se requiere pago único para usar esta herramienta.",
+        "unlock_all": "🔥 Desbloquear todas las herramientas (5 € pago único)",
         "nav_title": "🛠️ Navegación de Herramientas",
         "cat_label": "Seleccionar categoría:",
         "cat_basics": "💡 Básicos, Ideas y Guiones",
@@ -165,16 +165,16 @@ translations = {
         "tool_prompt": "Seleccionar herramienta:",
     },
     "🇩🇪": {
-        "sidebar_text": "Schalte alle KI-Tools und unbegrenzte Suche frei!",
-        "sidebar_btn": "🔥 Pro-Zugang holen (5 €)",
+        "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung von 5 € frei!",
+        "sidebar_btn": "🔥 Pro holen (5 €)",
         "dev_access": "🔑 Pro-Lizenzaktivierung",
-        "pass_label": "Pro-Passwort eingeben (vom Beleg):",
+        "pass_label": "Pro-Passwort eingeben (vom Kauf):",
         "success_pro": "✅ Pro-Zugang freigeschaltet!",
         "settings": "⚙️ Creator-Einstellungen",
         "v_len": "Videolänge / Typ",
         "aud": "Zielgruppe",
-        "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugang, um dieses Tool zu nutzen.",
-        "unlock_all": "🔥 Alle Tools für 5 € freischalten",
+        "paywall": "🔒 **Pro-Funktion:** Einmalige Zahlung erforderlich, um dieses Tool zu nutzen.",
+        "unlock_all": "🔥 Alle Tools freischalten (5 € einmalig)",
         "nav_title": "🛠️ Tool-Navigation",
         "cat_label": "Kategorie auswählen:",
         "cat_basics": "💡 Grundlagen, Ideen & Skripte",
@@ -182,16 +182,16 @@ translations = {
         "tool_prompt": "Tool auswählen:",
     },
     "🇫🇷": {
-        "sidebar_text": "Débloquez tous les outils IA et la recherche illimitée !",
-        "sidebar_btn": "🔥 Obtenir Pro Access (5 €)",
+        "sidebar_text": "Débloquez tous les outils avec un paiement unique de 5 € !",
+        "sidebar_btn": "🔥 Obtenir Pro (5 €)",
         "dev_access": "🔑 Activation de la licence Pro",
-        "pass_label": "Entrez le mot de passe Pro (du reçu) :",
+        "pass_label": "Entrez le mot de passe Pro (de l'achat) :",
         "success_pro": "✅ Accès Pro débloqué !",
         "settings": "⚙️ Paramètres du Créateur",
         "v_len": "Durée / Type de vidéo",
         "aud": "Public cible",
-        "paywall": "🔒 **Fonctionnalité Pro :** Vous avez besoin de l'accès Pro pour utiliser cet outil.",
-        "unlock_all": "🔥 Débloquer tous les outils pour 5 €",
+        "paywall": "🔒 **Fonctionnalité Pro :** Paiement unique requis pour utiliser cet outil.",
+        "unlock_all": "🔥 Débloquer tous les outils (5 € paiement unique)",
         "nav_title": "🛠️ Navigation des Outils",
         "cat_label": "Sélectionner la catégorie :",
         "cat_basics": "💡 Bases, Idées & Scripts",
@@ -199,16 +199,16 @@ translations = {
         "tool_prompt": "Sélectionner l'outil :",
     },
     "🇯🇵": {
-        "sidebar_text": "すべてのAIツールと無制限検索を解放しよう！",
-        "sidebar_btn": "🔥 Proアクセスを取得 (5 €)",
+        "sidebar_text": "5 €の買い切り（単発）支払いですべてのAIツールを解除しよう！",
+        "sidebar_btn": "🔥 Proを購入 (5 €)",
         "dev_access": "🔑 Proライセンス有効化",
-        "pass_label": "Proパスワードを入力（レシートから）:",
+        "pass_label": "Proパスワードを入力（購入後）:",
         "success_pro": "✅ Proアクセスが解除されました！",
         "settings": "⚙️ クリエイター設定",
         "v_len": "動画の長さ / タイプ",
         "aud": "ターゲット層",
-        "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
-        "unlock_all": "🔥 すべてのツールを5 €で解除",
+        "paywall": "🔒 **Pro機能:** このツールを使用するには5 €の買い切り支払いが必要です。",
+        "unlock_all": "🔥 すべてのツールを解除 (5 € 買い切り)",
         "nav_title": "🛠️ ツールナビゲーション",
         "cat_label": "カテゴリを選択:",
         "cat_basics": "💡 基本・アイデア・台本",
@@ -716,4 +716,4 @@ elif menu_choice == "simulator":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].content}</div>', unsafe_allow_html=True)
