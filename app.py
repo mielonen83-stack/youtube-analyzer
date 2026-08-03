@@ -4,6 +4,39 @@ from openai import OpenAI
 # Page configuration
 st.set_page_config(page_title="YouTube Pro Analyzer", page_icon="🎬", layout="wide")
 
+# --- CUSTOM CSS (Visuaalinen parannus) ---
+st.markdown("""
+    <style>
+    /* Pääotsikoiden tyyli */
+    h1 {
+        color: #FF0000;
+        font-weight: 800;
+    }
+    h2, h3 {
+        color: #222222;
+    }
+    /* Sivupalkin muotoilu */
+    [data-testid="stSidebar"] {
+        background-color: #f8f9fa;
+        padding-top: 20px;
+    }
+    /* Tyylitellyt kortit/laatikot */
+    .pro-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #FF0000;
+        margin-bottom: 20px;
+    }
+    .metric-container {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Fetch OpenAI API key securely from Streamlit Secrets
 try:
     openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -12,14 +45,15 @@ except Exception:
     client = None
 
 # --- SIDEBAR: Management & Payments ---
-st.sidebar.header("🚀 Pro Version")
+st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe payment link (käytetään siistiä lyhytlinkkiä)
+# Stripe payment link
 stripe_link = "https://tinyurl.com/tubecontent"
-st.sidebar.markdown(f"[Buy Pro Access ($9)]({stripe_link})", unsafe_allow_html=True)
+st.sidebar.link_button("🔥 Buy Pro Access ($9)", stripe_link, use_container_width=True)
 
 # Simulated Pro mode check
+st.sidebar.markdown("---")
 is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
 
 # --- CREATOR SETTINGS ---
@@ -30,50 +64,59 @@ target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advance
 
 # --- MAIN MENU (Tabs) ---
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "📊 Basic Searches & Trends", 
-    "✨ AI Tools & Ideas", 
-    "🎯 Thumbnail Generator", 
+    "📊 Basic Searches", 
+    "✨ AI Tools", 
+    "🎯 Thumbnails", 
     "📄 PDF Analyzer",
-    "🏷️ YouTube Tags & SEO",
-    "🔥 Pro Creator Toolkit"
+    "🏷️ Tags & SEO",
+    "🔥 Pro Toolkit"
 ])
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
 with tab1:
-    st.title("🎬 YouTube Content Creator Tool")
-    st.write("Search keywords, explore trends, and estimate earnings for free.")
+    st.title("🎬 YouTube Creator Hub")
+    st.markdown("Search keywords, explore trends, and estimate earnings for free.")
     
-    keyword = st.text_input("Enter a keyword or topic (e.g., gaming, cooking):")
+    keyword = st.text_input("🔍 Enter a keyword or topic (e.g., gaming, cooking):")
     
-    if st.button("Search Data"):
+    if st.button("Search Data", type="primary"):
         if keyword:
-            st.success(f"Found the following preliminary data for '{keyword}':")
+            st.success(f"Found preliminary data for '{keyword}':")
             
             col1, col2, col3 = st.columns(3)
-            col1.metric(label="Estimated Searches / mo", value="45,200", delta="+12%")
-            col2.metric(label="Competition", value="Medium", delta="-5%", delta_color="inverse")
-            col3.metric(label="Average RPM", value="$4.50", delta="$0.2")
+            with col1:
+                st.metric(label="Estimated Searches / mo", value="45,200", delta="+12%")
+            with col2:
+                st.metric(label="Competition", value="Medium", delta="-5%", delta_color="inverse")
+            with col3:
+                st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Go to the 'AI Tools & Ideas' tab to generate AI titles and scripts!")
+            st.info("💡 Tip: Go to the 'AI Tools' tab to generate AI titles and scripts!")
         else:
             st.warning("Please enter a keyword first.")
 
     st.markdown("---")
-    with st.expander("🚀 Why upgrade to Pro? (Check out the features)"):
-        st.write("""
-        The free version only includes basic keyword searches. **Upgrade to Pro ($9)** to unlock the complete AI toolkit:
-        * **Viral Idea Generator & Retention Hooks:** Create endless viral ideas and 3-second hooks.
-        * **AI Metadata & Scriptwriter:** Writes click-worthy titles, descriptions, and scripts.
-        * **Thumbnail Generator:** Delivers precise visual recipes for scroll-stopping thumbnails.
-        * **PDF Analyzer:** Analyzes your scripts and provides actionable feedback.
-        * **YouTube Tags & SEO:** Generates fully optimized search tags directly for YouTube in seconds!
-        * **Community Posts & Sponsorship Pitches:** Engage your audience and secure brand deals.
-        """)
+    
+    # Visuaalisempi myyntilaatikko (HTML-kortti)
+    st.markdown("""
+        <div class="pro-card">
+            <h3>🚀 Unlock the Full Power with Pro ($9)</h3>
+            <p>The free version includes basic keyword searches. Upgrading to Pro gives you complete access to:</p>
+            <ul>
+                <b>Viral Idea Generator & 3-Second Hooks</b><br>
+                <b>AI Metadata, Descriptions & Scripts</b><br>
+                <b>Scroll-stopping Thumbnail Recipes</b><br>
+                <b>PDF Script & Pacing Analyzer</b><br>
+                <b>YouTube Tags & SEO Generator</b><br>
+                <b>Community Posts & Sponsorship Pitch Emails</b>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
 # --- TAB 2: AI Tools & Viral Ideas (PRO) ---
 with tab2:
     st.title("🤖 AI-Powered Tools")
-    st.write(f"Current Settings: **{video_length}** | Target Audience: **{target_audience}**")
+    st.markdown(f"Current Settings: **{video_length}** | Target Audience: **{target_audience}**")
     
     if not is_pro:
         st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
@@ -90,7 +133,7 @@ with tab2:
             st.subheader("💡 Viral Idea Generator")
             niche = st.text_input("What is your channel niche/topic? (e.g., Finance, Gaming, Wellness)")
             
-            if st.button("Generate Viral Ideas"):
+            if st.button("Generate Viral Ideas", type="primary"):
                 if not niche:
                     st.warning("Please enter a niche first.")
                 else:
@@ -113,7 +156,7 @@ with tab2:
             st.subheader("✍️ AI Metadata & Scriptwriter")
             video_topic = st.text_input("Exact video topic:")
             
-            if st.button("Generate Titles and Script"):
+            if st.button("Generate Titles and Script", type="primary"):
                 if not video_topic:
                     st.warning("Please enter a video topic.")
                 else:
@@ -136,7 +179,7 @@ with tab2:
             st.subheader("🔥 Video Title Improver & Roster")
             existing_title = st.text_input("Enter your existing or planned video title:")
             
-            if st.button("Improve Title"):
+            if st.button("Improve Title", type="primary"):
                 if not existing_title:
                     st.warning("Please enter a title first.")
                 else:
@@ -158,7 +201,7 @@ with tab2:
 # --- TAB 3: Thumbnail Concept Generator (PRO) ---
 with tab3:
     st.title("🎯 Thumbnail Concept Generator")
-    st.write("Get a precise visual recipe from AI for a thumbnail that stops the scroll.")
+    st.markdown("Get a precise visual recipe from AI for a thumbnail that stops the scroll.")
     
     if not is_pro:
         st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
@@ -166,7 +209,7 @@ with tab3:
         thumb_topic = st.text_input("What is the core idea or surprising twist of the video?")
         thumb_style = st.selectbox("Visual Style", ["Shocking / Surprising", "Minimalist & Clean", "Meme / Funny", "Comparison (Before vs After)"])
         
-        if st.button("Generate Thumbnail Ideas"):
+        if st.button("Generate Thumbnail Ideas", type="primary"):
             if not thumb_topic:
                 st.warning("Please enter your video idea first.")
             elif not client:
@@ -198,8 +241,8 @@ with tab3:
 
 # --- TAB 4: PDF Analyzer (PRO) ---
 with tab4:
-    st.title("📄 PDF Script & Document Analyzer")
-    st.write("Upload a script or outline PDF, and let AI review it for pacing and engagement.")
+    st.title("📄 PDF Script Analyzer")
+    st.markdown("Upload a script or outline PDF, and let AI review it for pacing and engagement.")
     
     if not is_pro:
         st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
@@ -208,20 +251,20 @@ with tab4:
         
         if uploaded_file is not None:
             st.success("PDF uploaded successfully!")
-            if st.button("Analyze Script"):
+            if st.button("Analyze Script", type="primary"):
                 st.info("PDF text reading and AI analysis integration point.")
 
 # --- TAB 5: YouTube Tags & SEO Generator (PRO) ---
 with tab5:
     st.title("🏷️ YouTube Tags & SEO Generator")
-    st.write("Get optimized search tags and keywords for your video in seconds.")
+    st.markdown("Get optimized search tags and keywords for your video in seconds.")
     
     if not is_pro:
         st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
     else:
         tag_topic = st.text_input("What topic or video do you want to generate tags for?")
         
-        if st.button("Generate Tags"):
+        if st.button("Generate Tags", type="primary"):
             if not tag_topic:
                 st.warning("Please enter a video topic first.")
             else:
@@ -243,7 +286,7 @@ with tab5:
 # --- TAB 6: Pro Creator Toolkit (PRO) ---
 with tab6:
     st.title("🔥 Pro Creator Advanced Toolkit")
-    st.write("Advanced tools to skyrocket retention, community engagement, and monetization.")
+    st.markdown("Advanced tools to skyrocket retention, community engagement, and monetization.")
     
     if not is_pro:
         st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
@@ -259,7 +302,7 @@ with tab6:
             st.subheader("🎣 3-Second Retention Hook Generator")
             hook_topic = st.text_input("What is your video about?")
             
-            if st.button("Generate Hooks"):
+            if st.button("Generate Hooks", type="primary"):
                 if not hook_topic:
                     st.warning("Please enter your video topic.")
                 else:
@@ -282,7 +325,7 @@ with tab6:
             st.subheader("💬 Community Tab Post & Poll Generator")
             comm_topic = st.text_input("What do you want to post or ask your audience about?")
             
-            if st.button("Generate Community Post"):
+            if st.button("Generate Community Post", type="primary"):
                 if not comm_topic:
                     st.warning("Please enter a topic.")
                 else:
@@ -305,7 +348,7 @@ with tab6:
             st.subheader("♻️ Content Repurposer")
             long_content = st.text_area("Paste your video script, description, or core idea here:")
             
-            if st.button("Repurpose Content"):
+            if st.button("Repurpose Content", type="primary"):
                 if not long_content:
                     st.warning("Please paste some content first.")
                 else:
@@ -329,7 +372,7 @@ with tab6:
             brand_info = st.text_input("What is the brand name / product you want to pitch to?")
             channel_niche = st.text_input("Briefly describe your channel/niche and viewer stats:")
             
-            if st.button("Generate Pitch Email"):
+            if st.button("Generate Pitch Email", type="primary"):
                 if not brand_info or not channel_niche:
                     st.warning("Please fill in both fields.")
                 else:
