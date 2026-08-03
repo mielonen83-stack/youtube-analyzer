@@ -4,65 +4,72 @@ from openai import OpenAI
 # Sivun asetukset
 str_module.set_page_config(page_title="YouTube Pro Suite", page_icon="🎬", layout="wide")
 
-# --- KUSTOMOITU MODERNI CSS ---
+# --- KUSTOMOITU ERITTÄIN MODERNI JA HIOTTU CSS ---
 str_module.markdown("""
     <style>
-    /* Yleinen tyyli ja fontit */
+    /* Pääalueen tausta ja fontit */
     .main {
-        background-color: #fafbfc;
+        background-color: #f8fafc;
     }
-    h1 {
-        color: #111827;
-        font-weight: 800;
-        letter-spacing: -0.025em;
-    }
-    h2, h3 {
-        color: #1f2937;
-        font-weight: 700;
+    h1, h2, h3 {
+        color: #0f172a;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     
     /* Sivupalkin tyylittely */
     [data-testid="stSidebar"] {
-        background-color: #ffffff;
-        border-right: 1px solid #e5e7eb;
-        padding-top: 20px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        border-right: 1px solid #e2e8f0;
+        padding-top: 10px;
     }
     
     /* Pro-kortti sivupalkissa */
     .pro-sidebar-box {
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        padding: 16px;
-        border-radius: 12px;
-        border: 1px solid #fecaca;
+        background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid #fecdd3;
         margin-bottom: 20px;
         text-align: center;
+        box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.1);
     }
     
     /* Tyylikäs Osta-painike */
     .buy-button {
         display: block;
         width: 100%;
-        background-color: #ef4444;
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
         color: white !important;
         text-align: center;
-        padding: 12px 16px;
-        border-radius: 8px;
+        padding: 14px 20px;
+        border-radius: 10px;
         font-weight: 700;
+        font-size: 15px;
         text-decoration: none;
-        box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
-        transition: background-color 0.2s;
+        box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        transition: all 0.3s ease;
     }
     .buy-button:hover {
-        background-color: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(225, 29, 72, 0.4);
+    }
+
+    /* Streamlit-painikkeiden ja syötteiden hienosäätö */
+    .stButton>button {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.6rem 1.2rem;
+        transition: all 0.2s ease;
     }
     
-    /* Sisältökortit */
-    .stCard {
-        background-color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-        border: 1px solid #f3f4f6;
+    /* Sisältölaatikko tuloksille */
+    .result-box {
+        background-color: #ffffff;
+        padding: 24px;
+        border-radius: 14px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid #e2e8f0;
+        margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -78,11 +85,12 @@ except Exception:
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
 # --- SIVUPALKKI (Sidebar) ---
-str_module.sidebar.markdown("### 🚀 YouTube Pro Suite")
+str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
 str_module.sidebar.markdown("""
 <div class="pro-sidebar-box">
-    <p style="font-size: 14px; color: #7f1d1d; margin-bottom: 12px; font-weight: 500;">Unlock all AI tools and unlimited search!</p>
-    <a href="{}" target="_blank" class="buy-button">🔥 Get Pro Access (5 €)</a>
+    <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
+    <div style="font-size: 15px; color: #881337; margin-bottom: 14px; font-weight: 600; line-height: 1.4;">Avaa kaikki tekoälytyökalut ja rajaton haku!</div>
+    <a href="{}" target="_blank" class="buy-button">🔥 Hanki Pro Access (5 €)</a>
 </div>
 """.format(stripe_link), unsafe_allow_html=True)
 
@@ -331,7 +339,7 @@ elif menu_choice == "ideas":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "scripts":
     str_module.title(c_texts["scripts"]["title"])
@@ -349,7 +357,7 @@ elif menu_choice == "scripts":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "thumbnails":
     str_module.title(c_texts["thumbnails"]["title"])
@@ -367,7 +375,7 @@ elif menu_choice == "thumbnails":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "seo":
     str_module.title(c_texts["seo"]["title"])
@@ -385,7 +393,7 @@ elif menu_choice == "seo":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "comments":
     str_module.title(c_texts["comments"]["title"])
@@ -403,7 +411,7 @@ elif menu_choice == "comments":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "repurpose":
     str_module.title(c_texts["repurpose"]["title"])
@@ -422,7 +430,7 @@ elif menu_choice == "repurpose":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "sponsorship":
     str_module.title(c_texts["sponsorship"]["title"])
@@ -441,7 +449,7 @@ elif menu_choice == "sponsorship":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "translator":
     str_module.title(c_texts["translator"]["title"])
@@ -460,7 +468,7 @@ elif menu_choice == "translator":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "competitor":
     str_module.title(c_texts["competitor"]["title"])
@@ -478,7 +486,7 @@ elif menu_choice == "competitor":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "bulk":
     str_module.title(c_texts["bulk"]["title"])
@@ -496,7 +504,7 @@ elif menu_choice == "bulk":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "analytics":
     str_module.title(c_texts["analytics"]["title"])
@@ -516,7 +524,7 @@ elif menu_choice == "analytics":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "branding":
     str_module.title(c_texts["branding"]["title"])
@@ -534,7 +542,7 @@ elif menu_choice == "branding":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "timestamps":
     str_module.title(c_texts["timestamps"]["title"])
@@ -552,7 +560,7 @@ elif menu_choice == "timestamps":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "title_matrix":
     str_module.title(c_texts["title_matrix"]["title"])
@@ -570,7 +578,7 @@ elif menu_choice == "title_matrix":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "ai_images":
     str_module.title(c_texts["ai_images"]["title"])
@@ -588,7 +596,7 @@ elif menu_choice == "ai_images":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "voice":
     str_module.title(c_texts["voice"]["title"])
@@ -606,7 +614,7 @@ elif menu_choice == "voice":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
 
 elif menu_choice == "simulator":
     str_module.title(c_texts["simulator"]["title"])
@@ -626,4 +634,4 @@ elif menu_choice == "simulator":
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.write(res.choices[0].message.content)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
