@@ -56,8 +56,6 @@ st.sidebar.write("Unlock all AI tools and unlimited searches!")
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access (9 €)</a>', unsafe_allow_html=True)
 
-# Oletetaan toistaiseksi, että käyttäjällä ei ole Pro-oikeuksia ilman maksua 
-# (myöhemmin voit yhdistää tämän Stripe Webhook -tarkistukseen)
 is_pro = False 
 
 # --- MOBIILIYSTÄVÄLLINEN VALIKKO SIVUPALKISSA ---
@@ -73,7 +71,9 @@ menu_choice = st.sidebar.selectbox("Choose Tool:", [
     "♻️ Repurpose",
     "🤝 Sponsorship",
     "🌍 Translator",
-    "🏆 Competitor Audit"
+    "🏆 Competitor Audit",
+    "⚡ Bulk Edit Tools",
+    "📈 Data & Analytics"
 ])
 
 # --- CREATOR SETTINGS ---
@@ -81,8 +81,6 @@ st.sidebar.markdown("---")
 st.sidebar.header("⚙️ Creator Settings")
 video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
-
-# --- SISÄLTÖ VALIKON MUKAAN ---
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
 if menu_choice == "📊 Basic Search":
@@ -103,7 +101,7 @@ if menu_choice == "📊 Basic Search":
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Unlock Pro to use all 10 advanced AI tools!")
+            st.info("💡 Tip: Unlock Pro to use all 12 advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -111,7 +109,7 @@ if menu_choice == "📊 Basic Search":
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to all 10 advanced AI generators!</p>
+            <p>Upgrading gives you complete access to all 12 advanced AI generators and optimization suites!</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -377,4 +375,62 @@ elif menu_choice == "🏆 Competitor Audit":
                     temperature=0.7
                 )
                 st.success("Audit completed!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 11: Bulk Edit Tools (PRO) ---
+elif menu_choice == "⚡ Bulk Edit Tools":
+    st.title("⚡ Bulk Edit & Optimization Planner")
+    st.markdown("Generate mass templates, description disclaimers, or unified tag structures for multiple videos at once.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        bulk_goal = st.selectbox("Bulk Task:", ["Standard Video Description Template", "Channel-wide End Screen & Card Strategy", "Unified Tag & Keyword Template"])
+        channel_niche_bulk = st.text_input("Your channel niche or category:")
+        
+        if st.button("Generate Bulk Template", type="primary") and channel_niche_bulk:
+            with st.spinner("Creating bulk template..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a YouTube operations and automation expert."},
+                        {"role": "user", "content": f"Create a comprehensive, reusable {bulk_goal} optimized for a creator in the '{channel_niche_bulk}' niche to apply across multiple videos efficiently."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Template generated!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 12: Data & Analytics (PRO) ---
+elif menu_choice == "📈 Data & Analytics":
+    st.title("📈 Data & Analytics Health Check")
+    st.markdown("Get strategic guidance on how to interpret your CTR, retention rates, and channel analytics.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        st.markdown("Input your video's current metrics to get an AI diagnostic report:")
+        col_m1, col_m2 = st.columns(2)
+        with col_m1:
+            ctr_val = st.text_input("Click-Through Rate (CTR %)", value="4.5%")
+            avd_val = st.text_input("Average View Duration (Retention)", value="3 min 20 sec")
+        with col_m2:
+            views_val = st.text_input("View Count / 48h", value="1,200")
+            sub_rate = st.text_input("Subscribers Gained from Video", value="15")
+            
+        if st.button("Analyze Channel Metrics", type="primary"):
+            with st.spinner("Analyzing performance data..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a YouTube algorithm data scientist."},
+                        {"role": "user", "content": f"Analyze these video stats: CTR {ctr_val}, AVD {avd_val}, Views {views_val}, Subs gained {sub_val if 'sub_val' in locals() else '15'}. Explain what is working, what is failing based on YouTube benchmarks, and give 3 actionable steps to improve performance."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Analytics Diagnostic Ready!")
                 st.write(res.choices[0].message.content)
