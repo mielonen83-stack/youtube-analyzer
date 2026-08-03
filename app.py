@@ -1,5 +1,45 @@
 import streamlit as str_module
 from openai import OpenAI
+import sqlite3
+import hashlib
+
+# --- TIETOKANNAN ALUSTUS (SQLite) ---
+def init_db():
+    conn = sqlite3.connect("pro_users.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            password_hash TEXT UNIQUE
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def save_pro_password(password):
+    conn = sqlite3.connect("pro_users.db")
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO users (password_hash) VALUES (?)", (hash_password(password),))
+        conn.commit()
+        success = True
+    except sqlite3.IntegrityError:
+        success = False # Salasana on jo olemassa
+    conn.close()
+    return success
+
+def verify_pro_password(password):
+    conn = sqlite3.connect("pro_users.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE password_hash = ?", (hash_password(password),))
+    user = cursor.fetchone()
+    conn.close()
+    return user is not None
 
 # Sivun asetukset
 str_module.set_page_config(page_title="YouTube Pro Suite", page_icon="🎬", layout="wide")
@@ -73,7 +113,7 @@ except Exception:
 # Stripe-kertamaksun linkki
 stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
 
-# --- KELIN VALINTA ENSIN, ETTÄ KÄÄNNÖKSET TOIMIVAT HETI ---
+# --- KIELEN VALINTA ENSIN ---
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
 languages = ["🇬🇧 English", "🇫🇮 Suomi", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
 if "selected_language" not in str_module.session_state:
@@ -83,7 +123,7 @@ selected_language = str_module.sidebar.selectbox("Select Language:", languages, 
 str_module.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KAIKKI KÄÄNNÖKSET (MUKAAN LUKIEN SALASANA- JA KIRJAUTUMISTEKSTIT) ---
+# --- KAIKKI KÄÄNNÖKSET ---
 translations = {
     "🇬🇧": {
         "sidebar_text": "Unlock all AI tools with a one-time payment!",
@@ -108,7 +148,7 @@ translations = {
         "login_input": "Pro password:",
         "login_btn": "Login",
         "login_success": "Logged in successfully!",
-        "login_error": "Wrong password or password not created for this session.",
+        "login_error": "Wrong password.",
         "logout_btn": "Logout Pro"
     },
     "🇫🇮": {
@@ -134,7 +174,7 @@ translations = {
         "login_input": "Pro-salasana:",
         "login_btn": "Kirjaudu sisään",
         "login_success": "Kirjauduttu sisään!",
-        "login_error": "Väärä salasana tai salasanaa ei ole luotu tällä istunnolla.",
+        "login_error": "Väärä salasana.",
         "logout_btn": "Kirjaudu ulos Prosta"
     },
     "🇸🇪": {
@@ -160,7 +200,7 @@ translations = {
         "login_input": "Pro-lösenord:",
         "login_btn": "Logga in",
         "login_success": "Inloggad!",
-        "login_error": "Fel lösenord eller inte skapat i denna session.",
+        "login_error": "Fel lösenord.",
         "logout_btn": "Logga ut från Pro"
     },
     "🇪🇸": {
@@ -274,35 +314,32 @@ if lang_code not in translations:
 
 texts = translations[lang_code]
 
-# --- PRO-OIKEUKSIEN JA SALASANAN HALLINTA ---
+# --- PRO-OIKEUKSIEN HALLINTA TIETOKANNAN AVULLA ---
 if "is_pro" not in str_module.session_state:
     str_module.session_state.is_pro = False
-
-if "pro_password" not in str_module.session_state:
-    str_module.session_state.pro_password = ""
 
 query_params = str_module.query_params
 is_paid_url = query_params.get("pro") == "true"
 
-# Jos tullaan Stripestä ja salasanaa ei ole vielä luotu
-if is_paid_url and not str_module.session_state.pro_password:
+# Jos tullaan Stripestä (?pro=true)
+if is_paid_url and not str_module.session_state.is_pro:
     str_module.markdown(f"## {texts['pay_title']}")
     str_module.info(texts['pay_info'])
     
     new_pass = str_module.text_input(texts['pass_label'], type="password")
     if str_module.button(texts['save_btn'], type="primary"):
         if new_pass:
-            str_module.session_state.pro_password = new_pass
-            str_module.session_state.is_pro = True
-            str_module.query_params.clear()
-            str_module.rerun()
+            if save_pro_password(new_pass):
+                str_module.session_state.is_pro = True
+                str_module.query_params.clear()
+                str_module.success("Salasana tallennettu tietokantaan!")
+                str_module.rerun()
+            else:
+                str_module.warning("Tämä salasana on jo käytössä, valitse toinen.")
         else:
             str_module.warning(texts['pass_warning'])
     
     str_module.stop()
-
-if str_module.session_state.pro_password:
-    str_module.session_state.is_pro = True
 
 is_pro = str_module.session_state.is_pro
 
@@ -400,7 +437,7 @@ if not is_pro:
     with str_module.sidebar.expander(texts["login_title"]):
         login_pass = str_module.text_input(texts["login_input"], type="password", key="login_input")
         if str_module.button(texts["login_btn"]):
-            if str_module.session_state.pro_password and login_pass == str_module.session_state.pro_password:
+            if verify_pro_password(login_pass):
                 str_module.session_state.is_pro = True
                 str_module.success(texts["login_success"])
                 str_module.rerun()
