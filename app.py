@@ -58,22 +58,20 @@ st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Avaa kaikki tekoälytyökalut ja rajoittamaton haku!")
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Hanki Pro-oikeudet (9 €)</a>', unsafe_allow_html=True)
 
-# Kielen valinta
+# Kielen valinta (Tallennetaan session_stateen, jotta ei nollaudu)
 st.sidebar.markdown("---")
 st.sidebar.subheader("🌍 Language / Kieli")
-selected_language = st.sidebar.selectbox("Valitse kieli:", [
-    "🇫🇮 Suomi", 
-    "🇬🇧 English", 
-    "🇸🇪 Svenska", 
-    "🇪🇸 Español", 
-    "🇩🇪 Deutsch", 
-    "🇫🇷 Français", 
-    "🇯🇵 日本語"
-])
+
+languages = ["🇫🇮 Suomi", "🇬🇧 English", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
+if "selected_language" not in st.session_state:
+    st.session_state.selected_language = "🇫🇮 Suomi"
+
+selected_language = st.sidebar.selectbox("Valitse kieli:", languages, index=languages.index(st.session_state.selected_language))
+st.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KIELIAVAIMET JA KÄÄNNÖKSET ---
-texts = {
+# --- KIELIAVAIMET JA KÄÄNNÖKSET (Synkronoitu täydellisesti) ---
+translations = {
     "🇫🇮": {
         "dev_access": "🔐 Kehittäjä / Omistaja",
         "pass_label": "Syötä Pro-salasana:",
@@ -148,32 +146,10 @@ texts = {
             "simulator": "💰 Growth & ROI Simulator"
         }
     }
-}.get(lang_code, {
-    "dev_access": "🔐 Developer / Owner Access",
-    "pass_label": "Enter Pro Password:",
-    "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
-    "settings": "⚙️ Creator Settings",
-    "v_len": "Video Length / Type",
-    "aud": "Target Audience",
-    "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-    "unlock_all": "🔥 Unlock All Tools for 9 €",
-    "nav_title": "🛠️ Tools Navigation",
-    "cat_label": "Select category:",
-    "cat_basics": "💡 Basics, Ideas & Scripts",
-    "cat_advanced": "🚀 Advanced SEO, Growth & Analytics",
-    "tool_prompt": "Select tool:",
-    "tools_basics": {
-        "search": "📊 Basic Search", "ideas": "💡 Ideas & Hooks", "scripts": "✍️ Scripts & Shorts", 
-        "thumbnails": "🎯 Thumbnails", "seo": "🏷️ SEO & Tags", "comments": "💬 Comments", 
-        "repurpose": "♻️ Repurpose", "sponsorship": "🤝 Sponsorship"
-    },
-    "tools_advanced": {
-        "translator": "🌍 Translator", "competitor": "🏆 Competitor Audit", "bulk": "⚡ Bulk Edit Tools", 
-        "analytics": "📈 Data & Analytics", "branding": "🎨 Channel Branding", "timestamps": "⏱️ Timestamp Generator", 
-        "title_matrix": "🧠 Title A/B Matrix", "ai_images": "🎨 AI Image Prompts", "voice": "🎙️ Script Voice Optimizer", 
-        "simulator": "💰 Growth & ROI Simulator"
-    }
-})
+}
+
+# Jos jokin muu kieli kuin Suomi tai Englanti valitaan, käytetään oletuksena englantia (tai suomea jos haluat)
+texts = translations.get(lang_code, translations["🇬🇧"])
 
 # Salasana-tarkistus (Dev mode)
 st.sidebar.markdown("---")
@@ -213,7 +189,7 @@ def render_paywall():
 # ==========================================
 
 if menu_choice == "search":
-    st.title("🎬 Perushaku & Trendit")
+    st.title("📊 Perushaku & Trendit")
     st.markdown("Hae hakusanoja, tutki trendejä ja arvioi ansioita tekoälyn avulla.")
     keyword = st.text_input("🔍 Kirjoita hakusana tai aihe:")
     
@@ -224,7 +200,6 @@ if menu_choice == "search":
             else:
                 with st.spinner(f"Analysoidaan hakusanaa '{keyword}' tekoälyn avulla..."):
                     try:
-                        # Pyydetään tekoälyltä strukturoitu vastaus, jotta saadaan aidosti hakusanakohtaiset arvot
                         res = client.chat.completions.create(
                             model="gpt-4o",
                             messages=[
@@ -242,8 +217,6 @@ if menu_choice == "search":
                         
                         raw_response = res.choices[0].message.content
                         st.success(f"Dynaaminen analyysi hakusanalle '{keyword}':")
-                        
-                        # Näytetään tekoälyn raakavastaus tai puretaan se fiksummin
                         st.markdown("### 🤖 Tekoälyn analyysi ja metriikat:")
                         st.write(raw_response)
                         
