@@ -7,7 +7,6 @@ st.set_page_config(page_title="YouTube Pro Analyzer", page_icon="🎬", layout="
 # --- CUSTOM CSS (Visuaalinen parannus) ---
 st.markdown("""
     <style>
-    /* Pääotsikoiden tyyli */
     h1 {
         color: #FF0000;
         font-weight: 800;
@@ -15,24 +14,16 @@ st.markdown("""
     h2, h3 {
         color: #222222;
     }
-    /* Sivupalkin muotoilu */
     [data-testid="stSidebar"] {
         background-color: #f8f9fa;
         padding-top: 20px;
     }
-    /* Tyylitellyt kortit/laatikot */
     .pro-card {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         padding: 20px;
         border-radius: 10px;
         border-left: 5px solid #FF0000;
         margin-bottom: 20px;
-    }
-    .metric-container {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -48,7 +39,7 @@ except Exception:
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe payment link
+# Stripe payment link (Määritetty heti ennen nappia)
 stripe_link = "https://tinyurl.com/tubecontent"
 st.sidebar.link_button("🔥 Buy Pro Access ($9)", stripe_link, use_container_width=True)
 
@@ -97,7 +88,6 @@ with tab1:
 
     st.markdown("---")
     
-    # Visuaalisempi myyntilaatikko (HTML-kortti)
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro ($9)</h3>
