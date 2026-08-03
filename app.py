@@ -200,7 +200,6 @@ else:
     tool_dict = texts["tools_advanced"]
 
 selected_tool_label = st.selectbox(texts["tool_prompt"], list(tool_dict.values()))
-# Muunnetaan valittu teksti takaisin tunnisteeksi (key)
 menu_choice = [k for k, v in tool_dict.items() if v == selected_tool_label][0]
 
 st.markdown("---")
@@ -217,31 +216,46 @@ if menu_choice == "search":
     st.title("🎬 Perushaku & Trendit")
     st.markdown("Hae hakusanoja, tutki trendejä ja arvioi ansioita tekoälyn avulla.")
     keyword = st.text_input("🔍 Kirjoita hakusana tai aihe:")
+    
     if st.button("Hae & Analysoi", type="primary"):
-        if keyword and client:
-            with st.spinner(f"Analysoidaan hakusanaa '{keyword}'..."):
-                res = client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=[
-                        {"role": "system", "content": f"You are a YouTube analytics expert. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Provide estimated metrics for keyword '{keyword}': monthly searches, competition level, estimated RPM, and brief strategic insight."}
-                    ],
-                    temperature=0.7
-                )
-                st.success("Analyysi valmis:")
-                col1, col2, col3 = st.columns(3)
-                col1.metric("Haut / kk (AI)", "~45,000", "+10%")
-                col2.metric("Kilpailu (AI)", "Keskitaso", "Vakaa")
-                col3.metric("Arvioitu RPM (AI)", "$4.50", "+$0.2")
-                st.write(res.choices[0].message.content)
+        if keyword:
+            if not client:
+                st.error("OpenAI API key is missing!")
+            else:
+                with st.spinner(f"Analysoidaan hakusanaa '{keyword}' tekoälyn avulla..."):
+                    try:
+                        # Pyydetään tekoälyltä strukturoitu vastaus, jotta saadaan aidosti hakusanakohtaiset arvot
+                        res = client.chat.completions.create(
+                            model="gpt-4o",
+                            messages=[
+                                {
+                                    "role": "system", 
+                                    "content": f"You are a YouTube analytics expert. Respond in {selected_language}. Provide a realistic estimate for the given keyword in this exact format:\nHAUT: [estimated monthly searches, e.g. ~12,000]\nKILPAILU: [competition level, e.g. Matala / Keskitaso / Korkea]\nRPM: [estimated RPM, e.g. $3.50]\nANALYysi: [Brief 2-sentence strategic insight about this keyword]"
+                                },
+                                {
+                                    "role": "user", 
+                                    "content": f"Analyze keyword: '{keyword}'"
+                                }
+                            ],
+                            temperature=0.7
+                        )
+                        
+                        raw_response = res.choices[0].message.content
+                        st.success(f"Dynaaminen analyysi hakusanalle '{keyword}':")
+                        
+                        # Näytetään tekoälyn raakavastaus tai puretaan se fiksummin
+                        st.markdown("### 🤖 Tekoälyn analyysi ja metriikat:")
+                        st.write(raw_response)
+                        
+                    except Exception as e:
+                        st.error(f"Virhe tekoälyhaussa: {e}")
         else:
-            st.warning("Syötä hakusana.")
+            st.warning("Syötä ensin hakusana.")
 
 elif menu_choice == "ideas":
     st.title("💡 Viraalit Ideat & Koukut")
     if not is_pro: render_paywall()
     elif client:
-        sub = st.selectbox("Valitse toiminto:", ["Ideageneraattori", "3 sekunnin koukut"])
         niche = st.text_input("Aihepiiri / Niche:")
         if st.button("Generoi", type="primary") and niche:
             with st.spinner("Generoidaan..."):
