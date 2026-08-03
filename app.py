@@ -25,6 +25,22 @@ st.markdown("""
         border-left: 5px solid #FF0000;
         margin-bottom: 20px;
     }
+    /* Tyylitelty ostonappi sivupalkkiin */
+    .buy-button {
+        display: block;
+        width: 100%;
+        background-color: #FF0000;
+        color: white !important;
+        text-align: center;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        margin-bottom: 10px;
+    }
+    .buy-button:hover {
+        background-color: #cc0000;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -39,9 +55,9 @@ except Exception:
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe payment link (Määritetty heti ennen nappia)
-stripe_link = "https://tinyurl.com/tubecontent"
-st.sidebar.link_button("🔥 Buy Pro Access ($9)", stripe_link, use_container_width=True)
+# Päivitetty Oikea Stripe-linkki
+stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
+st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access ($9)</a>', unsafe_allow_html=True)
 
 # Simulated Pro mode check
 st.sidebar.markdown("---")
