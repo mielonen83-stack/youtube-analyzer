@@ -55,23 +55,80 @@ stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
 # --- SIVUPALKKI (Sidebar) ---
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
-st.sidebar.write("Avaa kaikki tekoälytyökalut ja rajoittamaton haku!")
-st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Hanki Pro-oikeudet (9 €)</a>', unsafe_allow_html=True)
+st.sidebar.write("Unlock all AI tools and unlimited search!")
+st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Get Pro Access (9 €)</a>', unsafe_allow_html=True)
 
-# Kielen valinta (Tallennetaan session_stateen)
+# Kielen valinta (Oletuksena englanti)
 st.sidebar.markdown("---")
 st.sidebar.subheader("🌍 Language / Kieli")
 
-languages = ["🇫🇮 Suomi", "🇬🇧 English", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
+languages = ["🇬🇧 English", "🇫🇮 Suomi", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
 if "selected_language" not in st.session_state:
-    st.session_state.selected_language = "🇫🇮 Suomi"
+    st.session_state.selected_language = "🇬🇧 English"
 
-selected_language = st.sidebar.selectbox("Valitse kieli:", languages, index=languages.index(st.session_state.selected_language))
+selected_language = st.sidebar.selectbox("Select Language:", languages, index=languages.index(st.session_state.selected_language))
 st.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KAIKKI KÄÄNNÖKSET (Kaikille 7 kielelle) ---
+# --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
 translations = {
+    "🇬🇧": {
+        "dev_access": "🔐 Developer / Owner Access",
+        "pass_label": "Enter Pro Password:",
+        "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
+        "settings": "⚙️ Creator Settings",
+        "v_len": "Video Length / Type",
+        "aud": "Target Audience",
+        "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
+        "unlock_all": "🔥 Unlock All Tools for 9 €",
+        "nav_title": "🛠️ Tools Navigation",
+        "cat_label": "Select category:",
+        "cat_basics": "💡 Basics, Ideas & Scripts",
+        "cat_advanced": "🚀 Advanced SEO, Growth & Analytics",
+        "tool_prompt": "Select tool:",
+        "tools_basics": {
+            "search": "📊 Basic Search & Trends",
+            "ideas": "💡 Viral Ideas & Hooks",
+            "scripts": "✍️ Scripts & Shorts",
+            "thumbnails": "🎯 Thumbnails",
+            "seo": "🏷️ SEO & Tags",
+            "comments": "💬 Comments Assistant",
+            "repurpose": "♻️ Content Repurposer",
+            "sponsorship": "🤝 Sponsorship Pitches"
+        },
+        "tools_advanced": {
+            "translator": "🌍 Global Translator",
+            "competitor": "🏆 Competitor Audit",
+            "bulk": "⚡ Bulk Edit Tools",
+            "analytics": "📈 Data & Analytics",
+            "branding": "🎨 Channel Branding",
+            "timestamps": "⏱️ Timestamp Generator",
+            "title_matrix": "🧠 Title A/B Matrix",
+            "ai_images": "🎨 AI Image Prompts",
+            "voice": "🎙️ Voice Optimizer",
+            "simulator": "💰 Growth & ROI Simulator"
+        },
+        "content": {
+            "search": {"title": "📊 Basic Search & Trends", "desc": "Search keywords, explore trends, and estimate earnings using AI.", "input": "🔍 Enter keyword or topic:", "btn": "Search & Analyze", "spinner": "Analyzing keyword '{keyword}' with AI..."},
+            "ideas": {"title": "💡 Viral Ideas & Hooks", "input": "Niche / Topic:", "btn": "Generate", "spinner": "Generating..."},
+            "scripts": {"title": "✍️ Scripts & Shorts", "input": "Video Topic:", "btn": "Write Script", "spinner": "Writing script..."},
+            "thumbnails": {"title": "🎯 Thumbnails", "input": "Core Video Idea:", "btn": "Design Thumbnail", "spinner": "Designing visual concepts..."},
+            "seo": {"title": "🏷️ SEO & Tags", "input": "Topic for SEO Tags:", "btn": "Generate Tags", "spinner": "Fetching optimized tags..."},
+            "comments": {"title": "💬 Comments Assistant", "input": "Viewer Comment:", "btn": "Write Reply", "spinner": "Writing reply..."},
+            "repurpose": {"title": "♻️ Content Repurposer", "input": "Video Script or Text:", "btn": "Repurpose", "spinner": "Adapting content..."},
+            "sponsorship": {"title": "🤝 Sponsorship Pitches", "input_brand": "Brand Name:", "input_stats": "Channel Stats / Niche:", "btn": "Write Pitch", "spinner": "Writing email..."},
+            "translator": {"title": "🌍 Global Translator & Localizer", "input": "Text to Translate:", "btn": "Translate", "spinner": "Translating..."},
+            "competitor": {"title": "🏆 Competitor Audit", "input": "Topic or Competitor Style:", "btn": "Audit Gaps", "spinner": "Analyzing..."},
+            "bulk": {"title": "⚡ Bulk Edit Tools", "input": "Channel Niche:", "btn": "Create Bulk Template", "spinner": "Creating..."},
+            "analytics": {"title": "📈 Data & Analytics", "btn": "Analyze Metrics", "spinner": "Analyzing stats..."},
+            "branding": {"title": "🎨 Channel Branding", "input": "Your Passions / Topic:", "btn": "Create Branding Package", "spinner": "Designing..."},
+            "timestamps": {"title": "⏱️ Timestamp Generator", "input": "Script / Content:", "btn": "Generate Timestamps", "spinner": "Creating chapters..."},
+            "title_matrix": {"title": "🧠 Title A/B Matrix", "input": "Video Topic / Idea:", "btn": "Create Title Matrix", "spinner": "Creating..."},
+            "ai_images": {"title": "🎨 AI Image Prompts", "input": "Thumbnail Subject:", "btn": "Generate Prompts", "spinner": "Formatting prompts..."},
+            "voice": {"title": "🎙️ Voice Optimizer", "input": "Raw Text:", "btn": "Optimize for Speech", "spinner": "Adapting..."},
+            "simulator": {"title": "💰 Growth & ROI Simulator", "sub1": "Current Subscribers:", "sub2": "Average Views per Video:", "btn": "Simulate Growth", "spinner": "Calculating forecast..."}
+        }
+    },
     "🇫🇮": {
         "dev_access": "🔐 Kehittäjä / Omistaja",
         "pass_label": "Syötä Pro-salasana:",
@@ -107,234 +164,36 @@ translations = {
             "ai_images": "🎨 Tekoälyn Kuvapromptit",
             "voice": "🎙️ Puhe- & Ääniohjaus",
             "simulator": "💰 Kasvu- & ROI Simulaattori"
-        }
-    },
-    "🇬🇧": {
-        "dev_access": "🔐 Developer / Owner Access",
-        "pass_label": "Enter Pro Password:",
-        "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
-        "settings": "⚙️ Creator Settings",
-        "v_len": "Video Length / Type",
-        "aud": "Target Audience",
-        "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools for 9 €",
-        "nav_title": "🛠️ Tools Navigation",
-        "cat_label": "Select category:",
-        "cat_basics": "💡 Basics, Ideas & Scripts",
-        "cat_advanced": "🚀 Advanced SEO, Growth & Analytics",
-        "tool_prompt": "Select tool:",
-        "tools_basics": {
-            "search": "📊 Basic Search",
-            "ideas": "💡 Ideas & Hooks",
-            "scripts": "✍️ Scripts & Shorts",
-            "thumbnails": "🎯 Thumbnails",
-            "seo": "🏷️ SEO & Tags",
-            "comments": "💬 Comments",
-            "repurpose": "♻️ Repurpose",
-            "sponsorship": "🤝 Sponsorship"
         },
-        "tools_advanced": {
-            "translator": "🌍 Translator",
-            "competitor": "🏆 Competitor Audit",
-            "bulk": "⚡ Bulk Edit Tools",
-            "analytics": "📈 Data & Analytics",
-            "branding": "🎨 Channel Branding",
-            "timestamps": "⏱️ Timestamp Generator",
-            "title_matrix": "🧠 Title A/B Matrix",
-            "ai_images": "🎨 AI Image Prompts",
-            "voice": "🎙️ Script Voice Optimizer",
-            "simulator": "💰 Growth & ROI Simulator"
-        }
-    },
-    "🇸🇪": {
-        "dev_access": "🔐 Utvecklare / Ägare",
-        "pass_label": "Ange Pro-lösenord:",
-        "success_pro": "✅ Pro-åtkomst upplåst (Dev Mode)",
-        "settings": "⚙️ Skaparinställningar",
-        "v_len": "Videons längd / Typ",
-        "aud": "Målgrupp",
-        "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda detta verktyg.",
-        "unlock_all": "🔥 Lås upp alla verktyg för 9 €",
-        "nav_title": "🛠️ Verktygsnavigering",
-        "cat_label": "Välj kategori:",
-        "cat_basics": "💡 Grunderna, Idéer & Manus",
-        "cat_advanced": "🚀 Avancerad SEO, Tillväxt & Analys",
-        "tool_prompt": "Välj verktyg:",
-        "tools_basics": {
-            "search": "📊 Grundsökning & Trender",
-            "ideas": "💡 Viral idéer & Krokar",
-            "scripts": "✍️ Manus & Shorts",
-            "thumbnails": "🎯 Miniatyrer (Thumbnails)",
-            "seo": "🏷️ Taggar & SEO",
-            "comments": "💬 Kommentarsassistent",
-            "repurpose": "♻️ Innehållsåtervinning",
-            "sponsorship": "🤝 Sponsorpitchar"
-        },
-        "tools_advanced": {
-            "translator": "🌍 Global Översättare",
-            "competitor": "🏆 Konkurrentanalys",
-            "bulk": "⚡ Massredigering",
-            "analytics": "📈 Data & Analys",
-            "branding": "🎨 Kanalvarumärke",
-            "timestamps": "⏱️ Tidsstämplar & Kapitel",
-            "title_matrix": "🧠 Titel A/B Matris",
-            "ai_images": "🎨 AI Bildprompter",
-            "voice": "🎙️ Röst- & Taloptimering",
-            "simulator": "💰 Tillväxt- & ROI-simulator"
-        }
-    },
-    "🇪🇸": {
-        "dev_access": "🔐 Desarrollador / Propietario",
-        "pass_label": "Introduce contraseña Pro:",
-        "success_pro": "✅ Acceso Pro desbloqueado (Dev Mode)",
-        "settings": "⚙️ Configuración del Creador",
-        "v_len": "Duración del video / Tipo",
-        "aud": "Público objetivo",
-        "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquear todas las herramientas por 9 €",
-        "nav_title": "🛠️ Navegación de Herramientas",
-        "cat_label": "Selecciona categoría:",
-        "cat_basics": "💡 Básicos, Ideas y Guiones",
-        "cat_advanced": "🚀 SEO Avanzado, Crecimiento y Analítica",
-        "tool_prompt": "Selecciona herramienta:",
-        "tools_basics": {
-            "search": "📊 Búsqueda Básica y Tendencias",
-            "ideas": "💡 Ideas Virales y ganchos",
-            "scripts": "✍️ Guiones y Shorts",
-            "thumbnails": "🎯 Miniaturas",
-            "seo": "🏷️ Etiquetas y SEO",
-            "comments": "💬 Asistente de Comentarios",
-            "repurpose": "♻️ Reutilizar Contenido",
-            "sponsorship": "🤝 Propuestas de Patrocinio"
-        },
-        "tools_advanced": {
-            "translator": "🌍 Traductor Global",
-            "competitor": "🏆 Auditoría de la Competencia",
-            "bulk": "⚡ Edición Masiva",
-            "analytics": "📈 Datos y Analítica",
-            "branding": "🎨 Imagen de Marca",
-            "timestamps": "⏱️ Generador de Marcas de Tiempo",
-            "title_matrix": "🧠 Matriz de Títulos A/B",
-            "ai_images": "🎨 Prompts de Imágenes IA",
-            "voice": "🎙️ Optimizador de Voz",
-            "simulator": "💰 Simulador de Crecimiento y ROI"
-        }
-    },
-    "🇩🇪": {
-        "dev_access": "🔐 Entwickler / Eigentümer",
-        "pass_label": "Pro-Passwort eingeben:",
-        "success_pro": "✅ Pro-Zugang freigeschaltet (Dev Mode)",
-        "settings": "⚙️ Creator-Einstellungen",
-        "v_len": "Videolänge / Typ",
-        "aud": "Zielgruppe",
-        "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugang, um dieses Tool zu nutzen.",
-        "unlock_all": "🔥 Alle Tools für 9 € freischalten",
-        "nav_title": "🛠️ Tool-Navigation",
-        "cat_label": "Kategorie auswählen:",
-        "cat_basics": "💡 Grundlagen, Ideen & Skripte",
-        "cat_advanced": "🚀 Fortgeschrittene SEO, Wachstum & Analytics",
-        "tool_prompt": "Tool auswählen:",
-        "tools_basics": {
-            "search": "📊 Grundsuche & Trends",
-            "ideas": "💡 Virale Ideen & Hooks",
-            "scripts": "✍️ Skripte & Shorts",
-            "thumbnails": "🎯 Thumbnails",
-            "seo": "🏷️ Tags & SEO",
-            "comments": "💬 Kommentar-Assistent",
-            "repurpose": "♻️ Content-Wiederverwertung",
-            "sponsorship": "🤝 Sponsoring-Pitches"
-        },
-        "tools_advanced": {
-            "translator": "🌍 Globaler Übersetzer",
-            "competitor": "🏆 Wettbewerbsanalyse",
-            "bulk": "⚡ Massenbearbeitung",
-            "analytics": "📈 Daten & Analytics",
-            "branding": "🎨 Kanal-Branding",
-            "timestamps": "⏱️ Zeitstempel-Generator",
-            "title_matrix": "🧠 Titel A/B Matrix",
-            "ai_images": "🎨 KI-Bildprompts",
-            "voice": "🎙️ Sprach- & Audio-Optimierer",
-            "simulator": "💰 Wachstums- & ROI-Simulator"
-        }
-    },
-    "🇫🇷": {
-        "dev_access": "🔐 Développeur / Propriétaire",
-        "pass_label": "Entrez le mot de passe Pro :",
-        "success_pro": "✅ Accès Pro déverrouillé (Dev Mode)",
-        "settings": "⚙️ Paramètres du Créateur",
-        "v_len": "Durée de la vidéo / Type",
-        "aud": "Public cible",
-        "paywall": "🔒 **Fonctionnalité Pro :** Vous avez besoin d'un accès Pro pour utiliser cet outil.",
-        "unlock_all": "🔥 Déverrouiller tous les outils pour 9 €",
-        "nav_title": "🛠️ Navigation des Outils",
-        "cat_label": "Sélectionnez la catégorie :",
-        "cat_basics": "💡 Bases, Idées & Scripts",
-        "cat_advanced": "🚀 SEO Avancé, Croissance & Analytique",
-        "tool_prompt": "Sélectionnez l'outil :",
-        "tools_basics": {
-            "search": "📊 Recherche de base & Tendances",
-            "ideas": "💡 Idées virales & Accroches",
-            "scripts": "✍️ Scripts & Shorts",
-            "thumbnails": "🎯 Miniatures",
-            "seo": "🏷️ Tags & SEO",
-            "comments": "💬 Assistant de Commentaires",
-            "repurpose": "♻️ Recyclage de Contenu",
-            "sponsorship": "🤝 Pitches de Sponsoring"
-        },
-        "tools_advanced": {
-            "translator": "🌍 Traducteur Global",
-            "competitor": "🏆 Analyse Concurrentielle",
-            "bulk": "⚡ Outils d'Édition en Masse",
-            "analytics": "📈 Données & Analytique",
-            "branding": "🎨 Image de Marque de la Chaîne",
-            "timestamps": "⏱️ Générateur de Horodatages",
-            "title_matrix": "🧠 Matrice de Titres A/B",
-            "ai_images": "🎨 Prompts d'Images IA",
-            "voice": "🎙️ Optimiseur de Voix",
-            "simulator": "💰 Simulateur de Croissance & ROI"
-        }
-    },
-    "🇯🇵": {
-        "dev_access": "🔐 開発者 / オーナーアクセス",
-        "pass_label": "Proパスワードを入力:",
-        "success_pro": "✅ Proアクセスが解放されました (Dev Mode)",
-        "settings": "⚙️ クリエイター設定",
-        "v_len": "動画の長さ / タイプ",
-        "aud": "ターゲット視聴者",
-        "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
-        "unlock_all": "🔥 9€ですべてのツールのロックを解除",
-        "nav_title": "🛠️ ツールナビゲーション",
-        "cat_label": "カテゴリを選択:",
-        "cat_basics": "💡 基本・アイデア・台本",
-        "cat_advanced": "🚀 高度なSEO・成長・アナリティクス",
-        "tool_prompt": "ツールを選択:",
-        "tools_basics": {
-            "search": "📊 基本検索とトレンド",
-            "ideas": "💡 バイラルアイデアとフック",
-            "scripts": "✍️ 台本とショート動画",
-            "thumbnails": "🎯 サムネイル",
-            "seo": "🏷️ タグとSEO",
-            "comments": "💬 コメントアシスタント",
-            "repurpose": "♻️ コンテンツのリパーパスポスト",
-            "sponsorship": "🤝 企業案件ピッチ"
-        },
-        "tools_advanced": {
-            "translator": "🌍 グローバル翻訳",
-            "competitor": "🏆 競合分析",
-            "bulk": "⚡ 一括編集ツール",
-            "analytics": "📈 データと分析",
-            "branding": "🎨 チャンネルブランディング",
-            "timestamps": "⏱️ タイムスタンプ生成",
-            "title_matrix": "🧠 タイトルA/Bマトリックス",
-            "ai_images": "🎨 AI画像プロンプト",
-            "voice": "🎙️ 音声最適化",
-            "simulator": "💰 成長・ROIシミュレーター"
+        "content": {
+            "search": {"title": "📊 Perushaku & Trendit", "desc": "Hae hakusanoja, tutki trendejä ja arvioi ansioita tekoälyn avulla.", "input": "🔍 Kirjoita hakusana tai aihe:", "btn": "Hae & Analysoi", "spinner": "Analysoidaan hakusanaa '{keyword}' tekoälyn avulla..."},
+            "ideas": {"title": "💡 Viraalit Ideat & Koukut", "input": "Aihepiiri / Niche:", "btn": "Generoi", "spinner": "Generoidaan..."},
+            "scripts": {"title": "✍️ Käsikirjoitukset & Shorts", "input": "Videon aihe:", "btn": "Kirjoita skripti", "spinner": "Kirjoitetaan käsikirjoitusta..."},
+            "thumbnails": {"title": "🎯 Pienoiskuvat (Thumbnails)", "input": "Videon ydinidea:", "btn": "Suunnittele pienoiskuva", "spinner": "Suunnitellaan visuaalista reseptiä..."},
+            "seo": {"title": "🏷️ SEO & Tunnisteet", "input": "Aihe SEO-tunnisteille:", "btn": "Generoi tunnisteet", "spinner": "Haetaan optimoituja tunnisteita..."},
+            "comments": {"title": "💬 Kommenttiavustaja", "input": "Katsojan kommentti:", "btn": "Kirjoita vastaus", "spinner": "Kirjoitetaan vastausta..."},
+            "repurpose": {"title": "♻️ Sisällön kierrätys", "input": "Videokäsikirjoitus tai teksti:", "btn": "Kierrätä", "spinner": "Muokataan sisältöä..."},
+            "sponsorship": {"title": "🤝 Sponsorointiviestit", "input_brand": "Brändin nimi:", "input_stats": "Kanavasi tilastot / niche:", "btn": "Kirjoita pitch", "spinner": "Kirjoitetaan sähköpostia..."},
+            "translator": {"title": "🌍 Globaali Kääntäjä & Lokalisoija", "input": "Käännettävä teksti:", "btn": "Käännä", "spinner": "Käännetään..."},
+            "competitor": {"title": "🏆 Kilpailija-analyysi", "input": "Aihe tai kilpailijoiden tyyli:", "btn": "Analysoi aukot", "spinner": "Analysoidaan..."},
+            "bulk": {"title": "⚡ Massamuokkaus-työkalut", "input": "Kanavasi aihe:", "btn": "Luo massapohja", "spinner": "Luodaan..."},
+            "analytics": {"title": "📈 Data & Analytiikka", "btn": "Analysoi mittarit", "spinner": "Analysoidaan tilastoja..."},
+            "branding": {"title": "🎨 Kanavan Brändäys", "input": "Intohimosi / aihealue:", "btn": "Luo brändäyspaketti", "spinner": "Suunnitellaan..."},
+            "timestamps": {"title": "⏱️ Aikaleimat & Luvut", "input": "Käsikirjoitus:", "btn": "Generoi aikaleimat", "spinner": "Luodaan lukuja..."},
+            "title_matrix": {"title": "🧠 Otsikko A/B Matriisi", "input": "Videon aihe / idea:", "btn": "Luo otsikkomatriisi", "spinner": "Luodaan..."},
+            "ai_images": {"title": "🎨 Tekoälyn Kuvapromptit", "input": "Pienoiskuvan aihe:", "btn": "Luo promptit", "spinner": "Muotoillaan prompteja..."},
+            "voice": {"title": "🎙️ Puhe- & Ääniohjaus", "input": "Raakateksti:", "btn": "Optimoi puheelle", "spinner": "Muokataan..."},
+            "simulator": {"title": "💰 Kasvu- & ROI Simulaattori", "sub1": "Nykyiset tilaajat:", "sub2": "Keskimääräiset katselukerrat per video:", "btn": "Simuloi kasvu", "spinner": "Lasketaan ennustetta..."}
         }
     }
 }
 
-# Haetaan valitut tekstit turvallisesti
-texts = translations.get(lang_code, translations["🇬🇧"])
+# Varmistetaan tuki myös muille kielille yleisellä tasolla
+if lang_code not in translations:
+    lang_code = "🇬🇧"
+
+texts = translations[lang_code]
+c_texts = texts["content"]
 
 # Salasana-tarkistus (Dev mode)
 st.sidebar.markdown("---")
@@ -374,23 +233,23 @@ def render_paywall():
 # ==========================================
 
 if menu_choice == "search":
-    st.title("📊 Perushaku & Trendit")
-    st.markdown("Hae hakusanoja, tutki trendejä ja arvioi ansioita tekoälyn avulla.")
-    keyword = st.text_input("🔍 Kirjoita hakusana tai aihe:")
+    st.title(c_texts["search"]["title"])
+    st.markdown(c_texts["search"]["desc"])
+    keyword = st.text_input(c_texts["search"]["input"])
     
-    if st.button("Hae & Analysoi", type="primary"):
+    if st.button(c_texts["search"]["btn"], type="primary"):
         if keyword:
             if not client:
                 st.error("OpenAI API key is missing!")
             else:
-                with st.spinner(f"Analysoidaan hakusanaa '{keyword}' tekoälyn avulla..."):
+                with st.spinner(c_texts["search"]["spinner"].format(keyword=keyword)):
                     try:
                         res = client.chat.completions.create(
                             model="gpt-4o",
                             messages=[
                                 {
                                     "role": "system", 
-                                    "content": f"You are a YouTube analytics expert. Respond in {selected_language}. Provide a realistic estimate for the given keyword in this exact format:\nHAUT: [estimated monthly searches, e.g. ~12,000]\nKILPAILU: [competition level, e.g. Matala / Keskitaso / Korkea]\nRPM: [estimated RPM, e.g. $3.50]\nANALYysi: [Brief 2-sentence strategic insight about this keyword]"
+                                    "content": f"You are a YouTube analytics expert. Respond in {selected_language}. Provide a realistic estimate for the given keyword in this exact format:\nHAUT: [estimated monthly searches, e.g. ~12,000]\nKILPAILU: [competition level, e.g. Low / Medium / High]\nRPM: [estimated RPM, e.g. $3.50]\nANALYysi: [Brief 2-sentence strategic insight about this keyword]"
                                 },
                                 {
                                     "role": "user", 
@@ -401,8 +260,7 @@ if menu_choice == "search":
                         )
                         
                         raw_response = res.choices[0].message.content
-                        
-                        haut, kilpailu, rpm, analyysi = "~10,000", "Keskitaso", "$3.00", raw_response
+                        haut, kilpailu, rpm, analyysi = "~10,000", "Medium", "$3.00", raw_response
                         
                         lines = raw_response.split('\n')
                         for line in lines:
@@ -415,28 +273,28 @@ if menu_choice == "search":
                             elif "ANALYysi:" in line or "ANALYYSISI:" in line or "ANALYYSI:" in line:
                                 analyysi = line.split(":", 1)[1].strip()
 
-                        st.success(f"Tulokset hakusanalle: **{keyword}**")
+                        st.success(f"Results for keyword: **{keyword}**")
                         
                         col1, col2, col3 = st.columns(3)
-                        col1.metric("🔍 Arvioidut haut / kk", haut)
-                        col2.metric("⚔️ Kilpailutaso", kilpailu)
-                        col3.metric("💵 Arvioitu RPM", rpm)
+                        col1.metric("🔍 Est. Monthly Searches", haut)
+                        col2.metric("⚔️ Competition Level", kilpailu)
+                        col3.metric("💵 Estimated RPM", rpm)
                         
-                        st.markdown("### 💡 Strateginen näkemys")
+                        st.markdown("### 💡 Strategic Insight")
                         st.info(analyysi)
                         
                     except Exception as e:
-                        st.error(f"Virhe tekoälyhaussa: {e}")
+                        st.error(f"AI Search error: {e}")
         else:
-            st.warning("Syötä ensin hakusana.")
+            st.warning("Please enter a keyword first.")
 
 elif menu_choice == "ideas":
-    st.title("💡 Viraalit Ideat & Koukut")
+    st.title(c_texts["ideas"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        niche = st.text_input("Aihepiiri / Niche:")
-        if st.button("Generoi", type="primary") and niche:
-            with st.spinner("Generoidaan..."):
+        niche = st.text_input(c_texts["ideas"]["input"])
+        if st.button(c_texts["ideas"]["btn"], type="primary") and niche:
+            with st.spinner(c_texts["ideas"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -445,16 +303,16 @@ elif menu_choice == "ideas":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "scripts":
-    st.title("✍️ Käsikirjoitukset & Shorts")
+    st.title(c_texts["scripts"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input("Videon aihe:")
-        if st.button("Kirjoita skripti", type="primary") and topic:
-            with st.spinner("Kirjoitetaan käsikirjoitusta..."):
+        topic = st.text_input(c_texts["scripts"]["input"])
+        if st.button(c_texts["scripts"]["btn"], type="primary") and topic:
+            with st.spinner(c_texts["scripts"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -463,16 +321,16 @@ elif menu_choice == "scripts":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "thumbnails":
-    st.title("🎯 Pienoiskuvat (Thumbnails)")
+    st.title(c_texts["thumbnails"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input("Videon ydinidea:")
-        if st.button("Suunnittele pienoiskuva", type="primary") and topic:
-            with st.spinner("Suunnitellaan visuaalista reseptiä..."):
+        topic = st.text_input(c_texts["thumbnails"]["input"])
+        if st.button(c_texts["thumbnails"]["btn"], type="primary") and topic:
+            with st.spinner(c_texts["thumbnails"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -481,16 +339,16 @@ elif menu_choice == "thumbnails":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "seo":
-    st.title("🏷️ SEO & Tunnisteet")
+    st.title(c_texts["seo"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input("Aihe SEO-tunnisteille:")
-        if st.button("Generoi tunnisteet", type="primary") and topic:
-            with st.spinner("Haetaan optimoituja tunnisteita..."):
+        topic = st.text_input(c_texts["seo"]["input"])
+        if st.button(c_texts["seo"]["btn"], type="primary") and topic:
+            with st.spinner(c_texts["seo"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -499,16 +357,16 @@ elif menu_choice == "seo":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "comments":
-    st.title("💬 Kommenttiavustaja")
+    st.title(c_texts["comments"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        comment = st.text_area("Katsojan kommentti:")
-        if st.button("Kirjoita vastaus", type="primary") and comment:
-            with st.spinner("Kirjoitetaan vastausta..."):
+        comment = st.text_area(c_texts["comments"]["input"])
+        if st.button(c_texts["comments"]["btn"], type="primary") and comment:
+            with st.spinner(c_texts["comments"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -517,17 +375,17 @@ elif menu_choice == "comments":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "repurpose":
-    st.title("♻️ Sisällön kierrätys")
+    st.title(c_texts["repurpose"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        content = st.text_area("Videokäsikirjoitus tai teksti:")
-        target = st.selectbox("Muunna muotoon:", ["X (Twitter) -ketju", "Yhteisöpostaus", "Uutiskirje"])
-        if st.button("Kierrätä", type="primary") and content:
-            with st.spinner("Muokataan sisältöä..."):
+        content = st.text_area(c_texts["repurpose"]["input"])
+        target = st.selectbox("Convert to format:", ["X (Twitter) Thread", "Community Post", "Newsletter"])
+        if st.button(c_texts["repurpose"]["btn"], type="primary") and content:
+            with st.spinner(c_texts["repurpose"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -536,17 +394,17 @@ elif menu_choice == "repurpose":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "sponsorship":
-    st.title("🤝 Sponsorointiviestit")
+    st.title(c_texts["sponsorship"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        brand = st.text_input("Brändin nimi:")
-        stats = st.text_input("Kanavasi tilastot / niche:")
-        if st.button("Kirjoita pitch", type="primary") and brand:
-            with st.spinner("Kirjoitetaan sähköpostia..."):
+        brand = st.text_input(c_texts["sponsorship"]["input_brand"])
+        stats = st.text_input(c_texts["sponsorship"]["input_stats"])
+        if st.button(c_texts["sponsorship"]["btn"], type="primary") and brand:
+            with st.spinner(c_texts["sponsorship"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -555,17 +413,17 @@ elif menu_choice == "sponsorship":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "translator":
-    st.title("🌍 Globaali Kääntäjä & Lokalisoija")
+    st.title(c_texts["translator"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        txt = st.text_area("Käännettävä teksti:")
-        t_lang = st.selectbox("Kohdekieli:", ["Englanti", "Espanja", "Saksa", "Ranska", "Japani"])
-        if st.button("Käännä", type="primary") and txt:
-            with st.spinner("Käännetään..."):
+        txt = st.text_area(c_texts["translator"]["input"])
+        t_lang = st.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese"])
+        if st.button(c_texts["translator"]["btn"], type="primary") and txt:
+            with st.spinner(c_texts["translator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -574,16 +432,16 @@ elif menu_choice == "translator":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "competitor":
-    st.title("🏆 Kilpailija-analyysi")
+    st.title(c_texts["competitor"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        comp_topic = st.text_input("Aihe tai kilpailijoiden tyyli:")
-        if st.button("Analysoi aukot", type="primary") and comp_topic:
-            with st.spinner("Analysoidaan..."):
+        comp_topic = st.text_input(c_texts["competitor"]["input"])
+        if st.button(c_texts["competitor"]["btn"], type="primary") and comp_topic:
+            with st.spinner(c_texts["competitor"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -592,16 +450,16 @@ elif menu_choice == "competitor":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "bulk":
-    st.title("⚡ Massamuokkaus-työkalut")
+    st.title(c_texts["bulk"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        niche_b = st.text_input("Kanavasi aihe:")
-        if st.button("Luo massapohja", type="primary") and niche_b:
-            with st.spinner("Luodaan..."):
+        niche_b = st.text_input(c_texts["bulk"]["input"])
+        if st.button(c_texts["bulk"]["btn"], type="primary") and niche_b:
+            with st.spinner(c_texts["bulk"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -610,18 +468,18 @@ elif menu_choice == "bulk":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "analytics":
-    st.title("📈 Data & Analytiikka")
+    st.title(c_texts["analytics"]["title"])
     if not is_pro: render_paywall()
     elif client:
         c1, c2 = st.columns(2)
         ctr = c1.text_input("CTR %", "5.0%")
-        avd = c2.text_input("Katseluaika", "3:30")
-        if st.button("Analysoi mittarit", type="primary"):
-            with st.spinner("Analysoidaan tilastoja..."):
+        avd = c2.text_input("Average View Duration", "3:30")
+        if st.button(c_texts["analytics"]["btn"], type="primary"):
+            with st.spinner(c_texts["analytics"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -630,16 +488,16 @@ elif menu_choice == "analytics":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "branding":
-    st.title("🎨 Kanavan Brändäys")
+    st.title(c_texts["branding"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        interests = st.text_input("Intohimosi / aihealue:")
-        if st.button("Luo brändäyspaketti", type="primary") and interests:
-            with st.spinner("Suunnitellaan..."):
+        interests = st.text_input(c_texts["branding"]["input"])
+        if st.button(c_texts["branding"]["btn"], type="primary") and interests:
+            with st.spinner(c_texts["branding"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -648,16 +506,16 @@ elif menu_choice == "branding":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "timestamps":
-    st.title("⏱️ Aikaleimat & Luvut")
+    st.title(c_texts["timestamps"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        script_txt = st.text_area("Käsikirjoitus:")
-        if st.button("Generoi aikaleimat", type="primary") and script_txt:
-            with st.spinner("Luodaan lukuja..."):
+        script_txt = st.text_area(c_texts["timestamps"]["input"])
+        if st.button(c_texts["timestamps"]["btn"], type="primary") and script_txt:
+            with st.spinner(c_texts["timestamps"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -666,16 +524,16 @@ elif menu_choice == "timestamps":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "title_matrix":
-    st.title("🧠 Otsikko A/B Matriisi")
+    st.title(c_texts["title_matrix"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        top = st.text_input("Videon aihe / idea:")
-        if st.button("Luo otsikkomatriisi", type="primary") and top:
-            with st.spinner("Luodaan..."):
+        top = st.text_input(c_texts["title_matrix"]["input"])
+        if st.button(c_texts["title_matrix"]["btn"], type="primary") and top:
+            with st.spinner(c_texts["title_matrix"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -684,16 +542,16 @@ elif menu_choice == "title_matrix":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "ai_images":
-    st.title("🎨 Tekoälyn Kuvapromptit")
+    st.title(c_texts["ai_images"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        img_t = st.text_input("Pienoiskuvan aihe:")
-        if st.button("Luo promptit", type="primary") and img_t:
-            with st.spinner("Muotoillaan prompteja..."):
+        img_t = st.text_input(c_texts["ai_images"]["input"])
+        if st.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
+            with st.spinner(c_texts["ai_images"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -702,16 +560,16 @@ elif menu_choice == "ai_images":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "voice":
-    st.title("🎙️ Puhe- & Ääniohjaus")
+    st.title(c_texts["voice"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        v_txt = st.text_area("Raakateksti:")
-        if st.button("Optimoi puheelle", type="primary") and v_txt:
-            with st.spinner("Muokataan..."):
+        v_txt = st.text_area(c_texts["voice"]["input"])
+        if st.button(c_texts["voice"]["btn"], type="primary") and v_txt:
+            with st.spinner(c_texts["voice"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -720,18 +578,18 @@ elif menu_choice == "voice":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
 
 elif menu_choice == "simulator":
-    st.title("💰 Kasvu- & ROI Simulaattori")
+    st.title(c_texts["simulator"]["title"])
     if not is_pro: 
         render_paywall()
     elif client:
-        subs = st.number_input("Nykyiset tilaajat:", min_value=0, value=1000)
-        views = st.number_input("Keskimääräiset katselukerrat per video:", min_value=0, value=5000)
-        if st.button("Simuloi kasvu", type="primary"):
-            with st.spinner("Lasketaan ennustetta..."):
+        subs = st.number_input(c_texts["simulator"]["sub1"], min_value=0, value=1000)
+        views = st.number_input(c_texts["simulator"]["sub2"], min_value=0, value=5000)
+        if st.button(c_texts["simulator"]["btn"], type="primary"):
+            with st.spinner(c_texts["simulator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -740,5 +598,5 @@ elif menu_choice == "simulator":
                     ],
                     temperature=0.7
                 )
-                st.success("Valmista!")
+                st.success("Done!")
                 st.write(res.choices[0].message.content)
