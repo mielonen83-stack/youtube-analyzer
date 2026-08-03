@@ -55,9 +55,9 @@ except Exception:
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Päivitetty Oikea Stripe-linkki
+# Stripe-maksulinkki ja hinta euroina
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
-st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access ($9)</a>', unsafe_allow_html=True)
+st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access (9 €)</a>', unsafe_allow_html=True)
 
 # Simulated Pro mode check
 st.sidebar.markdown("---")
@@ -106,7 +106,7 @@ with tab1:
     
     st.markdown("""
         <div class="pro-card">
-            <h3>🚀 Unlock the Full Power with Pro ($9)</h3>
+            <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
             <p>The free version includes basic keyword searches. Upgrading to Pro gives you complete access to:</p>
             <ul>
                 <b>Viral Idea Generator & 3-Second Hooks</b><br>
