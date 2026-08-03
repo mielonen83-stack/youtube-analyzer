@@ -81,8 +81,20 @@ try:
 except Exception:
     client = None
 
-# Päivitetty Stripe-kertamaksun linkki
+# Stripe-kertamaksun linkki
 stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
+
+# --- MAKSUN TARKISTUS URL:STA ---
+query_params = str_module.query_params
+is_paid_url = query_params.get("pro") == "true"
+
+if "is_pro" not in str_module.session_state:
+    str_module.session_state.is_pro = False
+
+if is_paid_url:
+    str_module.session_state.is_pro = True
+
+is_pro = str_module.session_state.is_pro
 
 # Kielen valinta (Oletuksena englanti)
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
@@ -99,8 +111,6 @@ translations = {
     "🇬🇧": {
         "sidebar_text": "Unlock all AI tools with a one-time payment of 5 €!",
         "sidebar_btn": "🔥 Get Lifetime Pro (5 €)",
-        "dev_access": "🔑 Pro License Activation",
-        "pass_label": "Enter Pro Password (from purchase):",
         "success_pro": "✅ Pro Access Unlocked!",
         "settings": "⚙️ Creator Settings",
         "v_len": "Video Length / Type",
@@ -116,8 +126,6 @@ translations = {
     "🇫🇮": {
         "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä 5 € kertamaksulla!",
         "sidebar_btn": "🔥 Osta Pro-pääsy (5 €)",
-        "dev_access": "🔑 Pro-käyttöoikeuden aktivointi",
-        "pass_label": "Syötä Pro-salasana (ostosta):",
         "success_pro": "✅ Pro-oikeudet aktivoitu!",
         "settings": "⚙️ Sisällöntuottajan Asetukset",
         "v_len": "Videon pituus / Tyyppi",
@@ -133,8 +141,6 @@ translations = {
     "🇸🇪": {
         "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning på 5 €!",
         "sidebar_btn": "🔥 Köp Pro (5 €)",
-        "dev_access": "🔑 Aktivering av Pro-licens",
-        "pass_label": "Ange Pro-lösenord (från köp):",
         "success_pro": "✅ Pro-åtkomst upplåst!",
         "settings": "⚙️ Skaparinställningar",
         "v_len": "Videon längd / typ",
@@ -150,8 +156,6 @@ translations = {
     "🇪🇸": {
         "sidebar_text": "¡Desbloquea todas las herramientas con un pago único de 5 €!",
         "sidebar_btn": "🔥 Obtener Pro (5 €)",
-        "dev_access": "🔑 Activación de Licencia Pro",
-        "pass_label": "Introduce contraseña Pro (de la compra):",
         "success_pro": "✅ ¡Acceso Pro desbloqueado!",
         "settings": "⚙️ Configuración del Creador",
         "v_len": "Duración / Tipo de video",
@@ -167,8 +171,6 @@ translations = {
     "🇩🇪": {
         "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung von 5 € frei!",
         "sidebar_btn": "🔥 Pro holen (5 €)",
-        "dev_access": "🔑 Pro-Lizenzaktivierung",
-        "pass_label": "Pro-Passwort eingeben (vom Kauf):",
         "success_pro": "✅ Pro-Zugang freigeschaltet!",
         "settings": "⚙️ Creator-Einstellungen",
         "v_len": "Videolänge / Typ",
@@ -184,8 +186,6 @@ translations = {
     "🇫🇷": {
         "sidebar_text": "Débloquez tous les outils avec un paiement unique de 5 € !",
         "sidebar_btn": "🔥 Obtenir Pro (5 €)",
-        "dev_access": "🔑 Activation de la licence Pro",
-        "pass_label": "Entrez le mot de passe Pro (de l'achat) :",
         "success_pro": "✅ Accès Pro débloqué !",
         "settings": "⚙️ Paramètres du Créateur",
         "v_len": "Durée / Type de vidéo",
@@ -201,8 +201,6 @@ translations = {
     "🇯🇵": {
         "sidebar_text": "5 €の買い切り（単発）支払いですべてのAIツールを解除しよう！",
         "sidebar_btn": "🔥 Proを購入 (5 €)",
-        "dev_access": "🔑 Proライセンス有効化",
-        "pass_label": "Proパスワードを入力（購入後）:",
         "success_pro": "✅ Proアクセスが解除されました！",
         "settings": "⚙️ クリエイター設定",
         "v_len": "動画の長さ / タイプ",
@@ -303,21 +301,16 @@ content_data = {
 
 c_texts = content_data.get(lang_code, content_data["🇬🇧"])
 
-# --- PRO-KORTTI SIVUPALKISSA ---
-str_module.sidebar.markdown(f"""
-<div class="pro-sidebar-box">
-    <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
-    <div style="font-size: 15px; color: #881337; margin-bottom: 14px; font-weight: 600; line-height: 1.4;">{texts["sidebar_text"]}</div>
-    <a href="{stripe_link}" target="_blank" class="buy-button">{texts["sidebar_btn"]}</a>
-</div>
-""", unsafe_allow_html=True)
-
-# Salasana-tarkistus sivupalkissa
-str_module.sidebar.markdown("---")
-str_module.sidebar.subheader(texts["dev_access"])
-entered_password = str_module.sidebar.text_input(texts["pass_label"], type="password")
-is_pro = (entered_password == "tubepro2026")
-if is_pro:
+# --- PRO-KORTTI TAI OLEMASSAOLEVA PRO SIVUPALKISSA ---
+if not is_pro:
+    str_module.sidebar.markdown(f"""
+    <div class="pro-sidebar-box">
+        <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
+        <div style="font-size: 15px; color: #881337; margin-bottom: 14px; font-weight: 600; line-height: 1.4;">{texts["sidebar_text"]}</div>
+        <a href="{stripe_link}" target="_blank" class="buy-button">{texts["sidebar_btn"]}</a>
+    </div>
+    """, unsafe_allow_html=True)
+else:
     str_module.sidebar.success(texts["success_pro"])
 
 # Kanavan asetukset sivupalkissa
