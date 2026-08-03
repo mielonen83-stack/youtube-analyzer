@@ -70,13 +70,15 @@ video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)",
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- MAIN MENU (Tabs) ---
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "📊 Basic Searches", 
-    "✨ AI Tools", 
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
+    "📊 Basic", 
+    "💡 Ideas & Hooks", 
+    "✍️ Scripts", 
     "🎯 Thumbnails", 
-    "📄 PDF Analyzer",
-    "🏷️ Tags & SEO",
-    "🔥 Pro Toolkit"
+    "🏷️ SEO & Tags",
+    "💬 Comments",
+    "♻️ Repurpose",
+    "🤝 Sponsorship"
 ])
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
@@ -98,7 +100,7 @@ with tab1:
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Go to the 'AI Tools' tab to generate AI titles and scripts!")
+            st.info("💡 Tip: Unlock Pro to use all advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -107,292 +109,224 @@ with tab1:
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>The free version includes basic keyword searches. Upgrading to Pro gives you complete access to:</p>
+            <p>Upgrading gives you complete access to 8 advanced AI generators:</p>
             <ul>
-                <b>Viral Idea Generator & 3-Second Hooks</b><br>
-                <b>AI Metadata, Descriptions & Scripts</b><br>
-                <b>Scroll-stopping Thumbnail Recipes</b><br>
-                <b>PDF Script & Pacing Analyzer</b><br>
-                <b>YouTube Tags & SEO Generator</b><br>
-                <b>Community Posts & Sponsorship Pitch Emails</b>
+                <b>Viral Ideas & 3-Second Hooks</b><br>
+                <b>Full Scripts & Shorts Machine</b><br>
+                <b>Thumbnail Recipes & SEO Tags</b><br>
+                <b>Comment Assistant & Sponsorship Pitch Emails</b>
             </ul>
         </div>
     """, unsafe_allow_html=True)
 
-# --- TAB 2: AI Tools & Viral Ideas (PRO) ---
+# --- TAB 2: Ideas & Hooks (PRO) ---
 with tab2:
-    st.title("🤖 AI-Powered Tools")
-    st.markdown(f"Current Settings: **{video_length}** | Target Audience: **{target_audience}**")
+    st.title("💡 Viral Ideas & Hooks Generator")
+    st.markdown("Brainstorm high-CTR concepts and powerful 3-second opening hooks.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
     elif not client:
-        st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
+        st.error("OpenAI API key is missing!")
     else:
-        ai_tool_choice = st.selectbox("Select AI Feature:", [
-            "Viral Idea Generator (Idea Machine)", 
-            "AI Metadata & Script", 
-            "Video Title Improver / Roster"
-        ])
+        sub_tool = st.radio("Choose tool:", ["Viral Idea Generator", "3-Second Retention Hooks", "Channel Niche & Name Ideas"])
         
-        if ai_tool_choice == "Viral Idea Generator (Idea Machine)":
-            st.subheader("💡 Viral Idea Generator")
-            niche = st.text_input("What is your channel niche/topic? (e.g., Finance, Gaming, Wellness)")
-            
-            if st.button("Generate Viral Ideas", type="primary"):
-                if not niche:
-                    st.warning("Please enter a niche first.")
-                else:
-                    with st.spinner("AI is brainstorming viral ideas..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a top-tier YouTube strategist."},
-                                    {"role": "user", "content": f"Create 5 highly engaging viral video concepts for the niche '{niche}' tailored for a {video_length} video targeting {target_audience}. Give each idea a catchy title and a short explanation."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Viral ideas generated successfully!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error in AI request: {e}")
-
-        elif ai_tool_choice == "AI Metadata & Script":
-            st.subheader("✍️ AI Metadata & Scriptwriter")
-            video_topic = st.text_input("Exact video topic:")
-            
-            if st.button("Generate Titles and Script", type="primary"):
-                if not video_topic:
-                    st.warning("Please enter a video topic.")
-                else:
-                    with st.spinner("Writing content..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a professional YouTube scriptwriter."},
-                                    {"role": "user", "content": f"Create 3 click-worthy titles, an engaging description, and a short video introduction (hook) for a {video_length} video about '{video_topic}' targeted at {target_audience}."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Metadata and script generated successfully!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
-
+        if sub_tool == "Viral Idea Generator":
+            niche = st.text_input("Channel niche or topic (e.g., Finance, Gaming):")
+            if st.button("Generate Ideas", type="primary") and niche:
+                with st.spinner("Brainstorming..."):
+                    res = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a top YouTube strategist."},
+                            {"role": "user", "content": f"Create 5 viral video concepts for niche '{niche}' tailored for {video_length} targeting {target_audience}."}
+                        ],
+                        temperature=0.7
+                    )
+                    st.success("Done!")
+                    st.write(res.choices[0].message.content)
+                    
+        elif sub_tool == "3-Second Retention Hooks":
+            hook_topic = st.text_input("Video topic:")
+            if st.button("Generate Hooks", type="primary") and hook_topic:
+                with st.spinner("Crafting hooks..."):
+                    res = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a retention psychology expert."},
+                            {"role": "user", "content": f"Create 3 powerful opening hooks (first 3-5 seconds) for a video about '{hook_topic}'."}
+                        ],
+                        temperature=0.7
+                    )
+                    st.success("Done!")
+                    st.write(res.choices[0].message.content)
+                    
         else:
-            st.subheader("🔥 Video Title Improver & Roster")
-            existing_title = st.text_input("Enter your existing or planned video title:")
-            
-            if st.button("Improve Title", type="primary"):
-                if not existing_title:
-                    st.warning("Please enter a title first.")
-                else:
-                    with st.spinner("Analyzing and improving title..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a YouTube CTR and headline optimization expert."},
-                                    {"role": "user", "content": f"Analyze this YouTube title: '{existing_title}'. Give 3-5 improved, high-CTR alternative versions designed to make it 50% more clickable, and explain briefly why they work better."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Title suggestions generated successfully!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
+            passion = st.text_input("What are your interests or skills?")
+            if st.button("Generate Channel Concepts", type="primary") and passion:
+                with st.spinner("Generating channel ideas..."):
+                    res = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a YouTube branding expert."},
+                            {"role": "user", "content": f"Create 3 catchy channel names and content strategies based on interests: '{passion}'."}
+                        ],
+                        temperature=0.7
+                    )
+                    st.success("Done!")
+                    st.write(res.choices[0].message.content)
 
-# --- TAB 3: Thumbnail Concept Generator (PRO) ---
+# --- TAB 3: Scripts & Shorts (PRO) ---
 with tab3:
-    st.title("🎯 Thumbnail Concept Generator")
-    st.markdown("Get a precise visual recipe from AI for a thumbnail that stops the scroll.")
+    st.title("✍️ Full Scripts & Shorts Machine")
+    st.markdown("Generate full minute-by-minute video scripts or viral short-form scripts.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
     else:
-        thumb_topic = st.text_input("What is the core idea or surprising twist of the video?")
-        thumb_style = st.selectbox("Visual Style", ["Shocking / Surprising", "Minimalist & Clean", "Meme / Funny", "Comparison (Before vs After)"])
+        script_type = st.radio("Script Type:", ["Full Video Script (Minute-by-Minute)", "YouTube Short / TikTok Script (< 60s)"])
+        script_topic = st.text_input("Exact video topic or title:")
         
-        if st.button("Generate Thumbnail Ideas", type="primary"):
-            if not thumb_topic:
-                st.warning("Please enter your video idea first.")
-            elif not client:
-                st.error("OpenAI key is missing from settings.")
-            else:
-                with st.spinner("Designing click magnets..."):
-                    try:
-                        prompt = f"""
-                        Act as a YouTube thumbnail expert. Create 3 different visual ideas for a thumbnail based on the topic: '{thumb_topic}'.
-                        Selected style: {thumb_style}.
-                        Each idea must specify:
-                        1. Visual composition and background
-                        2. Text on image (maximum 3 words, all caps)
-                        3. Primary colors
-                        """
-                        response = client.chat.completions.create(
-                            model="gpt-4o",
-                            messages=[
-                                {"role": "system", "content": "You are a graphic designer and YouTube CTR expert."},
-                                {"role": "user", "content": prompt}
-                            ],
-                            temperature=0.7
-                        )
-                        tulo = response.choices[0].message.content
-                        st.success("Thumbnail ideas generated successfully!")
-                        st.write(tulo)
-                    except Exception as e:
-                        st.error(f"Error: {e}")
+        if st.button("Generate Script", type="primary") and script_topic:
+            with st.spinner("Writing script..."):
+                prompt = f"Create a full minute-by-minute script for a {video_length} video about '{script_topic}'." if "Full" in script_type else f"Create a punchy, fast-paced under-60-second vertical video script with a twist for: '{script_topic}'."
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a professional YouTube scriptwriter."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Script generated!")
+                st.write(res.choices[0].message.content)
 
-# --- TAB 4: PDF Analyzer (PRO) ---
+# --- TAB 4: Thumbnails (PRO) ---
 with tab4:
-    st.title("📄 PDF Script Analyzer")
-    st.markdown("Upload a script or outline PDF, and let AI review it for pacing and engagement.")
+    st.title("🎯 Thumbnail Concept Generator")
+    st.markdown("Get a precise visual recipe for a high-CTR thumbnail.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
     else:
-        uploaded_file = st.file_uploader("Upload PDF file", type=["pdf"])
+        thumb_topic = st.text_input("Core idea or twist of the video:")
+        thumb_style = st.selectbox("Visual Style", ["Shocking / Surprising", "Minimalist & Clean", "Meme / Funny", "Before vs After"])
         
-        if uploaded_file is not None:
-            st.success("PDF uploaded successfully!")
-            if st.button("Analyze Script", type="primary"):
-                st.info("PDF text reading and AI analysis integration point.")
+        if st.button("Generate Thumbnail Recipe", type="primary") and thumb_topic:
+            with st.spinner("Designing..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a YouTube CTR and graphic design expert."},
+                        {"role": "user", "content": f"Create 3 visual concepts for a thumbnail about '{thumb_topic}' in style '{thumb_style}'. Include background, text (max 3 words), and colors."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
 
-# --- TAB 5: YouTube Tags & SEO Generator (PRO) ---
+# --- TAB 5: SEO & Tags (PRO) ---
 with tab5:
     st.title("🏷️ YouTube Tags & SEO Generator")
-    st.markdown("Get optimized search tags and keywords for your video in seconds.")
+    st.markdown("Get optimized search tags and keywords ready to copy into YouTube Studio.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
     else:
-        tag_topic = st.text_input("What topic or video do you want to generate tags for?")
-        
-        if st.button("Generate Tags", type="primary"):
-            if not tag_topic:
-                st.warning("Please enter a video topic first.")
-            else:
-                with st.spinner("Generating search tags and SEO keywords..."):
-                    try:
-                        response = client.chat.completions.create(
-                            model="gpt-4o",
-                            messages=[
-                                {"role": "system", "content": "You are a YouTube SEO expert who specializes in keyword tagging and search optimization."},
-                                {"role": "user", "content": f"Generate a comprehensive list of high-performing YouTube search tags and comma-separated keywords for a video about: '{tag_topic}'. Provide both broad and long-tail tags that can be copied directly into YouTube Studio."}
-                            ],
-                            temperature=0.7
-                        )
-                        st.success("Tags generated successfully!")
-                        st.write(response.choices[0].message.content)
-                    except Exception as e:
-                        st.error(f"Error: {e}")
+        tag_topic = st.text_input("Video topic for SEO tags:")
+        if st.button("Generate Tags", type="primary") and tag_topic:
+            with st.spinner("Generating SEO tags..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a YouTube SEO expert."},
+                        {"role": "user", "content": f"Provide comma-separated high-performing search tags and long-tail keywords for a video about: '{tag_topic}'."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
 
-# --- TAB 6: Pro Creator Toolkit (PRO) ---
+# --- TAB 6: Comments (PRO) ---
 with tab6:
-    st.title("🔥 Pro Creator Advanced Toolkit")
-    st.markdown("Advanced tools to skyrocket retention, community engagement, and monetization.")
+    st.title("💬 Comment Reply Assistant")
+    st.markdown("Generate engaging, community-building replies to viewer comments.")
     
     if not is_pro:
-        st.warning("🔒 **Pro Feature:** This section requires Pro access. Buy Pro via the sidebar or enable test mode!")
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
     else:
-        pro_tool = st.selectbox("Select Advanced Tool:", [
-            "1. Retention Hook Generator", 
-            "2. Community Post & Poll Generator", 
-            "3. Content Repurposer (Shorts / X Thread)", 
-            "4. Sponsorship Pitch Email Generator"
-        ])
+        viewer_comment = st.text_area("Paste viewer comment here:")
+        tone = st.selectbox("Tone:", ["Friendly & Appreciative", "Funny & Witty", "Expert & Informative"])
         
-        if pro_tool == "1. Retention Hook Generator":
-            st.subheader("🎣 3-Second Retention Hook Generator")
-            hook_topic = st.text_input("What is your video about?")
-            
-            if st.button("Generate Hooks", type="primary"):
-                if not hook_topic:
-                    st.warning("Please enter your video topic.")
-                else:
-                    with st.spinner("Crafting retention hooks..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are an expert in YouTube audience retention and viewer psychology."},
-                                    {"role": "user", "content": f"Create 3 powerful opening hooks (first 3-5 seconds) for a YouTube video about '{hook_topic}'. Make them punchy, curiosity-driven, and designed to stop viewers from clicking away."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Hooks generated successfully!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
+        if st.button("Generate Reply", type="primary") and viewer_comment:
+            with st.spinner("Writing reply..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": f"You are a helpful YouTube creator responding in a {tone} tone."},
+                        {"role": "user", "content": f"Write a great reply to this comment: '{viewer_comment}'"}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
 
-        elif pro_tool == "2. Community Post & Poll Generator":
-            st.subheader("💬 Community Tab Post & Poll Generator")
-            comm_topic = st.text_input("What do you want to post or ask your audience about?")
-            
-            if st.button("Generate Community Post", type="primary"):
-                if not comm_topic:
-                    st.warning("Please enter a topic.")
-                else:
-                    with st.spinner("Generating community engagement post..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a community manager specialized in maximizing YouTube Community tab engagement."},
-                                    {"role": "user", "content": f"Create a high-engagement YouTube Community tab post based on: '{comm_topic}'. Include a catchy text teaser and a multi-choice poll option to drive comments and votes."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Community post generated!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
+# --- TAB 7: Repurpose (PRO) ---
+with tab7:
+    st.title("♻️ Content Repurposer")
+    st.markdown("Convert your video script into community posts, X (Twitter) threads, or short summaries.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        long_content = st.text_area("Paste your video script or core concept:")
+        repurpose_target = st.selectbox("Format:", ["X (Twitter) Thread", "Community Tab Post & Poll", "Newsletter Summary"])
+        
+        if st.button("Repurpose Content", type="primary") and long_content:
+            with st.spinner("Adapting content..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a multi-platform content strategist."},
+                        {"role": "user", "content": f"Convert this text into a {repurpose_target}: '{long_content}'"}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
 
-        elif pro_tool == "3. Content Repurposer (Shorts / X Thread)":
-            st.subheader("♻️ Content Repurposer")
-            long_content = st.text_area("Paste your video script, description, or core idea here:")
-            
-            if st.button("Repurpose Content", type="primary"):
-                if not long_content:
-                    st.warning("Please paste some content first.")
-                else:
-                    with st.spinner("Repurposing content for multi-platform..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a social media repurposing expert."},
-                                    {"role": "user", "content": f"Take this YouTube content/script and convert it into: 1) A punchy TikTok/Shorts script, and 2) A 4-part X (Twitter) thread. Source material: '{long_content}'"}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Content successfully repurposed!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
-
-        else:
-            st.subheader("🤝 Sponsorship Pitch Email Generator")
-            brand_info = st.text_input("What is the brand name / product you want to pitch to?")
-            channel_niche = st.text_input("Briefly describe your channel/niche and viewer stats:")
-            
-            if st.button("Generate Pitch Email", type="primary"):
-                if not brand_info or not channel_niche:
-                    st.warning("Please fill in both fields.")
-                else:
-                    with st.spinner("Writing professional sponsorship pitch..."):
-                        try:
-                            response = client.chat.completions.create(
-                                model="gpt-4o",
-                                messages=[
-                                    {"role": "system", "content": "You are a professional talent manager and sponsorship closer."},
-                                    {"role": "user", "content": f"Write a professional, high-converting sponsorship pitch email to a brand named '{brand_info}'. My channel background: '{channel_niche}'. Highlight the value proposition and why partnering with my channel benefits them."}
-                                ],
-                                temperature=0.7
-                            )
-                            st.success("Pitch email generated successfully!")
-                            st.write(response.choices[0].message.content)
-                        except Exception as e:
-                            st.error(f"Error: {e}")
+# --- TAB 8: Sponsorship (PRO) ---
+with tab8:
+    st.title("🤝 Sponsorship Pitch Email Generator")
+    st.markdown("Pitch brands professionally to land lucrative sponsorships.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        brand_name = st.text_input("Brand name:")
+        channel_stats = st.text_input("Your channel niche and viewer stats:")
+        
+        if st.button("Generate Pitch Email", type="primary") and brand_name and channel_stats:
+            with st.spinner("Writing pitch..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a professional talent manager."},
+                        {"role": "user", "content": f"Write a high-converting sponsorship pitch email to '{brand_name}' highlighting my channel background: '{channel_stats}'."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
