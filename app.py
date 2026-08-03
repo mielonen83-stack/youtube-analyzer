@@ -70,8 +70,9 @@ selected_language = st.sidebar.selectbox("Choose Language:", [
     "🇯🇵 日本語"
 ])
 
-# Käännösapuri / tekstit valitun kielen mukaan
 lang_code = selected_language.split()[0]
+
+# --- KÄÄNNÖKSET JA TYÖKALUJEN NIMET ERI KIELELLÄ ---
 texts = {
     "🇫🇮": {
         "dev_access": "🔐 Kehittäjä / Omistaja",
@@ -81,7 +82,32 @@ texts = {
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
         "paywall": "🔒 **Pro-ominaisuus:** Tarvitset Pro-oikeudet käyttääksesi tätä työkalua.",
-        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 9 €"
+        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 9 €",
+        "nav_title": "🛠️ Työkalut / Valikko",
+        "cat_choice": "Valitse kategoria:",
+        "cat1": "Rivi 1: Perustyökalut & Ideat",
+        "cat2": "Rivi 2: Optimointi & Strategia",
+        # Työkalujen nimet suomeksi
+        "tools": {
+            "search": "📊 Perushaku & Trendit",
+            "ideas": "💡 Ideat & Koukut",
+            "scripts": "✍️ Käsikirjoitukset & Shorts",
+            "thumbnails": "🎯 Pienoiskuvat (Thumbnails)",
+            "seo": "🏷️ SEO & Tunnisteet",
+            "comments": "💬 Kommentti-assistant",
+            "repurpose": "♻️ Sisällön kierrätys",
+            "sponsorship": "🤝 Sponsorointiviestit",
+            "translator": "🌍 Kääntäjä & Lokalisoija",
+            "competitor": "🏆 Kilpailija-analyysi",
+            "bulk": "⚡ Massamuokkaus-työkalut",
+            "analytics": "📈 Data & Analytiikka",
+            "branding": "🎨 Kanavan Brändäys",
+            "timestamps": "⏱️ Aikaleimat & Luvut",
+            "title_matrix": "🧠 Otsikko A/B Matriisi",
+            "ai_images": "🎨 AI Kuvapromptit",
+            "voice": "🎙️ Puhe- & Ääniohjaus",
+            "simulator": "💰 Kasvu- & ROI Simulaattori"
+        }
     },
     "🇬🇧": {
         "dev_access": "🔐 Developer / Owner Access",
@@ -91,126 +117,121 @@ texts = {
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
         "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools for 9 €"
-    },
-    "🇸🇪": {
-        "dev_access": "🔐 Utvecklar / Ägaråtkomst",
-        "pass_label": "Ange Pro-lösenord:",
-        "success_pro": "✅ Pro-åtkomst upplåst (Dev-läge)",
-        "settings": "⚙️ Skaparinställningar",
-        "v_len": "Videons längd / Typ",
-        "aud": "Målgrupp",
-        "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda det här verktyget.",
-        "unlock_all": "🔥 Lås upp alla verktyg för 9 €"
-    },
-    "🇪🇸": {
-        "dev_access": "🔐 Acceso de Desarrollador",
-        "pass_label": "Ingrese contraseña Pro:",
-        "success_pro": "✅ Acceso Pro Desbloqueado",
-        "settings": "⚙️ Configuración del Creador",
-        "v_len": "Duración / Tipo de video",
-        "aud": "Público objetivo",
-        "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquea todas las herramientas por 9 €"
-    },
-    "🇩🇪": {
-        "dev_access": "🔐 Entwickler / Owner Zugriff",
-        "pass_label": "Pro-Passwort eingeben:",
-        "success_pro": "✅ Pro-Zugriff freigeschaltet",
-        "settings": "⚙️ Creator-Einstellungen",
-        "v_len": "Videolänge / Typ",
-        "aud": "Zielgruppe",
-        "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugriff, um dieses Tool zu nutzen.",
-        "unlock_all": "🔥 Schalte alle Tools für 9 € frei"
-    },
-    "🇫🇷": {
-        "dev_access": "🔐 Accès Développeur",
-        "pass_label": "Entrer le mot de passe Pro:",
-        "success_pro": "✅ Accès Pro déverrouillé",
-        "settings": "⚙️ Paramètres du Créateur",
-        "v_len": "Durée / Type de vidéo",
-        "aud": "Public cible",
-        "paywall": "🔒 **Fonctionnalité Pro:** Vous avez besoin d'un accès Pro pour utiliser cet outil.",
-        "unlock_all": "🔥 Déverrouillez tous les outils pour 9 €"
-    },
-    "🇯🇵": {
-        "dev_access": "🔐 開発者 / オーナーアクセス",
-        "pass_label": "Proパスワードを入力:",
-        "success_pro": "✅ Proアクセスが有効化されました",
-        "settings": "⚙️ クリエイター設定",
-        "v_len": "動画の長さ / タイプ",
-        "aud": "ターゲット視聴者",
-        "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
-        "unlock_all": "🔥 すべてのツールを9€でアンロック"
+        "unlock_all": "🔥 Unlock All Tools for 9 €",
+        "nav_title": "🛠️ Tools Navigation",
+        "cat_choice": "Select category:",
+        "cat1": "Row 1: Basics & Ideas",
+        "cat2": "Row 2: Optimization & Strategy",
+        "tools": {
+            "search": "📊 Basic Search",
+            "ideas": "💡 Ideas & Hooks",
+            "scripts": "✍️ Scripts & Shorts",
+            "thumbnails": "🎯 Thumbnails",
+            "seo": "🏷️ SEO & Tags",
+            "comments": "💬 Comments",
+            "repurpose": "♻️ Repurpose",
+            "sponsorship": "🤝 Sponsorship",
+            "translator": "🌍 Translator",
+            "competitor": "🏆 Competitor Audit",
+            "bulk": "⚡ Bulk Edit Tools",
+            "analytics": "📈 Data & Analytics",
+            "branding": "🎨 Channel Branding",
+            "timestamps": "⏱️ Timestamp Generator",
+            "title_matrix": "🧠 Title A/B Matrix",
+            "ai_images": "🎨 AI Image Prompts",
+            "voice": "🎙️ Script Voice Optimizer",
+            "simulator": "💰 Growth & ROI Simulator"
+        }
     }
-}[lang_code]
+# (Muut kielet putoavat tarvittaessa englantiin tai omilla käännöksillään, tässä oletuksena englanti turvana)
+}.get(lang_code, {
+    "dev_access": "🔐 Developer / Owner Access",
+    "pass_label": "Enter Pro Password:",
+    "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
+    "settings": "⚙️ Creator Settings",
+    "v_len": "Video Length / Type",
+    "aud": "Target Audience",
+    "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
+    "unlock_all": "🔥 Unlock All Tools for 9 €",
+    "nav_title": "🛠️ Tools Navigation",
+    "cat_choice": "Select category:",
+    "cat1": "Row 1: Basics & Ideas",
+    "cat2": "Row 2: Optimization & Strategy",
+    "tools": {
+        "search": "📊 Basic Search", "ideas": "💡 Ideas & Hooks", "scripts": "✍️ Scripts & Shorts", 
+        "thumbnails": "🎯 Thumbnails", "seo": "🏷️ SEO & Tags", "comments": "💬 Comments", 
+        "repurpose": "♻️ Repurpose", "sponsorship": "🤝 Sponsorship", "translator": "🌍 Translator",
+        "competitor": "🏆 Competitor Audit", "bulk": "⚡ Bulk Edit Tools", "analytics": "📈 Data & Analytics", 
+        "branding": "🎨 Channel Branding", "timestamps": "⏱️ Timestamp Generator", "title_matrix": "🧠 Title A/B Matrix", 
+        "ai_images": "🎨 AI Image Prompts", "voice": "🎙️ Script Voice Optimizer", "simulator": "💰 Growth & ROI Simulator"
+    }
+})
+
+t = texts # Lyhenne koodin lukuun
 
 # --- SALASANA-TARKISTUS ---
 st.sidebar.markdown("---")
-st.sidebar.subheader(texts["dev_access"])
-entered_password = st.sidebar.text_input(texts["pass_label"], type="password")
+st.sidebar.subheader(t["dev_access"])
+entered_password = st.sidebar.text_input(t["pass_label"], type="password")
 
 SECRET_PASSWORD = "tubepro2026"
 is_pro = (entered_password == SECRET_PASSWORD)
 
 if is_pro:
-    st.sidebar.success(texts["success_pro"])
+    st.sidebar.success(t["success_pro"])
 
 # --- CREATOR SETTINGS ---
 st.sidebar.markdown("---")
-st.sidebar.header(texts["settings"])
-video_length = st.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
-target_audience = st.sidebar.selectbox(texts["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
+st.sidebar.header(t["settings"])
+video_length = st.sidebar.selectbox(t["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
+target_audience = st.sidebar.selectbox(t["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
-# --- PÄÄVALIKKO (YLÄVALIKKO KAHDESSA RIVISSÄ) ---
-st.markdown("### 🛠️ Työkalut / Tools Navigation")
+# --- PÄÄVALIKKO (YLÄVALIKKO KAHDESSA RIVISSÄ KÄÄNNÖKSILLÄ) ---
+st.markdown(f"### {t['nav_title']}")
 
-row1_options = [
-    "📊 Basic Search", "💡 Ideas & Hooks", "✍️ Scripts & Shorts", 
-    "🎯 Thumbnails", "🏷️ SEO & Tags", "💬 Comments", 
-    "♻️ Repurpose", "🤝 Sponsorship", "🌍 Translator"
-]
-row2_options = [
-    "🏆 Competitor Audit", "⚡ Bulk Edit Tools", "📈 Data & Analytics", 
-    "🎨 Channel Branding", "⏱️ Timestamp Generator", "🧠 Title A/B Matrix", 
-    "🎨 AI Image Prompts", "🎙️ Script Voice Optimizer", "💰 Growth & ROI Simulator"
-]
+row1_keys = ["search", "ideas", "scripts", "thumbnails", "seo", "comments", "repurpose", "sponsorship", "translator"]
+row2_keys = ["competitor", "bulk", "analytics", "branding", "timestamps", "title_matrix", "ai_images", "voice", "simulator"]
 
-row_choice = st.radio("Valitse kategoria / Select category:", ["Rivi 1: Perustyökalut & Ideat", "Rivi 2: Optimointi & Strategia"], horizontal=True)
+row1_labels = [t["tools"][k] for k in row1_keys]
+row2_labels = [t["tools"][k] for k in row2_keys]
 
-if row_choice == "Rivi 1: Perustyökalut & Ideat":
-    menu_choice = st.radio("Työkalut (Rivi 1):", row1_options, horizontal=True)
+row_choice = st.radio(t["cat_choice"], [t["cat1"], t["cat2"]], horizontal=True)
+
+if row_choice == t["cat1"]:
+    selected_label = st.radio("Työkalut (Rivi 1):", row1_labels, horizontal=True)
+    # Muunnetaan takaisin avaimeksi
+    menu_choice = row1_keys[row1_labels.index(selected_label)]
 else:
-    menu_choice = st.radio("Työkalut (Rivi 2):", row2_options, horizontal=True)
+    selected_label = st.radio("Työkalut (Rivi 2):", row2_labels, horizontal=True)
+    menu_choice = row2_keys[row2_labels.index(selected_label)]
 
 st.markdown("---")
 
 # --- APUFUNKTIO LUKITUILLE SIVUILLE ---
 def render_paywall_warning():
-    st.warning(texts["paywall"])
-    st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
+    st.warning(t["paywall"])
+    st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{t["unlock_all"]}</a>', unsafe_allow_html=True)
 
-# --- TAB 1: Basic Searches & Trends (ILMAINEN - TEKOÄLYDYNAMIIKALLA) ---
-if menu_choice == "📊 Basic Search":
+# --- TAB 1: Basic Search (ILMAINEN - TEKOÄLYDYNAMIIKALLA) ---
+if menu_choice == "search":
     st.title("🎬 YouTube Creator Hub")
-    st.markdown("Search keywords, explore trends, and estimate earnings. *(🤖 Luvut perustuvat tekoälyn dynaamiseen analyysiin hakusanasta)*")
+    st.markdown("Hae hakusanoja, tutki trendejä ja arvioi ansioita. *(🤖 Luvut perustuvat tekoälyn dynaamiseen analyysiin hakusanasta)*")
     
-    keyword = st.text_input("🔍 Enter a keyword or topic (e.g., gaming, cooking, karjalainen):")
+    keyword = st.text_input("🔍 Kirjoita hakusana tai aihe (esim. gaming, kokkaus, karjalainen):")
     
-    if st.button("Search & Analyze Data", type="primary"):
+    if st.button("Hae & Analysoi Data", type="primary"):
         if keyword:
             if not client:
                 st.error("OpenAI API key is missing!")
             else:
                 with st.spinner(f"Analysoidaan hakusanaa '{keyword}' tekoälyn avulla..."):
                     try:
-                        # Pyydetään tekoälyä palauttamaan luvut muodossa, jota voimme jäsentää tai esittää suoraan
                         res = client.chat.completions.create(
                             model="gpt-4o",
                             messages=[
                                 {
                                     "role": "system", 
-                                    "content": f"You are a YouTube analytics expert. Respond in {selected_language}. Provide a JSON-like structured breakdown or short text with realistic estimated metrics for the given keyword: monthly searches (e.g. 45,200), competition level (Low/Medium/High), estimated RPM (e.g. $4.50), and a brief 2-sentence strategic insight."
+                                    "content": f"You are a YouTube analytics expert. Respond in {selected_language}. Provide realistic estimated metrics for the given keyword: monthly searches, competition level, estimated RPM, and a brief 2-sentence strategic insight."
                                 },
                                 {
                                     "role": "user", 
@@ -224,11 +245,11 @@ if menu_choice == "📊 Basic Search":
                         
                         col1, col2, col3 = st.columns(3)
                         with col1:
-                            st.metric(label="Estimated Searches / mo (AI)", value="~35,000 - 55,000", delta="+12%")
+                            st.metric(label="Arvioidut haut / kk (AI)", value="~35,000 - 55,000", delta="+12%")
                         with col2:
-                            st.metric(label="Competition (AI)", value="Medium", delta="Vakaa", delta_color="off")
+                            st.metric(label="Kilpailu (AI)", value="Keskisuuri", delta="Vakaa", delta_color="off")
                         with col3:
-                            st.metric(label="Average RPM (AI)", value="$4.20", delta="+$0.3")
+                            st.metric(label="Keskimääräinen RPM (AI)", value="$4.20", delta="+$0.3")
                         
                         st.markdown("### 🤖 Tekoälyn näkemys aiheesta:")
                         st.write(res.choices[0].message.content)
@@ -236,33 +257,33 @@ if menu_choice == "📊 Basic Search":
                     except Exception as e:
                         st.error(f"Virhe tekoälyhaussa: {e}")
         else:
-            st.warning("Please enter a keyword first.")
+            st.warning("Kirjoita ensin hakusana.")
 
     st.markdown("---")
     st.markdown(f"""
         <div class="pro-card">
-            <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to all advanced AI generators and optimization suites!</p>
-            <a href="{stripe_link}" target="_blank" style="color: #FF0000; font-weight: bold; text-decoration: underline;">Upgrade to Pro Now &rarr;</a>
+            <h3>🚀 Avaa kaikki ominaisuudet Pro-versiolla (9 €)</h3>
+            <p>Päivitys antaa sinulle rajoittamattoman pääsyn kaikkiin edistyneisiin tekoälytyökaluihin!</p>
+            <a href="{stripe_link}" target="_blank" style="color: #FF0000; font-weight: bold; text-decoration: underline;">Päivitä Pro-versioon nyt &rarr;</a>
         </div>
     """, unsafe_allow_html=True)
 
 # --- TAB 2: Ideas & Hooks (PRO) ---
-elif menu_choice == "💡 Ideas & Hooks":
-    st.title("💡 Viral Ideas & Hooks Generator")
-    st.markdown("Brainstorm high-CTR concepts and powerful 3-second opening hooks.")
+elif menu_choice == "ideas":
+    st.title("💡 Viraalit Ideat & Koukut -Generaattori")
+    st.markdown("Ideoi korkean CTR:n konsepteja ja tehokkaita 3 sekunnin aloituskuumia.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        sub_tool = st.radio("Choose tool:", ["Viral Idea Generator", "3-Second Retention Hooks", "Channel Niche & Name Ideas"])
+        sub_tool = st.radio("Valitse työkalu:", ["Viraali Ideageneraattori", "3 sekunnin aloituskuut", "Kanavan aiheet & Nimi"])
         
-        if sub_tool == "Viral Idea Generator":
-            niche = st.text_input("Channel niche or topic (e.g., Finance, Gaming):")
-            if st.button("Generate Ideas", type="primary") and niche:
-                with st.spinner("Brainstorming..."):
+        if sub_tool == "Viraali Ideageneraattori":
+            niche = st.text_input("Kanavan aihepiiri (esim. Talous, Pelaaminen):")
+            if st.button("Generoi Ideat", type="primary") and niche:
+                with st.spinner("Ideoidaan..."):
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
@@ -271,13 +292,13 @@ elif menu_choice == "💡 Ideas & Hooks":
                         ],
                         temperature=0.7
                     )
-                    st.success("Done!")
+                    st.success("Valmista!")
                     st.write(res.choices[0].message.content)
                     
-        elif sub_tool == "3-Second Retention Hooks":
-            hook_topic = st.text_input("Video topic:")
-            if st.button("Generate Hooks", type="primary") and hook_topic:
-                with st.spinner("Crafting hooks..."):
+        elif sub_tool == "3 sekunnin aloituskuut":
+            hook_topic = st.text_input("Videon aihe:")
+            if st.button("Generoi Koukut", type="primary") and hook_topic:
+                with st.spinner("Luodaan koukkuja..."):
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
@@ -286,13 +307,13 @@ elif menu_choice == "💡 Ideas & Hooks":
                         ],
                         temperature=0.7
                     )
-                    st.success("Done!")
+                    st.success("Valmista!")
                     st.write(res.choices[0].message.content)
                     
         else:
-            passion = st.text_input("What are your interests or skills?")
-            if st.button("Generate Channel Concepts", type="primary") and passion:
-                with st.spinner("Generating channel ideas..."):
+            passion = st.text_input("Mitkä ovat kiinnostuksen kohteesi tai taitosi?")
+            if st.button("Generoi Kanavakonseptit", type="primary") and passion:
+                with st.spinner("Generoidaan kanavaideoita..."):
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
@@ -301,25 +322,25 @@ elif menu_choice == "💡 Ideas & Hooks":
                         ],
                         temperature=0.7
                     )
-                    st.success("Done!")
+                    st.success("Valmista!")
                     st.write(res.choices[0].message.content)
 
 # --- TAB 3: Scripts & Shorts (PRO) ---
-elif menu_choice == "✍️ Scripts & Shorts":
-    st.title("✍️ Full Scripts & Shorts Machine")
-    st.markdown("Generate full minute-by-minute video scripts or viral short-form scripts.")
+elif menu_choice == "scripts":
+    st.title("✍️ Käsikirjoitukset & Shorts -kone")
+    st.markdown("Luo minuuttitarkkoja videokäsikirjoituksia tai viraaleja lyhytvideoita.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        script_type = st.radio("Script Type:", ["Full Video Script (Minute-by-Minute)", "YouTube Short / TikTok Script (< 60s)"])
-        script_topic = st.text_input("Exact video topic or title:")
+        script_type = st.radio("Käsikirjoituksen tyyppi:", ["Koko videon käsikirjoitus", "YouTube Short / TikTok -skripti (< 60s)"])
+        script_topic = st.text_input("Tarkka videon aihe tai otsikko:")
         
-        if st.button("Generate Script", type="primary") and script_topic:
-            with st.spinner("Writing script..."):
-                prompt = f"Create a full minute-by-minute script for a {video_length} video about '{script_topic}'." if "Full" in script_type else f"Create a punchy, fast-paced under-60-second vertical video script with a twist for: '{script_topic}'."
+        if st.button("Generoi Käsikirjoitus", type="primary") and script_topic:
+            with st.spinner("Kirjoitetaan käsikirjoitusta..."):
+                prompt = f"Create a full minute-by-minute script for a {video_length} video about '{script_topic}'." if "Koko" in script_type else f"Create a punchy, fast-paced under-60-second vertical video script with a twist for: '{script_topic}'."
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -328,24 +349,24 @@ elif menu_choice == "✍️ Scripts & Shorts":
                     ],
                     temperature=0.7
                 )
-                st.success("Script generated!")
+                st.success("Käsikirjoitus luotu!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 4: Thumbnails (PRO) ---
-elif menu_choice == "🎯 Thumbnails":
-    st.title("🎯 Thumbnail Concept Generator")
-    st.markdown("Get a precise visual recipe for a high-CTR thumbnail.")
+elif menu_choice == "thumbnails":
+    st.title("🎯 Pienoiskuva (Thumbnail) -resepti")
+    st.markdown("Hae tarkka visuaalinen resepti korkean CTR:n pienoiskuvalle.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        thumb_topic = st.text_input("Core idea or twist of the video:")
-        thumb_style = st.selectbox("Visual Style", ["Shocking / Surprising", "Minimalist & Clean", "Meme / Funny", "Before vs After"])
+        thumb_topic = st.text_input("Videon ydinidea tai twisti:")
+        thumb_style = st.selectbox("Visuaalinen tyyli", ["Shokeeraava / Yllättävä", "Minimalistinen & Puhdas", "Meme / Hauska", "Ennen vs Jälkeen"])
         
-        if st.button("Generate Thumbnail Recipe", type="primary") and thumb_topic:
-            with st.spinner("Designing..."):
+        if st.button("Generoi Pienoiskuva-resepti", type="primary") and thumb_topic:
+            with st.spinner("Suunnitellaan..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -354,22 +375,22 @@ elif menu_choice == "🎯 Thumbnails":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 5: SEO & Tags (PRO) ---
-elif menu_choice == "🏷️ SEO & Tags":
-    st.title("🏷️ YouTube Tags & SEO Generator")
-    st.markdown("Get optimized search tags and keywords ready to copy into YouTube Studio.")
+elif menu_choice == "seo":
+    st.title("🏷️ YouTube Tunnisteet & SEO Generaattori")
+    st.markdown("Hae optimoidut hakutunnisteet ja avainsanat suoraan YouTube Studioon vietäväksi.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        tag_topic = st.text_input("Video topic for SEO tags:")
-        if st.button("Generate Tags", type="primary") and tag_topic:
-            with st.spinner("Generating SEO tags..."):
+        tag_topic = st.text_input("Videon aihe SEO-tunnisteille:")
+        if st.button("Generoi Tunnisteet", type="primary") and tag_topic:
+            with st.spinner("Generoidaan SEO-tunnisteita..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -378,24 +399,24 @@ elif menu_choice == "🏷️ SEO & Tags":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 6: Comments (PRO) ---
-elif menu_choice == "💬 Comments":
-    st.title("💬 Comment Reply Assistant")
-    st.markdown("Generate engaging, community-building replies to viewer comments.")
+elif menu_choice == "comments":
+    st.title("💬 Kommenttivastaus-assistentti")
+    st.markdown("Luo yhteisöä sitouttavia vastauksia katsojien kommentteihin.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        viewer_comment = st.text_area("Paste viewer comment here:")
-        tone = st.selectbox("Tone:", ["Friendly & Appreciative", "Funny & Witty", "Expert & Informative"])
+        viewer_comment = st.text_area("Liitä katsojan kommentti tähän:")
+        tone = st.selectbox("Äänensävy:", ["Ystävällinen & Kiitollinen", "Hauska & Nokkela", "Asiantunteva & Informatiivinen"])
         
-        if st.button("Generate Reply", type="primary") and viewer_comment:
-            with st.spinner("Writing reply..."):
+        if st.button("Generoi Vastaus", type="primary") and viewer_comment:
+            with st.spinner("Kirjoitetaan vastausta..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -404,24 +425,24 @@ elif menu_choice == "💬 Comments":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 7: Repurpose (PRO) ---
-elif menu_choice == "♻️ Repurpose":
-    st.title("♻️ Content Repurposer")
-    st.markdown("Convert your video script into community posts, X (Twitter) threads, or short summaries.")
+elif menu_choice == "repurpose":
+    st.title("♻️ Sisällön Kierrättäjä")
+    st.markdown("Muunna käsikirjoituksesi yhteisöpostauksiksi, X (Twitter) -ketjuiksi tai uutiskirjeiksi.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        long_content = st.text_area("Paste your video script or core concept:")
-        repurpose_target = st.selectbox("Format:", ["X (Twitter) Thread", "Community Tab Post & Poll", "Newsletter Summary"])
+        long_content = st.text_area("Liitä videokäsikirjoitus tai pääidea tähän:")
+        repurpose_target = st.selectbox("Formaatti:", ["X (Twitter) -ketju", "Yhteisötabin postaus & äänestys", "Uutiskirjeen tiivistelmä"])
         
-        if st.button("Repurpose Content", type="primary") and long_content:
-            with st.spinner("Adapting content..."):
+        if st.button("Kierrätä Sisältö", type="primary") and long_content:
+            with st.spinner("Mukautetaan sisältöä..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -430,24 +451,24 @@ elif menu_choice == "♻️ Repurpose":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 8: Sponsorship (PRO) ---
-elif menu_choice == "🤝 Sponsorship":
-    st.title("🤝 Sponsorship Pitch Email Generator")
-    st.markdown("Pitch brands professionally to land lucrative sponsorships.")
+elif menu_choice == "sponsorship":
+    st.title("🤝 Sponsorointisähköpostin Generaattori")
+    st.markdown("Pitchaa brändeille ammattimaisesti ja saa tuottoisia sponsorisopimuksia.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        brand_name = st.text_input("Brand name:")
-        channel_stats = st.text_input("Your channel niche and viewer stats:")
+        brand_name = st.text_input("Brändin nimi:")
+        channel_stats = st.text_input("Kanavasi aihepiiri ja katsojatilastot:")
         
-        if st.button("Generate Pitch Email", type="primary") and brand_name and channel_stats:
-            with st.spinner("Writing pitch..."):
+        if st.button("Generoi Pitchaus-sähköposti", type="primary") and brand_name and channel_stats:
+            with st.spinner("Kirjoitetaan pitchausta..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -456,24 +477,24 @@ elif menu_choice == "🤝 Sponsorship":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 9: Translator (PRO) ---
-elif menu_choice == "🌍 Translator":
-    st.title("🌍 Global Translator & Localizer")
-    st.markdown("Translate and optimize your video titles, descriptions, and tags for international audiences.")
+elif menu_choice == "translator":
+    st.title("🌍 Globaali Kääntäjä & Lokalisoija")
+    st.markdown("Käännä ja optimoi otsikot, kuvaukset ja tunnisteet kansainväliselle yleisölle.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        text_to_translate = st.text_area("Paste text, title or description to localize:")
-        target_lang = st.selectbox("Target Language:", ["English", "Finnish", "Spanish", "German", "French", "Japanese", "Swedish"])
+        text_to_translate = st.text_area("Liitä käännettävä teksti, otsikko tai kuvaus:")
+        target_lang = st.selectbox("Kohdekieli:", ["Englanti", "Suomi", "Espanja", "Saksa", "Ranska", "Japani", "Ruotsi"])
         
-        if st.button("Translate & Optimize", type="primary") and text_to_translate:
-            with st.spinner("Translating and localizing for maximum reach..."):
+        if st.button("Käännä & Optimoi", type="primary") and text_to_translate:
+            with st.spinner("Käännetään ja lokalisoidaan maksiminäkyvyydelle..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -482,24 +503,24 @@ elif menu_choice == "🌍 Translator":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 10: Competitor Audit (PRO) ---
-elif menu_choice == "🏆 Competitor Audit":
-    st.title("🏆 Competitor & Algorithm Audit")
-    st.markdown("Analyze a topic or competitor angle to find the gap and make your video stand out.")
+elif menu_choice == "competitor":
+    st.title("🏆 Kilpailija- & Algoritmi-auditoija")
+    st.markdown("Analysoi aihe tai kilpailijoiden kulma löytääksesi aukon, jolla erotut eduksesi.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        audit_topic = st.text_input("Enter the topic or what competitors are currently covering:")
-        competitor_style = st.text_input("What is the standard approach everyone else uses? (optional):")
+        audit_topic = st.text_input("Syötä aihe tai se mitä kilpailijat parhaillaan käsittelevät:")
+        competitor_style = st.text_input("Mikä on perinteinen tapa, jota kaikki muut käyttävät? (valinnainen):")
         
-        if st.button("Run Strategy Audit", type="primary") and audit_topic:
-            with st.spinner("Analyzing competition and algorithm trends..."):
+        if st.button("Aja Strategia-auditoini", type="primary") and audit_topic:
+            with st.spinner("Analysoidaan kilpailua ja algoritmisuuntauksia..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -508,24 +529,24 @@ elif menu_choice == "🏆 Competitor Audit":
                     ],
                     temperature=0.7
                 )
-                st.success("Audit completed!")
+                st.success("Auditoini valmis!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 11: Bulk Edit Tools (PRO) ---
-elif menu_choice == "⚡ Bulk Edit Tools":
-    st.title("⚡ Bulk Edit & Optimization Planner")
-    st.markdown("Generate mass templates, description disclaimers, or unified tag structures for multiple videos at once.")
+elif menu_choice == "bulk":
+    st.title("⚡ Massamuokkaus & Optimointityökalu")
+    st.markdown("Luo massapohjia, kuvausvastuuvapautuslausekkeita tai yhtenäisiä tunnisterakenteita useille videoille kerralla.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        bulk_goal = st.selectbox("Bulk Task:", ["Standard Video Description Template", "Channel-wide End Screen & Card Strategy", "Unified Tag & Keyword Template"])
-        channel_niche_bulk = st.text_input("Your channel niche or category:")
+        bulk_goal = st.selectbox("Massatehtävä:", ["Vakiovideon kuvauspohja", "Kanavanlaajuinen loppuruutu- & korttistrategia", "Yhtenäinen tunniste- & avainsanapohja"])
+        channel_niche_bulk = st.text_input("Kanavasi aihepiiri tai kategoria:")
         
-        if st.button("Generate Bulk Template", type="primary") and channel_niche_bulk:
-            with st.spinner("Creating bulk template..."):
+        if st.button("Generoi Massapohja", type="primary") and channel_niche_bulk:
+            with st.spinner("Luodaan massapohjaa..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -534,30 +555,30 @@ elif menu_choice == "⚡ Bulk Edit Tools":
                     ],
                     temperature=0.7
                 )
-                st.success("Template generated!")
+                st.success("Pohja luotu!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 12: Data & Analytics (PRO) ---
-elif menu_choice == "📈 Data & Analytics":
-    st.title("📈 Data & Analytics Health Check")
-    st.markdown("Get strategic guidance on how to interpret your CTR, retention rates, and channel analytics.")
+elif menu_choice == "analytics":
+    st.title("📈 Data & Analytiikan Terveystarkastus")
+    st.markdown("Hae strategisia ohjeita CTR:n, katseluaikojen ja kanava-analytiikan tulkintaan.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        st.markdown("Input your video's current metrics to get an AI diagnostic report:")
+        st.markdown("Syötä videosi nykyiset mittarit saadaksesi tekoälyn diagnoosin:")
         col_m1, col_m2 = st.columns(2)
         with col_m1:
-            ctr_val = st.text_input("Click-Through Rate (CTR %)", value="4.5%")
-            avd_val = st.text_input("Average View Duration (Retention)", value="3 min 20 sec")
+            ctr_val = st.text_input("Klikkaussuhde (CTR %)", value="4.5%")
+            avd_val = st.text_input("Keskimääräinen katseluaika (Retention)", value="3 min 20 sec")
         with col_m2:
-            views_val = st.text_input("View Count / 48h", value="1,200")
-            sub_rate = st.text_input("Subscribers Gained from Video", value="15")
+            views_val = st.text_input("Katselukerrat / 48h", value="1,200")
+            sub_rate = st.text_input("Videolta tulleet tilaajat", value="15")
             
-        if st.button("Analyze Channel Metrics", type="primary"):
-            with st.spinner("Analyzing performance data..."):
+        if st.button("Analysoi Kanavamittarit", type="primary"):
+            with st.spinner("Analysoidaan suorituskykyä..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -566,24 +587,24 @@ elif menu_choice == "📈 Data & Analytics":
                     ],
                     temperature=0.7
                 )
-                st.success("Analytics Diagnostic Ready!")
+                st.success("Analytiikkadiagnoosi valmis!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 13: Channel Branding (PRO) ---
-elif menu_choice == "🎨 Channel Branding":
-    st.title("🎨 AI Channel Name & Branding Generator")
-    st.markdown("Input your interests and audience to generate a full visual and verbal branding package.")
+elif menu_choice == "branding":
+    st.title("🎨 Kanavan Brändäys -Generaattori")
+    st.markdown("Syötä kiinnostuksen kohteesi ja yleisösi luodaksesi täydellisen visuaalisen ja verbaalisen brändäyspaketin.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        brand_interests = st.text_input("Your passions, skills, or niche topics:")
-        brand_audience = st.text_input("Who is your target viewer?")
+        brand_interests = st.text_input("Intohimosi, taitosi tai aihealueesi:")
+        brand_audience = st.text_input("Kuka on tavoiteyleisösi?")
         
-        if st.button("Generate Complete Branding Package", type="primary") and brand_interests:
-            with st.spinner("Designing brand identity..."):
+        if st.button("Generoi Täydellinen Brändäyspaketti", type="primary") and brand_interests:
+            with st.spinner("Suunnitellaan brändi-identiteettiä..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -592,23 +613,23 @@ elif menu_choice == "🎨 Channel Branding":
                     ],
                     temperature=0.7
                 )
-                st.success("Branding Package Ready!")
+                st.success("Brändäyspaketti valmis!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 14: Timestamp Generator (PRO) ---
-elif menu_choice == "⏱️ Timestamp Generator":
-    st.title("⏱️ Video Chapter & Timestamp Generator")
-    st.markdown("Paste your video script or rough notes to instantly generate SEO-friendly timestamps.")
+elif menu_choice == "timestamps":
+    st.title("⏱️ Videon Luvut & Aikaleimat -Generaattori")
+    st.markdown("Liitä käsikirjoitus tai muistiinpanot luodaksesi SEO-ystävälliset aikaleimat.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        script_input = st.text_area("Paste your video script, outline, or breakdown notes here:")
+        script_input = st.text_area("Liitä videokäsikirjoitus, runko tai muistiinpanot tähän:")
         
-        if st.button("Generate Timestamps", type="primary") and script_input:
-            with st.spinner("Structuring chapters and timestamps..."):
+        if st.button("Generoi Aikaleimat", type="primary") and script_input:
+            with st.spinner("Rakennetaan lukuja ja aikaleimoja..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -617,23 +638,23 @@ elif menu_choice == "⏱️ Timestamp Generator":
                     ],
                     temperature=0.7
                 )
-                st.success("Timestamps Generated!")
+                st.success("Aikaleimat luotu!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 15: Title A/B Matrix (PRO) ---
-elif menu_choice == "🧠 Title A/B Matrix":
-    st.title("🧠 Title A/B Testing Matrix")
-    st.markdown("Generate 10 psychologically optimized video title angles to maximize CTR.")
+elif menu_choice == "title_matrix":
+    st.title("🧠 Otsikko A/B Testausmatriisi")
+    st.markdown("Luo 10 psykologisesti optimoitua videon otsikkoa maksimoidaksesi CTR:n.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        base_topic = st.text_input("Enter your core video topic or raw idea:")
+        base_topic = st.text_input("Syötä videon pääaihe tai raaka idea:")
         
-        if st.button("Generate Title Matrix", type="primary") and base_topic:
-            with st.spinner("Applying psychological triggers and title formulas..."):
+        if st.button("Generoi Otsikkomatriisi", type="primary") and base_topic:
+            with st.spinner("Sovelletaan psykologisia triggereitä ja otsikkokaavoja..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -642,24 +663,24 @@ elif menu_choice == "🧠 Title A/B Matrix":
                     ],
                     temperature=0.7
                 )
-                st.success("Title Matrix Generated!")
+                st.success("Otsikkomatriisi luotu!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 16: AI Image Prompts (PRO) ---
-elif menu_choice == "🎨 AI Image Prompts":
-    st.title("🎨 AI Thumbnail Image Prompt Generator")
-    st.markdown("Generate ready-to-use prompts for Midjourney, DALL-E, or Stable Diffusion to create high-CTR custom thumbnails.")
+elif menu_choice == "ai_images":
+    st.title("🎨 Tekoälyn Pienoiskuvapromptit")
+    st.markdown("Luo valmiita prompteja Midjourney-, DALL-E- tai Stable Diffusion -kuvageneraattoreille.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        img_topic = st.text_input("What is the video subject or core visual element?")
-        img_mood = st.selectbox("Visual Mood & Style", ["Cinematic & Dramatic", "Bright & Vibrant Cartoon / 3D", "Tech / Cyberpunk Glow", "Dark & Mysterious Studio"])
+        img_topic = st.text_input("Mikä on videon aihe tai keskeinen visuaalinen elementti?")
+        img_mood = st.selectbox("Visuaalinen tunnelma & tyyli", ["Elokuvallinen & Dramaattinen", "Kirkas & Eloisa Sarjakuva / 3D", "Tekno / Cyberpunk Glow", "Tumma & Salaperäinen Studio"])
         
-        if st.button("Generate AI Image Prompts", type="primary") and img_topic:
-            with st.spinner("Crafting prompt engineering recipes..."):
+        if st.button("Generoi AI Kuvapromptit", type="primary") and img_topic:
+            with st.spinner("Muotoillaan prompteja..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -668,23 +689,23 @@ elif menu_choice == "🎨 AI Image Prompts":
                     ],
                     temperature=0.7
                 )
-                st.success("Prompts Ready!")
+                st.success("Promptit valmiina!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 17: Script Voice Optimizer (PRO) ---
-elif menu_choice == "🎙️ Script Voice Optimizer":
-    st.title("🎙️ Script Voice & Audio Enhancer")
-    st.markdown("Transform written text into natural spoken speech rhythm with organic pauses and engaging delivery cues.")
+elif menu_choice == "voice":
+    st.title("🎙️ Puhe- & Ääniohjaus -Optimoija")
+    st.markdown("Muunna teksti luonnolliseksi puherytmiksi luonnollisilla tauoilla ja esitysvihjeillä.")
     
     if not is_pro:
         render_paywall_warning()
     elif not client:
         st.error("OpenAI API key is missing!")
     else:
-        raw_script = st.text_area("Paste your raw script section or paragraph here:")
+        raw_script = st.text_area("Liitä raakakäsikirjoitus tai kappale tähän:")
         
-        if st.button("Optimize for Voice Delivery", type="primary") and raw_script:
-            with st.spinner("Adjusting pacing, pauses, and natural speech patterns..."):
+        if st.button("Optimoi Puhetoimitukselle", type="primary") and raw_script:
+            with st.spinner("Säädetään tahteja, taukoja ja luonnollisia puhekuvioita..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -693,42 +714,42 @@ elif menu_choice == "🎙️ Script Voice Optimizer":
                     ],
                     temperature=0.7
                 )
-                st.success("Voice Script Optimized!")
+                st.success("Äänikäsikirjoitus optimoitu!")
                 st.write(res.choices[0].message.content)
 
 # --- TAB 18: Growth & ROI Simulator (PRO) ---
-elif menu_choice == "💰 Growth & ROI Simulator":
-    st.title("💰 YouTube Growth & Earnings Simulator")
-    st.markdown("Estimate ad revenue (AdSense), projected views, and channel milestone timelines based on key metrics.")
+elif menu_choice == "simulator":
+    st.title("💰 Kasvu- & Ansiolaskelma Simulaattori")
+    st.markdown("Arvioi mainostuloja (AdSense), ennustettuja katselukertoja ja tilaajakehitystä.")
     
     if not is_pro:
         render_paywall_warning()
     else:
-        st.markdown("Configure your expected video performance parameters:")
+        st.markdown("Määritä videon oletetut suorituskykyparametrit:")
         col_s1, col_s2 = st.columns(2)
         with col_s1:
-            sim_views = st.number_input("Target View Count", min_value=100, max_value=10000000, value=10000, step=500)
-            sim_rpm = st.slider("Estimated RPM ($ per 1,000 views)", min_value=0.5, max_value=30.0, value=4.5, step=0.5)
+            sim_views = st.number_input("Tavoiteltu katselumäärä", min_value=100, max_value=10000000, value=10000, step=500)
+            sim_rpm = st.slider("Arvioitu RPM ($ per 1 000 katselua)", min_value=0.5, max_value=30.0, value=4.5, step=0.5)
         with col_s2:
-            sim_ctr = st.slider("Expected Click-Through Rate (CTR %)", min_value=1.0, max_value=25.0, value=5.0, step=0.5)
-            sim_sub_conv = st.slider("Subscribers per 1,000 views", min_value=1, max_value=50, value=10, step=1)
+            sim_ctr = st.slider("Odotettu klikkaussuhde (CTR %)", min_value=1.0, max_value=25.0, value=5.0, step=0.5)
+            sim_sub_conv = st.slider("Tilaajia per 1 000 katselua", min_value=1, max_value=50, value=10, step=1)
             
-        if st.button("Calculate Projections", type="primary"):
+        if st.button("Laske Ennusteet", type="primary"):
             estimated_earnings = (sim_views / 1000) * sim_rpm
             estimated_subs = int((sim_views / 1000) * sim_sub_conv)
             
-            st.success("Simulated Projections Complete!")
+            st.success("Simulaatio valmis!")
             
             col_res1, col_res2, col_res3 = st.columns(3)
             with col_res1:
-                st.metric(label="Estimated Ad Revenue", value=f"${estimated_earnings:.2f}")
+                st.metric(label="Arvioidut Mainostulot", value=f"${estimated_earnings:.2f}")
             with col_res2:
-                st.metric(label="Projected New Subs", value=f"+{estimated_subs}")
+                st.metric(label="Ennustetut Uudet Tilaajat", value=f"+{estimated_subs}")
             with col_res3:
-                st.metric(label="Performance Score", value="Great 🚀" if sim_ctr >= 5.0 else "Needs Work ⚠️")
+                st.metric(label="Suorituskyvyn pisteet", value="Erinomainen 🚀" if sim_ctr >= 5.0 else "Vaatii työtä ⚠️")
                 
             if client:
-                with st.spinner("Generating AI growth strategy analysis..."):
+                with st.spinner("Generoidaan tekoälyn strategista palautetta..."):
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
@@ -737,5 +758,5 @@ elif menu_choice == "💰 Growth & ROI Simulator":
                         ],
                         temperature=0.7
                     )
-                    st.markdown("### 🤖 AI Strategic Feedback")
+                    st.markdown("### 🤖 Tekoälyn Strateginen Palaute")
                     st.write(res.choices[0].message.content)
