@@ -7,7 +7,6 @@ str_module.set_page_config(page_title="YouTube Pro Suite", page_icon="🎬", lay
 # --- KUSTOMOITU ERITTÄIN MODERNI JA HIOTTU CSS ---
 str_module.markdown("""
     <style>
-    /* Pääalueen tausta ja fontit */
     .main {
         background-color: #f8fafc;
     }
@@ -15,15 +14,11 @@ str_module.markdown("""
         color: #0f172a;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    
-    /* Sivupalkin tyylittely */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         border-right: 1px solid #e2e8f0;
         padding-top: 10px;
     }
-    
-    /* Pro-kortti sivupalkissa */
     .pro-sidebar-box {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
         padding: 20px;
@@ -33,8 +28,6 @@ str_module.markdown("""
         text-align: center;
         box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.1);
     }
-    
-    /* Tyylikäs Tilaa-painike */
     .buy-button {
         display: block;
         width: 100%;
@@ -53,16 +46,12 @@ str_module.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(225, 29, 72, 0.4);
     }
-
-    /* Streamlit-painikkeiden ja syötteiden hienosäätö */
     .stButton>button {
         border-radius: 10px;
         font-weight: 600;
         padding: 0.6rem 1.2rem;
         transition: all 0.2s ease;
     }
-    
-    /* Sisältölaatikko tuloksille */
     .result-box {
         background-color: #ffffff;
         padding: 24px;
@@ -81,43 +70,10 @@ try:
 except Exception:
     client = None
 
-# Stripe-kertamaksun linkki (päivitä tähän tarvittaessa 1 € tai 5 € linkkisi)
+# Stripe-kertamaksun linkki
 stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
 
-# --- PRO-OIKEUKSIEN JA SALASANAN HALLINTA ---
-if "is_pro" not in str_module.session_state:
-    str_module.session_state.is_pro = False
-
-if "pro_password" not in str_module.session_state:
-    str_module.session_state.pro_password = ""
-
-query_params = str_module.query_params
-is_paid_url = query_params.get("pro") == "true"
-
-# Jos tullaan Stripestä ja salasanaa ei ole vielä luotu tälle istunnolle
-if is_paid_url and not str_module.session_state.pro_password:
-    str_module.markdown("## 🎉 Maksu vastaanotettu onnistuneesti!")
-    str_module.info("Keksi itsellesi henkilökohtainen **Pro-salasana**, jotta pääset jatkossakin sisään milloin tahansa ilman uutta maksua. Ota salasana talteen!")
-    
-    new_pass = str_module.text_input("Keksi Pro-salasana:", type="password")
-    if str_module.button("Tallenna salasana ja aloita", type="primary"):
-        if new_pass:
-            str_module.session_state.pro_password = new_pass
-            str_module.session_state.is_pro = True
-            str_module.query_params.clear()
-            str_module.rerun()
-        else:
-            str_module.warning("Kirjoita salasana jatkaaksesi.")
-    
-    str_module.stop()
-
-# Jos salasana on olemassa, aktivoidaan pro-tila automaattisesti
-if str_module.session_state.pro_password:
-    str_module.session_state.is_pro = True
-
-is_pro = str_module.session_state.is_pro
-
-# Kielen valinta (Oletuksena englanti)
+# --- KELIN VALINTA ENSIN, ETTÄ KÄÄNNÖKSET TOIMIVAT HETI ---
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
 languages = ["🇬🇧 English", "🇫🇮 Suomi", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
 if "selected_language" not in str_module.session_state:
@@ -127,7 +83,7 @@ selected_language = str_module.sidebar.selectbox("Select Language:", languages, 
 str_module.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
+# --- KAIKKI KÄÄNNÖKSET (MUKAAN LUKIEN SALASANA- JA KIRJAUTUMISTEKSTIT) ---
 translations = {
     "🇬🇧": {
         "sidebar_text": "Unlock all AI tools with a one-time payment!",
@@ -143,6 +99,17 @@ translations = {
         "cat_basics": "💡 Basics, Ideas & Scripts",
         "cat_advanced": "🚀 Advanced SEO, Growth & Analytics",
         "tool_prompt": "Select tool:",
+        "pay_title": "🎉 Payment Received Successfully!",
+        "pay_info": "Create a personal **Pro password** so you can log back in anytime without paying again. Save it somewhere safe!",
+        "pass_label": "Create Pro password:",
+        "save_btn": "Save Password & Start",
+        "pass_warning": "Please enter a password to continue.",
+        "login_title": "🔑 Already have Pro? Login",
+        "login_input": "Pro password:",
+        "login_btn": "Login",
+        "login_success": "Logged in successfully!",
+        "login_error": "Wrong password or password not created for this session.",
+        "logout_btn": "Logout Pro"
     },
     "🇫🇮": {
         "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä kertamaksulla!",
@@ -158,6 +125,17 @@ translations = {
         "cat_basics": "💡 Perustyökalut, Ideat & Käsikirjoitukset",
         "cat_advanced": "🚀 Edistynyt SEO, Kasvu & Analytiikka",
         "tool_prompt": "Valitse työkalu:",
+        "pay_title": "🎉 Maksu vastaanotettu onnistuneesti!",
+        "pay_info": "Keksi itsellesi henkilökohtainen **Pro-salasana**, jotta pääset jatkossakin sisään milloin tahansa ilman uutta maksua. Ota salasana talteen!",
+        "pass_label": "Keksi Pro-salasana:",
+        "save_btn": "Tallenna salasana ja aloita",
+        "pass_warning": "Kirjoita salasana jatkaaksesi.",
+        "login_title": "🔑 Onko sinulla jo Pro? Kirjaudu",
+        "login_input": "Pro-salasana:",
+        "login_btn": "Kirjaudu sisään",
+        "login_success": "Kirjauduttu sisään!",
+        "login_error": "Väärä salasana tai salasanaa ei ole luotu tällä istunnolla.",
+        "logout_btn": "Kirjaudu ulos Prosta"
     },
     "🇸🇪": {
         "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning!",
@@ -173,6 +151,17 @@ translations = {
         "cat_basics": "💡 Grunderna, idéer & manus",
         "cat_advanced": "🚀 Avancerad SEO, tillväxt & analys",
         "tool_prompt": "Välj verktyg:",
+        "pay_title": "🎉 Betalning mottagen!",
+        "pay_info": "Skapa ett personligt **Pro-lösenord** så att du kan logga in igen när som helst utan att betala på nytt.",
+        "pass_label": "Skapa Pro-lösenord:",
+        "save_btn": "Spara lösenord & börja",
+        "pass_warning": "Ange ett lösenord för att fortsätta.",
+        "login_title": "🔑 Har du redan Pro? Logga in",
+        "login_input": "Pro-lösenord:",
+        "login_btn": "Logga in",
+        "login_success": "Inloggad!",
+        "login_error": "Fel lösenord eller inte skapat i denna session.",
+        "logout_btn": "Logga ut från Pro"
     },
     "🇪🇸": {
         "sidebar_text": "¡Desbloquea todas las herramientas con un pago único!",
@@ -188,6 +177,17 @@ translations = {
         "cat_basics": "💡 Básicos, Ideas y Guiones",
         "cat_advanced": "🚀 SEO Avanzado, Crecimiento y Analítica",
         "tool_prompt": "Seleccionar herramienta:",
+        "pay_title": "🎉 ¡Pago recibido con éxito!",
+        "pay_info": "Crea una **contraseña Pro** personal para volver a iniciar sesión en cualquier momento.",
+        "pass_label": "Crear contraseña Pro:",
+        "save_btn": "Guardar contraseña y empezar",
+        "pass_warning": "Por favor escribe una contraseña.",
+        "login_title": "🔑 ¿Ya tienes Pro? Iniciar sesión",
+        "login_input": "Contraseña Pro:",
+        "login_btn": "Iniciar sesión",
+        "login_success": "¡Sesión iniciada!",
+        "login_error": "Contraseña incorrecta.",
+        "logout_btn": "Cerrar sesión Pro"
     },
     "🇩🇪": {
         "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung frei!",
@@ -196,13 +196,24 @@ translations = {
         "settings": "⚙️ Creator-Einstellungen",
         "v_len": "Videolänge / Typ",
         "aud": "Zielgruppe",
-        "paywall": "🔒 **Pro-Funktion:** Einmalige Zahlung erforderlich, um dieses Tool zu nutzen.",
+        "paywall": "🔒 **Pro-Funktion:** Einmalige Zahlung erforderlich.",
         "unlock_all": "🔥 Alle Tools freischalten (Einmalig)",
         "nav_title": "🛠️ Tool-Navigation",
         "cat_label": "Kategorie auswählen:",
         "cat_basics": "💡 Grundlagen, Ideen & Skripte",
         "cat_advanced": "🚀 Fortgeschrittenes SEO, Wachstum & Analyse",
         "tool_prompt": "Tool auswählen:",
+        "pay_title": "🎉 Zahlung erfolgreich erhalten!",
+        "pay_info": "Erstelle ein persönliches **Pro-Passwort**, um dich jederzeit wieder anzumelden.",
+        "pass_label": "Pro-Passwort erstellen:",
+        "save_btn": "Passwort speichern & starten",
+        "pass_warning": "Bitte gib ein Passwort ein.",
+        "login_title": "🔑 Bereits Pro? Anmelden",
+        "login_input": "Pro-Passwort:",
+        "login_btn": "Anmelden",
+        "login_success": "Erfolgreich angemeldet!",
+        "login_error": "Falsches Passwort.",
+        "logout_btn": "Pro abmelden"
     },
     "🇫🇷": {
         "sidebar_text": "Débloquez tous les outils avec un paiement unique !",
@@ -211,13 +222,24 @@ translations = {
         "settings": "⚙️ Paramètres du Créateur",
         "v_len": "Durée / Type de vidéo",
         "aud": "Public cible",
-        "paywall": "🔒 **Fonctionnalité Pro :** Paiement unique requis pour utiliser cet outil.",
+        "paywall": "🔒 **Fonctionnalité Pro :** Paiement unique requis.",
         "unlock_all": "🔥 Débloquer tous les outils (Paiement unique)",
         "nav_title": "🛠️ Navigation des Outils",
         "cat_label": "Sélectionner la catégorie :",
         "cat_basics": "💡 Bases, Idées & Scripts",
         "cat_advanced": "🚀 SEO Avancé, Croissance & Analytique",
         "tool_prompt": "Sélectionner l'outil :",
+        "pay_title": "🎉 Paiement reçu avec succès !",
+        "pay_info": "Créez un **mot de passe Pro** personnel pour vous reconnecter à tout moment.",
+        "pass_label": "Créer un mot de passe Pro :",
+        "save_btn": "Enregistrer et commencer",
+        "pass_warning": "Veuillez entrer un mot de passe.",
+        "login_title": "🔑 Déjà Pro ? Connexion",
+        "login_input": "Mot de passe Pro :",
+        "login_btn": "Se connecter",
+        "login_success": "Connecté avec succès !",
+        "login_error": "Mot de passe incorrect.",
+        "logout_btn": "Déconnexion Pro"
     },
     "🇯🇵": {
         "sidebar_text": "買い切り支払いですべてのAIツールを解除しよう！",
@@ -226,13 +248,24 @@ translations = {
         "settings": "⚙️ クリエイター設定",
         "v_len": "動画の長さ / タイプ",
         "aud": "ターゲット層",
-        "paywall": "🔒 **Pro機能:** このツールを使用するには買い切り支払いが必要です。",
+        "paywall": "🔒 **Pro機能:** 買い切り支払いが必要です。",
         "unlock_all": "🔥 すべてのツールを解除 (買い切り)",
         "nav_title": "🛠️ ツールナビゲーション",
         "cat_label": "カテゴリを選択:",
         "cat_basics": "💡 基本・アイデア・台本",
         "cat_advanced": "🚀 高度なSEO・成長・分析",
         "tool_prompt": "ツールを選択:",
+        "pay_title": "🎉 お支払いを確認しました！",
+        "pay_info": "いつでも再ログインできるように、独自の**Proパスワード**を作成してください。",
+        "pass_label": "Proパスワードを作成:",
+        "save_btn": "パスワードを保存して開始",
+        "pass_warning": "パスワードを入力してください。",
+        "login_title": "🔑 すでにProですか？ ログイン",
+        "login_input": "Proパスワード:",
+        "login_btn": "ログイン",
+        "login_success": "ログインしました！",
+        "login_error": "パスワードが間違っています。",
+        "logout_btn": "Proからログアウト"
     }
 }
 
@@ -240,6 +273,38 @@ if lang_code not in translations:
     lang_code = "🇬🇧"
 
 texts = translations[lang_code]
+
+# --- PRO-OIKEUKSIEN JA SALASANAN HALLINTA ---
+if "is_pro" not in str_module.session_state:
+    str_module.session_state.is_pro = False
+
+if "pro_password" not in str_module.session_state:
+    str_module.session_state.pro_password = ""
+
+query_params = str_module.query_params
+is_paid_url = query_params.get("pro") == "true"
+
+# Jos tullaan Stripestä ja salasanaa ei ole vielä luotu
+if is_paid_url and not str_module.session_state.pro_password:
+    str_module.markdown(f"## {texts['pay_title']}")
+    str_module.info(texts['pay_info'])
+    
+    new_pass = str_module.text_input(texts['pass_label'], type="password")
+    if str_module.button(texts['save_btn'], type="primary"):
+        if new_pass:
+            str_module.session_state.pro_password = new_pass
+            str_module.session_state.is_pro = True
+            str_module.query_params.clear()
+            str_module.rerun()
+        else:
+            str_module.warning(texts['pass_warning'])
+    
+    str_module.stop()
+
+if str_module.session_state.pro_password:
+    str_module.session_state.is_pro = True
+
+is_pro = str_module.session_state.is_pro
 
 # Työkalujen sanakirjat kielittäin
 tools_data = {
@@ -332,19 +397,18 @@ if not is_pro:
     </div>
     """, unsafe_allow_html=True)
     
-    # Mahdollisuus kirjautua sisään aiemmin luodulla salasanalla
-    with str_module.sidebar.expander("🔑 Onko sinulla jo Pro? Kirjaudu"):
-        login_pass = str_module.text_input("Pro-salasana:", type="password", key="login_input")
-        if str_module.button("Kirjaudu sisään"):
+    with str_module.sidebar.expander(texts["login_title"]):
+        login_pass = str_module.text_input(texts["login_input"], type="password", key="login_input")
+        if str_module.button(texts["login_btn"]):
             if str_module.session_state.pro_password and login_pass == str_module.session_state.pro_password:
                 str_module.session_state.is_pro = True
-                str_module.success("Kirjauduttu sisään!")
+                str_module.success(texts["login_success"])
                 str_module.rerun()
             else:
-                str_module.error("Väärä salasana tai salasanaa ei ole luotu tällä istunnolla.")
+                str_module.error(texts["login_error"])
 else:
     str_module.sidebar.success(texts["success_pro"])
-    if str_module.sidebar.button("Kirjaudu ulos Prosta"):
+    if str_module.sidebar.button(texts["logout_btn"]):
         str_module.session_state.is_pro = False
         str_module.rerun()
 
