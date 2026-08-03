@@ -70,7 +70,7 @@ video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)",
 target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- MAIN MENU (Tabs) ---
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
     "📊 Basic", 
     "💡 Ideas & Hooks", 
     "✍️ Scripts", 
@@ -78,7 +78,8 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "🏷️ SEO & Tags",
     "💬 Comments",
     "♻️ Repurpose",
-    "🤝 Sponsorship"
+    "🤝 Sponsorship",
+    "🌍 Translator"
 ])
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
@@ -109,13 +110,7 @@ with tab1:
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to 8 advanced AI generators:</p>
-            <ul>
-                <b>Viral Ideas & 3-Second Hooks</b><br>
-                <b>Full Scripts & Shorts Machine</b><br>
-                <b>Thumbnail Recipes & SEO Tags</b><br>
-                <b>Comment Assistant & Sponsorship Pitch Emails</b>
-            </ul>
+            <p>Upgrading gives you complete access to 9 advanced AI generators, including global translation tools!</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -325,6 +320,32 @@ with tab8:
                     messages=[
                         {"role": "system", "content": "You are a professional talent manager."},
                         {"role": "user", "content": f"Write a high-converting sponsorship pitch email to '{brand_name}' highlighting my channel background: '{channel_stats}'."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Done!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 9: Translator (PRO) ---
+with tab9:
+    st.title("🌍 Global Translator & Localizer")
+    st.markdown("Translate and optimize your video titles, descriptions, and tags for international audiences.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Requires Pro access or Test Mode!")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        text_to_translate = st.text_area("Paste text, title or description to localize:")
+        target_lang = st.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese", "Swedish"])
+        
+        if st.button("Translate & Optimize", type="primary") and text_to_translate:
+            with st.spinner("Translating and localizing for maximum reach..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a professional YouTube localization and translation expert. Make the text sound natural, click-worthy, and optimized for local search habits."},
+                        {"role": "user", "content": f"Translate and optimize this text into {target_lang} for international YouTube viewers: '{text_to_translate}'"}
                     ],
                     temperature=0.7
                 )
