@@ -4,7 +4,7 @@ from openai import OpenAI
 # Page configuration
 st.set_page_config(page_title="YouTube Pro Analyzer", page_icon="🎬", layout="wide")
 
-# --- CUSTOM CSS (Visuaalinen parannus) ---
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
     h1 {
@@ -25,7 +25,6 @@ st.markdown("""
         border-left: 5px solid #FF0000;
         margin-bottom: 20px;
     }
-    /* Tyylitelty ostonappi sivupalkkiin */
     .buy-button {
         display: block;
         width: 100%;
@@ -44,36 +43,29 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Fetch OpenAI API key securely from Streamlit Secrets
 try:
     openai_api_key = st.secrets["OPENAI_API_KEY"]
     client = OpenAI(api_key=openai_api_key)
 except Exception:
     client = None
 
-# --- SIDEBAR: Management & Payments ---
+# --- SIDEBAR: Management, Payments & Menu ---
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 
-# Stripe-maksulinkki ja hinta euroina
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access (9 €)</a>', unsafe_allow_html=True)
 
-# Simulated Pro mode check
 st.sidebar.markdown("---")
 is_pro = st.sidebar.checkbox("I have paid for Pro (Test Mode)")
 
-# --- CREATOR SETTINGS ---
+# --- MOBIILIYSTÄVÄLLINEN VALIKKO SIVUPALKISSA ---
 st.sidebar.markdown("---")
-st.sidebar.header("⚙️ Creator Settings")
-video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
-target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
-
-# --- MAIN MENU (Tabs) ---
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
-    "📊 Basic", 
+st.sidebar.header("📱 Navigation Menu")
+menu_choice = st.sidebar.selectbox("Choose Tool:", [
+    "📊 Basic Search", 
     "💡 Ideas & Hooks", 
-    "✍️ Scripts", 
+    "✍️ Scripts & Shorts", 
     "🎯 Thumbnails", 
     "🏷️ SEO & Tags",
     "💬 Comments",
@@ -83,8 +75,16 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
     "🏆 Competitor Audit"
 ])
 
+# --- CREATOR SETTINGS ---
+st.sidebar.markdown("---")
+st.sidebar.header("⚙️ Creator Settings")
+video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
+target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
+
+# --- SISÄLTÖ VALIKON MUKAAN ---
+
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
-with tab1:
+if menu_choice == "📊 Basic Search":
     st.title("🎬 YouTube Creator Hub")
     st.markdown("Search keywords, explore trends, and estimate earnings for free.")
     
@@ -107,16 +107,15 @@ with tab1:
             st.warning("Please enter a keyword first.")
 
     st.markdown("---")
-    
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to 10 advanced AI generators, including competitor and strategy audits!</p>
+            <p>Upgrading gives you complete access to all 10 advanced AI generators!</p>
         </div>
     """, unsafe_allow_html=True)
 
 # --- TAB 2: Ideas & Hooks (PRO) ---
-with tab2:
+elif menu_choice == "💡 Ideas & Hooks":
     st.title("💡 Viral Ideas & Hooks Generator")
     st.markdown("Brainstorm high-CTR concepts and powerful 3-second opening hooks.")
     
@@ -173,7 +172,7 @@ with tab2:
                     st.write(res.choices[0].message.content)
 
 # --- TAB 3: Scripts & Shorts (PRO) ---
-with tab3:
+elif menu_choice == "✍️ Scripts & Shorts":
     st.title("✍️ Full Scripts & Shorts Machine")
     st.markdown("Generate full minute-by-minute video scripts or viral short-form scripts.")
     
@@ -200,7 +199,7 @@ with tab3:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 4: Thumbnails (PRO) ---
-with tab4:
+elif menu_choice == "🎯 Thumbnails":
     st.title("🎯 Thumbnail Concept Generator")
     st.markdown("Get a precise visual recipe for a high-CTR thumbnail.")
     
@@ -226,7 +225,7 @@ with tab4:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 5: SEO & Tags (PRO) ---
-with tab5:
+elif menu_choice == "🏷️ SEO & Tags":
     st.title("🏷️ YouTube Tags & SEO Generator")
     st.markdown("Get optimized search tags and keywords ready to copy into YouTube Studio.")
     
@@ -250,7 +249,7 @@ with tab5:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 6: Comments (PRO) ---
-with tab6:
+elif menu_choice == "💬 Comments":
     st.title("💬 Comment Reply Assistant")
     st.markdown("Generate engaging, community-building replies to viewer comments.")
     
@@ -276,7 +275,7 @@ with tab6:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 7: Repurpose (PRO) ---
-with tab7:
+elif menu_choice == "♻️ Repurpose":
     st.title("♻️ Content Repurposer")
     st.markdown("Convert your video script into community posts, X (Twitter) threads, or short summaries.")
     
@@ -302,7 +301,7 @@ with tab7:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 8: Sponsorship (PRO) ---
-with tab8:
+elif menu_choice == "🤝 Sponsorship":
     st.title("🤝 Sponsorship Pitch Email Generator")
     st.markdown("Pitch brands professionally to land lucrative sponsorships.")
     
@@ -328,7 +327,7 @@ with tab8:
                 st.write(res.choices[0].message.content)
 
 # --- TAB 9: Translator (PRO) ---
-with tab9:
+elif menu_choice == "🌍 Translator":
     st.title("🌍 Global Translator & Localizer")
     st.markdown("Translate and optimize your video titles, descriptions, and tags for international audiences.")
     
@@ -353,8 +352,8 @@ with tab9:
                 st.success("Done!")
                 st.write(res.choices[0].message.content)
 
-# --- TAB 10: Competitor & Strategy Audit (PRO) ---
-with tab10:
+# --- TAB 10: Competitor Audit (PRO) ---
+elif menu_choice == "🏆 Competitor Audit":
     st.title("🏆 Competitor & Algorithm Audit")
     st.markdown("Analyze a topic or competitor angle to find the gap and make your video stand out.")
     
