@@ -81,8 +81,8 @@ try:
 except Exception:
     client = None
 
-# Stripe-kertamaksun linkki päivitettynä
-stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
+# Päivitetty Stripe-kertamaksun linkki
+stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
 
 # Kielen valinta (Oletuksena englanti)
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
@@ -537,15 +537,15 @@ elif menu_choice == "translator":
     str_module.title(c_texts["translator"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        txt = str_module.text_area(c_texts["translator"]["input"])
-        t_lang = str_module.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese"])
-        if str_module.button(c_texts["translator"]["btn"], type="primary") and txt:
+        text_to_trans = str_module.text_area(c_texts["translator"]["input"])
+        target_lang = str_module.selectbox("Target Language:", ["English", "Finnish", "Swedish", "Spanish", "German", "French", "Japanese"])
+        if str_module.button(c_texts["translator"]["btn"], type="primary") and text_to_trans:
             with str_module.spinner(c_texts["translator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a professional localization expert."},
-                        {"role": "user", "content": f"Translate and optimize for YouTube in {t_lang}: '{txt}'"}
+                        {"role": "system", "content": f"You are a professional translator specializing in localized YouTube content. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Translate and localize the following text into {target_lang} for maximum YouTube engagement: '{text_to_trans}'"}
                     ],
                     temperature=0.7
                 )
@@ -556,14 +556,14 @@ elif menu_choice == "competitor":
     str_module.title(c_texts["competitor"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        comp_topic = str_module.text_input(c_texts["competitor"]["input"])
-        if str_module.button(c_texts["competitor"]["btn"], type="primary") and comp_topic:
+        comp_input = str_module.text_input(c_texts["competitor"]["input"])
+        if str_module.button(c_texts["competitor"]["btn"], type="primary") and comp_input:
             with str_module.spinner(c_texts["competitor"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a YouTube growth strategist. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Perform a competitive audit for topic '{comp_topic}' and find a unique angle."}
+                        {"role": "system", "content": f"You are a YouTube competitive intelligence analyst. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Perform a content gap analysis and suggest differentiation strategies for: '{comp_input}'"}
                     ],
                     temperature=0.7
                 )
@@ -574,14 +574,14 @@ elif menu_choice == "bulk":
     str_module.title(c_texts["bulk"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        niche_b = str_module.text_input(c_texts["bulk"]["input"])
-        if str_module.button(c_texts["bulk"]["btn"], type="primary") and niche_b:
+        bulk_input = str_module.text_input(c_texts["bulk"]["input"])
+        if str_module.button(c_texts["bulk"]["btn"], type="primary") and bulk_input:
             with str_module.spinner(c_texts["bulk"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are an automation expert. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Create reusable description template and tags strategy for niche '{niche_b}'."}
+                        {"role": "system", "content": f"You are a YouTube workflow automation specialist. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Create a bulk optimization spreadsheet template (titles, descriptions, tags framework) for niche: '{bulk_input}'"}
                     ],
                     temperature=0.7
                 )
@@ -592,16 +592,18 @@ elif menu_choice == "analytics":
     str_module.title(c_texts["analytics"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        c1, c2 = str_module.columns(2)
-        ctr = c1.text_input("CTR %", "5.0%")
-        avd = c2.text_input("Average View Duration", "3:30")
+        c_subs = str_module.number_input("Current Subscribers:", min_value=0, value=1000)
+        c_views = str_module.number_input("Average Views per Video:", min_value=0, value=500)
+        c_ctr = str_module.slider("Average Click-Through Rate (CTR %):", 0.0, 20.0, 5.0)
+        c_retention = str_module.slider("Average View Duration (%):", 0.0, 100.0, 40.0)
+        
         if str_module.button(c_texts["analytics"]["btn"], type="primary"):
             with str_module.spinner(c_texts["analytics"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
                         {"role": "system", "content": f"You are a YouTube data scientist. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Analyze stats: CTR {ctr}, AVD {avd}. Give growth advice."}
+                        {"role": "user", "content": f"Analyze these channel metrics: Subs: {c_subs}, Avg Views: {c_views}, CTR: {c_ctr}%, Retention: {c_retention}%. Provide a diagnostic review and 3 priority action items to boost channel performance."}
                     ],
                     temperature=0.7
                 )
@@ -612,14 +614,14 @@ elif menu_choice == "branding":
     str_module.title(c_texts["branding"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        interests = str_module.text_input(c_texts["branding"]["input"])
-        if str_module.button(c_texts["branding"]["btn"], type="primary") and interests:
+        brand_topic = str_module.text_input(c_texts["branding"]["input"])
+        if str_module.button(c_texts["branding"]["btn"], type="primary") and brand_topic:
             with str_module.spinner(c_texts["branding"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a brand director. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Create channel names, slogans, and visual ideas for: '{interests}'."}
+                        {"role": "system", "content": f"You are a YouTube channel branding and visual identity expert. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Create a complete channel branding package (channel name ideas, banner concept, logo design guidelines, and about page intro) for: '{brand_topic}'"}
                     ],
                     temperature=0.7
                 )
@@ -630,14 +632,14 @@ elif menu_choice == "timestamps":
     str_module.title(c_texts["timestamps"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        script_txt = str_module.text_area(c_texts["timestamps"]["input"])
-        if str_module.button(c_texts["timestamps"]["btn"], type="primary") and script_txt:
+        script_text = str_module.text_area(c_texts["timestamps"]["input"])
+        if str_module.button(c_texts["timestamps"]["btn"], type="primary") and script_text:
             with str_module.spinner(c_texts["timestamps"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a video editor. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Create timestamp chapters starting at 00:00 for: '{script_txt}'"}
+                        {"role": "system", "content": f"You are a YouTube video editor and chapter creation specialist. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Based on the following script/content, generate logical YouTube video chapters with estimated timestamps (format: 00:00 - Title): '{script_text}'"}
                     ],
                     temperature=0.7
                 )
@@ -648,14 +650,14 @@ elif menu_choice == "title_matrix":
     str_module.title(c_texts["title_matrix"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        top = str_module.text_input(c_texts["title_matrix"]["input"])
-        if str_module.button(c_texts["title_matrix"]["btn"], type="primary") and top:
+        matrix_topic = str_module.text_input(c_texts["title_matrix"]["input"])
+        if str_module.button(c_texts["title_matrix"]["btn"], type="primary") and matrix_topic:
             with str_module.spinner(c_texts["title_matrix"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a copywriting expert. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Create 10 psychological angles for titles based on topic '{top}'."}
+                        {"role": "system", "content": f"You are a YouTube psychology and copywriting expert. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Create an A/B testing title matrix for '{matrix_topic}' featuring different psychological hooks (Curiosity, Urgency, Authority, Negative framing, Benefit-driven)."}
                     ],
                     temperature=0.7
                 )
@@ -666,14 +668,14 @@ elif menu_choice == "ai_images":
     str_module.title(c_texts["ai_images"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        img_t = str_module.text_input(c_texts["ai_images"]["input"])
-        if str_module.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
+        img_topic = str_module.text_input(c_texts["ai_images"]["input"])
+        if str_module.button(c_texts["ai_images"]["btn"], type="primary") and img_topic:
             with str_module.spinner(c_texts["ai_images"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are an AI prompt engineer. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Create 3 image generation prompts for thumbnail about '{img_t}'."}
+                        {"role": "system", "content": f"You are an expert AI art prompt engineer for Midjourney and DALL-E. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Generate 3 highly detailed, high-CTR thumbnail image prompts optimized for Midjourney v6 based on this subject: '{img_topic}'"}
                     ],
                     temperature=0.7
                 )
@@ -684,14 +686,14 @@ elif menu_choice == "voice":
     str_module.title(c_texts["voice"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        v_txt = str_module.text_area(c_texts["voice"]["input"])
-        if str_module.button(c_texts["voice"]["btn"], type="primary") and v_txt:
+        raw_voice_text = str_module.text_area(c_texts["voice"]["input"])
+        if str_module.button(c_texts["voice"]["btn"], type="primary") and raw_voice_text:
             with str_module.spinner(c_texts["voice"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a voiceover coach. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Rewrite for natural speech delivery with pauses: '{v_txt}'"}
+                        {"role": "system", "content": f"You are a professional voiceover director and speech coach. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Rewrite the following raw text for spoken delivery (add natural pauses, conversational tone, phonetic emphasis notes): '{raw_voice_text}'"}
                     ],
                     temperature=0.7
                 )
@@ -700,20 +702,21 @@ elif menu_choice == "voice":
 
 elif menu_choice == "simulator":
     str_module.title(c_texts["simulator"]["title"])
-    if not is_pro: 
-        render_paywall()
+    if not is_pro: render_paywall()
     elif client:
-        subs = str_module.number_input(c_texts["simulator"]["sub1"], min_value=0, value=1000)
-        views = str_module.number_input(c_texts["simulator"]["sub2"], min_value=0, value=5000)
+        sim_subs = str_module.number_input(c_texts["simulator"]["sub1"], min_value=0, value=5000)
+        sim_views = str_module.number_input(c_texts["simulator"]["sub2"], min_value=0, value=2500)
+        sim_niche_rpm = str_module.slider("Estimated Niche RPM ($):", 0.5, 30.0, 4.0)
+        
         if str_module.button(c_texts["simulator"]["btn"], type="primary"):
             with str_module.spinner(c_texts["simulator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a YouTube financial analyst. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Simulate channel growth and estimated revenue for current subs: {subs}, average views: {views}."}
+                        {"role": "system", "content": f"You are a financial analyst specializing in creator economies. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Simulate a 12-month growth and revenue forecast for a channel with {sim_subs} subs, averaging {sim_views} views per video, at an RPM of ${sim_niche_rpm}. Estimate monthly ad revenue, brand deal potential, and provide strategic milestones for growth."}
                     ],
                     temperature=0.7
                 )
                 str_module.success("Done!")
-                str_module.markdown(f'<div class="result-box">{res.choices[0].content}</div>', unsafe_allow_html=True)
+                str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
