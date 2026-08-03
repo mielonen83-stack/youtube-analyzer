@@ -370,7 +370,7 @@ def render_paywall():
     st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
 
 # ==========================================
-# TYÖKALUJEN LOGIIKKA (Nyt menu_choice on olemassa)
+# TYÖKALUJEN LOGIIKKA
 # ==========================================
 
 if menu_choice == "search":
@@ -402,10 +402,9 @@ if menu_choice == "search":
                         
                         raw_response = res.choices[0].message.content
                         
-                        # Parsitaan vastaus siisteiksi osiksi
-                        lines = raw_response.split('\n')
                         haut, kilpailu, rpm, analyysi = "~10,000", "Keskitaso", "$3.00", raw_response
                         
+                        lines = raw_response.split('\n')
                         for line in lines:
                             if "HAUT:" in line:
                                 haut = line.split("HAUT:")[1].strip()
@@ -418,13 +417,11 @@ if menu_choice == "search":
 
                         st.success(f"Tulokset hakusanalle: **{keyword}**")
                         
-                        # Visuaaliset mittarit
                         col1, col2, col3 = st.columns(3)
                         col1.metric("🔍 Arvioidut haut / kk", haut)
                         col2.metric("⚔️ Kilpailutaso", kilpailu)
                         col3.metric("💵 Arvioitu RPM", rpm)
                         
-                        # Strateginen analyysi laatikossa
                         st.markdown("### 💡 Strateginen näkemys")
                         st.info(analyysi)
                         
@@ -728,21 +725,20 @@ elif menu_choice == "voice":
 
 elif menu_choice == "simulator":
     st.title("💰 Kasvu- & ROI Simulaattori")
-    if not is_pro: render_paywall()
-    else:
-        v_count = st.number_input("Odotetut katselukerrat", value=10000, step=1000)
-        rpm_val = st.slider("RPM ($)", 0.5, 30.0, 4.5)
-        if st.button("Laske simulaatio", type="primary"):
-            earnings = (v_count / 1000) * rpm_val
-            st.success("Simulaatio valmis!")
-            st.metric("Arvioidut mainostulot", f"${earnings:.2f}")
-            if client:
+    if not is_pro: 
+        render_paywall()
+    elif client:
+        subs = st.number_input("Nykyiset tilaajat:", min_value=0, value=1000)
+        views = st.number_input("Keskimääräiset katselukerrat per video:", min_value=0, value=5000)
+        if st.button("Simuloi kasvu", type="primary"):
+            with st.spinner("Lasketaan ennustetta..."):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a growth economist. Respond in {selected_language}."},
-                        {"role": "user", "content": f"Give strategic advice for {v_count} views generating ${earnings:.2f}."}
+                        {"role": "system", "content": f"You are a YouTube financial analyst. Respond in {selected_language}."},
+                        {"role": "user", "content": f"Simulate channel growth and estimated revenue for current subs: {subs}, average views: {views}."}
                     ],
                     temperature=0.7
                 )
+                st.success("Valmista!")
                 st.write(res.choices[0].message.content)
