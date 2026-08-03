@@ -29,7 +29,7 @@ def save_pro_password(password):
         conn.commit()
         success = True
     except sqlite3.IntegrityError:
-        success = False # Salasana on jo olemassa
+        success = False
     conn.close()
     return success
 
@@ -50,7 +50,7 @@ admin_key = query_params.get("admin")
 
 if admin_key == "youtubeadmin123":
     str_module.title("🛠️ Admin Dashboard: Tietokannanhallinta")
-    str_module.warning("Olet ylläpitonäkymässä. Tässä näkyvät tietokantaan tallennetut käyttäjien salasanojen tiivisteet (hashit turvallisuuden vuoksi).")
+    str_module.warning("Olet ylläpitonäkymässä. Tässä näkyvät tietokantaan tallennetut käyttäjien salasanojen tiivisteet.")
     
     conn = sqlite3.connect("pro_users.db")
     cursor = conn.cursor()
@@ -65,7 +65,7 @@ if admin_key == "youtubeadmin123":
         df = pd.DataFrame(all_users, columns=["ID", "Salasanan Hash (SHA-256)"])
         str_module.dataframe(df, use_container_width=True)
     
-    if str_module.button("⚠️ Tyhjennä koko tietokanta (Poista kaikki käyttäjät)", type="primary"):
+    if str_module.button("⚠️ Tyhjennä koko tietokanta", type="primary"):
         conn = sqlite3.connect("pro_users.db")
         cursor = conn.cursor()
         cursor.execute("DELETE FROM users")
@@ -80,11 +80,11 @@ if admin_key == "youtubeadmin123":
         
     str_module.stop()
 
-# --- KUSTOMOITU ERITTÄIN MODERNI JA HIOTTU CSS ---
+# --- ERITTÄIN HOUTUTTELEVA JA MODERNI CSS ---
 str_module.markdown("""
     <style>
     .main {
-        background-color: #f8fafc;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     }
     h1, h2, h3 {
         color: #0f172a;
@@ -97,12 +97,18 @@ str_module.markdown("""
     }
     .pro-sidebar-box {
         background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
-        padding: 20px;
-        border-radius: 16px;
-        border: 1px solid #fecdd3;
+        padding: 22px;
+        border-radius: 18px;
+        border: 2px solid #fecdd3;
         margin-bottom: 20px;
         text-align: center;
-        box-shadow: 0 10px 15px -3px rgba(244, 63, 94, 0.1);
+        box-shadow: 0 12px 20px -4px rgba(244, 63, 94, 0.15);
+    }
+    .price-tag {
+        font-size: 26px;
+        font-weight: 800;
+        color: #e11d48;
+        margin: 6px 0 12px 0;
     }
     .buy-button {
         display: block;
@@ -111,28 +117,39 @@ str_module.markdown("""
         color: white !important;
         text-align: center;
         padding: 14px 20px;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 700;
-        font-size: 15px;
+        font-size: 16px;
         text-decoration: none;
-        box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        box-shadow: 0 6px 16px rgba(225, 29, 72, 0.35);
         transition: all 0.3s ease;
     }
     .buy-button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(225, 29, 72, 0.4);
+        box-shadow: 0 8px 22px rgba(225, 29, 72, 0.5);
+    }
+    .hero-banner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 30px;
+        border-radius: 20px;
+        color: white;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     .stButton>button {
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 600;
-        padding: 0.6rem 1.2rem;
+        padding: 0.6rem 1.4rem;
         transition: all 0.2s ease;
     }
     .result-box {
         background-color: #ffffff;
-        padding: 24px;
-        border-radius: 14px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        padding: 26px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
         border: 1px solid #e2e8f0;
         margin-top: 20px;
     }
@@ -149,7 +166,7 @@ except Exception:
 # Stripe-kertamaksun linkki
 stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
 
-# --- KIELEN VALINTA ENSIN ---
+# --- KIELEN VALINTA ---
 str_module.sidebar.markdown("### 🎬 YouTube Pro Suite")
 languages = ["🇬🇧 English", "🇫🇮 Suomi", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
 if "selected_language" not in str_module.session_state:
@@ -159,17 +176,18 @@ selected_language = str_module.sidebar.selectbox("Select Language:", languages, 
 str_module.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KAIKKI KÄÄNNÖKSET ---
+# --- KÄÄNNÖKSET ---
 translations = {
     "🇬🇧": {
-        "sidebar_text": "Unlock all AI tools with a one-time payment!",
-        "sidebar_btn": "🔥 Get Lifetime Pro",
+        "sidebar_text": "Unlock all 18+ AI tools instantly!",
+        "price_text": "Only 5 € • Lifetime Access",
+        "sidebar_btn": "🔥 Get Pro Now",
         "success_pro": "✅ Pro Access Unlocked!",
         "settings": "⚙️ Creator Settings",
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
-        "paywall": "🔒 **Pro Feature:** One-time purchase required to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools (One-Time)",
+        "paywall": "🔒 **Pro Feature:** Unlock all advanced creator tools with a one-time payment of 5 €.",
+        "unlock_all": "🔥 Unlock All Tools for 5 € (Lifetime)",
         "nav_title": "🛠️ Tools Navigation",
         "cat_label": "Select category:",
         "cat_basics": "💡 Basics, Ideas & Scripts",
@@ -188,14 +206,15 @@ translations = {
         "logout_btn": "Logout Pro"
     },
     "🇫🇮": {
-        "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä kertamaksulla!",
-        "sidebar_btn": "🔥 Osta Pro-pääsy",
+        "sidebar_text": "Avaa kaikki tekoälytyökalut heti käyttöön!",
+        "price_text": "Vain 5 € • Kertamaksu (ikuinen)",
+        "sidebar_btn": "🔥 Osta Pro heti",
         "success_pro": "✅ Pro-oikeudet aktivoitu!",
         "settings": "⚙️ Sisällöntuottajan Asetukset",
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
-        "paywall": "🔒 **Pro-ominaisuus:** Vaatii kertamaksun tämän työkalun käyttämiseen.",
-        "unlock_all": "🔥 Avaa kaikki työkalut (Kertamaksu)",
+        "paywall": "🔒 **Pro-ominaisuus:** Avaa kaikki tekoälytyökalut yhdellä edullisella 5 € kertamaksulla.",
+        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 5 € (Kertamaksu)",
         "nav_title": "🛠️ Työkalujen Hallinta",
         "cat_label": "Valitse toiminta-alue:",
         "cat_basics": "💡 Perustyökalut, Ideat & Käsikirjoitukset",
@@ -214,21 +233,22 @@ translations = {
         "logout_btn": "Kirjaudu ulos Prosta"
     },
     "🇸🇪": {
-        "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning!",
-        "sidebar_btn": "🔥 Köp Pro",
+        "sidebar_text": "Lås upp alla AI-verktyg direkt!",
+        "price_text": "Endast 5 € • Engångskostnad",
+        "sidebar_btn": "🔥 Köp Pro nu",
         "success_pro": "✅ Pro-åtkomst upplåst!",
         "settings": "⚙️ Skaparinställningar",
         "v_len": "Videon längd / typ",
         "aud": "Målgrupp",
-        "paywall": "🔒 **Pro-funktion:** Kräver en engångsbetalning för att använda detta verktyg.",
-        "unlock_all": "🔥 Lås upp alla verktyg (Engångskostnad)",
+        "paywall": "🔒 **Pro-funktion:** Lås upp alla avancerade verktyg för endast 5 €.",
+        "unlock_all": "🔥 Lås upp alla verktyg för 5 €",
         "nav_title": "🛠️ Verktygsnavigering",
         "cat_label": "Välj kategori:",
         "cat_basics": "💡 Grunderna, idéer & manus",
         "cat_advanced": "🚀 Avancerad SEO, tillväxt & analys",
         "tool_prompt": "Välj verktyg:",
         "pay_title": "🎉 Betalning mottagen!",
-        "pay_info": "Skapa ett personligt **Pro-lösenord** så att du kan logga in igen när som helst utan att betala på nytt.",
+        "pay_info": "Skapa ett personligt **Pro-lösenord** så att du kan logga in igen när som helst.",
         "pass_label": "Skapa Pro-lösenord:",
         "save_btn": "Spara lösenord & börja",
         "pass_warning": "Ange ett lösenord för att fortsätta.",
@@ -240,21 +260,22 @@ translations = {
         "logout_btn": "Logga ut från Pro"
     },
     "🇪🇸": {
-        "sidebar_text": "¡Desbloquea todas las herramientas con un pago único!",
-        "sidebar_btn": "🔥 Obtener Pro",
+        "sidebar_text": "¡Desbloquea todas las herramientas de IA!",
+        "price_text": "Solo 5 € • Pago único",
+        "sidebar_btn": "🔥 Obtener Pro ahora",
         "success_pro": "✅ ¡Acceso Pro desbloqueado!",
         "settings": "⚙️ Configuración del Creador",
         "v_len": "Duración / Tipo de video",
         "aud": "Público objetivo",
-        "paywall": "🔒 **Función Pro:** Se requiere pago único para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquear todas las herramientas (Pago único)",
+        "paywall": "🔒 **Función Pro:** Desbloquea todas las herramientas por un pago único de 5 €.",
+        "unlock_all": "🔥 Desbloquear todo por 5 €",
         "nav_title": "🛠️ Navegación de Herramientas",
         "cat_label": "Seleccionar categoría:",
         "cat_basics": "💡 Básicos, Ideas y Guiones",
         "cat_advanced": "🚀 SEO Avanzado, Crecimiento y Analítica",
         "tool_prompt": "Seleccionar herramienta:",
         "pay_title": "🎉 ¡Pago recibido con éxito!",
-        "pay_info": "Crea una **contraseña Pro** personal para volver a iniciar sesión en cualquier momento.",
+        "pay_info": "Crea una **contraseña Pro** personal para volver a iniciar sesión.",
         "pass_label": "Crear contraseña Pro:",
         "save_btn": "Guardar contraseña y empezar",
         "pass_warning": "Por favor escribe una contraseña.",
@@ -266,14 +287,15 @@ translations = {
         "logout_btn": "Cerrar sesión Pro"
     },
     "🇩🇪": {
-        "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung frei!",
+        "sidebar_text": "Schalte alle KI-Tools sofort frei!",
+        "price_text": "Nur 5 € • Einmalig",
         "sidebar_btn": "🔥 Pro holen",
         "success_pro": "✅ Pro-Zugang freigeschaltet!",
         "settings": "⚙️ Creator-Einstellungen",
         "v_len": "Videolänge / Typ",
         "aud": "Zielgruppe",
-        "paywall": "🔒 **Pro-Funktion:** Einmalige Zahlung erforderlich.",
-        "unlock_all": "🔥 Alle Tools freischalten (Einmalig)",
+        "paywall": "🔒 **Pro-Funktion:** Schalte alle Tools für nur 5 € frei.",
+        "unlock_all": "🔥 Alle Tools für 5 € freischalten",
         "nav_title": "🛠️ Tool-Navigation",
         "cat_label": "Kategorie auswählen:",
         "cat_basics": "💡 Grundlagen, Ideen & Skripte",
@@ -292,14 +314,15 @@ translations = {
         "logout_btn": "Pro abmelden"
     },
     "🇫🇷": {
-        "sidebar_text": "Débloquez tous les outils avec un paiement unique !",
+        "sidebar_text": "Débloquez tous les outils IA instantanément !",
+        "price_text": "Seulement 5 € • Paiement unique",
         "sidebar_btn": "🔥 Obtenir Pro",
         "success_pro": "✅ Accès Pro débloqué !",
         "settings": "⚙️ Paramètres du Créateur",
         "v_len": "Durée / Type de vidéo",
         "aud": "Public cible",
-        "paywall": "🔒 **Fonctionnalité Pro :** Paiement unique requis.",
-        "unlock_all": "🔥 Débloquer tous les outils (Paiement unique)",
+        "paywall": "🔒 **Fonctionnalité Pro :** Débloquez tout pour seulement 5 €.",
+        "unlock_all": "🔥 Débloquer tout pour 5 €",
         "nav_title": "🛠️ Navigation des Outils",
         "cat_label": "Sélectionner la catégorie :",
         "cat_basics": "💡 Bases, Idées & Scripts",
@@ -318,14 +341,15 @@ translations = {
         "logout_btn": "Déconnexion Pro"
     },
     "🇯🇵": {
-        "sidebar_text": "買い切り支払いですべてのAIツールを解除しよう！",
-        "sidebar_btn": "🔥 Proを購入",
+        "sidebar_text": "すべてのAIツールを今すぐ解除しよう！",
+        "price_text": "たったの5 € • 買い切り",
+        "sidebar_btn": "🔥 Proを購入する",
         "success_pro": "✅ Proアクセスが解除されました！",
         "settings": "⚙️ クリエイター設定",
         "v_len": "動画の長さ / タイプ",
         "aud": "ターゲット層",
-        "paywall": "🔒 **Pro機能:** 買い切り支払いが必要です。",
-        "unlock_all": "🔥 すべてのツールを解除 (買い切り)",
+        "paywall": "🔒 **Pro機能:** 5 €の買い切り払いですべての機能が使えます。",
+        "unlock_all": "🔥 5 €で全ツールを解除する",
         "nav_title": "🛠️ ツールナビゲーション",
         "cat_label": "カテゴリを選択:",
         "cat_basics": "💡 基本・アイデア・台本",
@@ -350,14 +374,13 @@ if lang_code not in translations:
 
 texts = translations[lang_code]
 
-# --- PRO-OIKEUKSIEN HALLINTA TIETOKANNAN AVULLA ---
+# --- PRO-OIKEUKSIEN HALLINTA ---
 if "is_pro" not in str_module.session_state:
     str_module.session_state.is_pro = False
 
 url_params = str_module.query_params
 is_paid_url = url_params.get("pro") == "true"
 
-# Jos tullaan Stripestä (?pro=true)
 if is_paid_url and not str_module.session_state.is_pro:
     str_module.markdown(f"## {texts['pay_title']}")
     str_module.info(texts['pay_info'])
@@ -460,12 +483,13 @@ content_data = {
 
 c_texts = content_data.get(lang_code, content_data["🇬🇧"])
 
-# --- PRO-KORTTI TAI KIRJAUTUMINEN SIVUPALKISSA ---
+# --- HOUTUTTELEVA PRO-KORTTI SIVUPALKISSA ---
 if not is_pro:
     str_module.sidebar.markdown(f"""
     <div class="pro-sidebar-box">
-        <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
-        <div style="font-size: 15px; color: #881337; margin-bottom: 14px; font-weight: 600; line-height: 1.4;">{texts["sidebar_text"]}</div>
+        <div style="font-size: 26px; margin-bottom: 4px;">🚀</div>
+        <div style="font-size: 16px; color: #881337; font-weight: 700; line-height: 1.3;">{texts["sidebar_text"]}</div>
+        <div class="price-tag">{texts["price_text"]}</div>
         <a href="{stripe_link}" target="_blank" class="buy-button">{texts["sidebar_btn"]}</a>
     </div>
     """, unsafe_allow_html=True)
@@ -485,7 +509,7 @@ else:
         str_module.session_state.is_pro = False
         str_module.rerun()
 
-# Kanavan asetukset sivupalkissa
+# Asetukset sivupalkissa
 str_module.sidebar.markdown("---")
 str_module.sidebar.header(texts["settings"])
 video_length = str_module.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
@@ -507,8 +531,13 @@ menu_choice = [k for k, v in tool_dict.items() if v == selected_tool_label][0]
 str_module.markdown("---")
 
 def render_paywall():
-    str_module.warning(texts["paywall"])
-    str_module.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
+    str_module.markdown(f"""
+    <div style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); padding: 30px; border-radius: 18px; border: 2px solid #fecdd3; text-align: center; margin-top: 20px; box-shadow: 0 10px 20px rgba(244,63,94,0.1);">
+        <h3 style="color: #9f1239; margin-bottom: 10px;">🔒 Pro-ominaisuus lukittu</h3>
+        <p style="color: #881337; font-size: 16px; margin-bottom: 20px;">{texts["paywall"]}</p>
+        <a href="{stripe_link}" target="_blank" class="buy-button" style="max-width: 320px; margin: 0 auto; display: block;">{texts["unlock_all"]}</a>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # TYÖKALUJEN LOGIIKKA
