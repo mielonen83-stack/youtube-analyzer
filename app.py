@@ -81,17 +81,38 @@ try:
 except Exception:
     client = None
 
-# Stripe-kertamaksun linkki
+# Stripe-kertamaksun linkki (päivitä tähän tarvittaessa 1 € tai 5 € linkkisi)
 stripe_link = "https://buy.stripe.com/aFaaEXe5K9cd0Vyfm6ebu01"
 
-# --- MAKSUN TARKISTUS URL:STA ---
-query_params = str_module.query_params
-is_paid_url = query_params.get("pro") == "true"
-
+# --- PRO-OIKEUKSIEN JA SALASANAN HALLINTA ---
 if "is_pro" not in str_module.session_state:
     str_module.session_state.is_pro = False
 
-if is_paid_url:
+if "pro_password" not in str_module.session_state:
+    str_module.session_state.pro_password = ""
+
+query_params = str_module.query_params
+is_paid_url = query_params.get("pro") == "true"
+
+# Jos tullaan Stripestä ja salasanaa ei ole vielä luotu tälle istunnolle
+if is_paid_url and not str_module.session_state.pro_password:
+    str_module.markdown("## 🎉 Maksu vastaanotettu onnistuneesti!")
+    str_module.info("Keksi itsellesi henkilökohtainen **Pro-salasana**, jotta pääset jatkossakin sisään milloin tahansa ilman uutta maksua. Ota salasana talteen!")
+    
+    new_pass = str_module.text_input("Keksi Pro-salasana:", type="password")
+    if str_module.button("Tallenna salasana ja aloita", type="primary"):
+        if new_pass:
+            str_module.session_state.pro_password = new_pass
+            str_module.session_state.is_pro = True
+            str_module.query_params.clear()
+            str_module.rerun()
+        else:
+            str_module.warning("Kirjoita salasana jatkaaksesi.")
+    
+    str_module.stop()
+
+# Jos salasana on olemassa, aktivoidaan pro-tila automaattisesti
+if str_module.session_state.pro_password:
     str_module.session_state.is_pro = True
 
 is_pro = str_module.session_state.is_pro
@@ -109,14 +130,14 @@ lang_code = selected_language.split()[0]
 # --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
 translations = {
     "🇬🇧": {
-        "sidebar_text": "Unlock all AI tools with a one-time payment of 5 €!",
-        "sidebar_btn": "🔥 Get Lifetime Pro (5 €)",
+        "sidebar_text": "Unlock all AI tools with a one-time payment!",
+        "sidebar_btn": "🔥 Get Lifetime Pro",
         "success_pro": "✅ Pro Access Unlocked!",
         "settings": "⚙️ Creator Settings",
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
         "paywall": "🔒 **Pro Feature:** One-time purchase required to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools (5 € One-Time)",
+        "unlock_all": "🔥 Unlock All Tools (One-Time)",
         "nav_title": "🛠️ Tools Navigation",
         "cat_label": "Select category:",
         "cat_basics": "💡 Basics, Ideas & Scripts",
@@ -124,14 +145,14 @@ translations = {
         "tool_prompt": "Select tool:",
     },
     "🇫🇮": {
-        "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä 5 € kertamaksulla!",
-        "sidebar_btn": "🔥 Osta Pro-pääsy (5 €)",
+        "sidebar_text": "Avaa kaikki tekoälytyökalut yhdellä kertamaksulla!",
+        "sidebar_btn": "🔥 Osta Pro-pääsy",
         "success_pro": "✅ Pro-oikeudet aktivoitu!",
         "settings": "⚙️ Sisällöntuottajan Asetukset",
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
-        "paywall": "🔒 **Pro-ominaisuus:** Vaatii 5 € kertamaksun tämän työkalun käyttämiseen.",
-        "unlock_all": "🔥 Avaa kaikki työkalut (5 € kertamaksu)",
+        "paywall": "🔒 **Pro-ominaisuus:** Vaatii kertamaksun tämän työkalun käyttämiseen.",
+        "unlock_all": "🔥 Avaa kaikki työkalut (Kertamaksu)",
         "nav_title": "🛠️ Työkalujen Hallinta",
         "cat_label": "Valitse toiminta-alue:",
         "cat_basics": "💡 Perustyökalut, Ideat & Käsikirjoitukset",
@@ -139,14 +160,14 @@ translations = {
         "tool_prompt": "Valitse työkalu:",
     },
     "🇸🇪": {
-        "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning på 5 €!",
-        "sidebar_btn": "🔥 Köp Pro (5 €)",
+        "sidebar_text": "Lås upp alla AI-verktyg med en engångsbetalning!",
+        "sidebar_btn": "🔥 Köp Pro",
         "success_pro": "✅ Pro-åtkomst upplåst!",
         "settings": "⚙️ Skaparinställningar",
         "v_len": "Videon längd / typ",
         "aud": "Målgrupp",
         "paywall": "🔒 **Pro-funktion:** Kräver en engångsbetalning för att använda detta verktyg.",
-        "unlock_all": "🔥 Lås upp alla verktyg (5 € engångskostnad)",
+        "unlock_all": "🔥 Lås upp alla verktyg (Engångskostnad)",
         "nav_title": "🛠️ Verktygsnavigering",
         "cat_label": "Välj kategori:",
         "cat_basics": "💡 Grunderna, idéer & manus",
@@ -154,14 +175,14 @@ translations = {
         "tool_prompt": "Välj verktyg:",
     },
     "🇪🇸": {
-        "sidebar_text": "¡Desbloquea todas las herramientas con un pago único de 5 €!",
-        "sidebar_btn": "🔥 Obtener Pro (5 €)",
+        "sidebar_text": "¡Desbloquea todas las herramientas con un pago único!",
+        "sidebar_btn": "🔥 Obtener Pro",
         "success_pro": "✅ ¡Acceso Pro desbloqueado!",
         "settings": "⚙️ Configuración del Creador",
         "v_len": "Duración / Tipo de video",
         "aud": "Público objetivo",
         "paywall": "🔒 **Función Pro:** Se requiere pago único para usar esta herramienta.",
-        "unlock_all": "🔥 Desbloquear todas las herramientas (5 € pago único)",
+        "unlock_all": "🔥 Desbloquear todas las herramientas (Pago único)",
         "nav_title": "🛠️ Navegación de Herramientas",
         "cat_label": "Seleccionar categoría:",
         "cat_basics": "💡 Básicos, Ideas y Guiones",
@@ -169,14 +190,14 @@ translations = {
         "tool_prompt": "Seleccionar herramienta:",
     },
     "🇩🇪": {
-        "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung von 5 € frei!",
-        "sidebar_btn": "🔥 Pro holen (5 €)",
+        "sidebar_text": "Schalte alle KI-Tools mit einer einmaligen Zahlung frei!",
+        "sidebar_btn": "🔥 Pro holen",
         "success_pro": "✅ Pro-Zugang freigeschaltet!",
         "settings": "⚙️ Creator-Einstellungen",
         "v_len": "Videolänge / Typ",
         "aud": "Zielgruppe",
         "paywall": "🔒 **Pro-Funktion:** Einmalige Zahlung erforderlich, um dieses Tool zu nutzen.",
-        "unlock_all": "🔥 Alle Tools freischalten (5 € einmalig)",
+        "unlock_all": "🔥 Alle Tools freischalten (Einmalig)",
         "nav_title": "🛠️ Tool-Navigation",
         "cat_label": "Kategorie auswählen:",
         "cat_basics": "💡 Grundlagen, Ideen & Skripte",
@@ -184,14 +205,14 @@ translations = {
         "tool_prompt": "Tool auswählen:",
     },
     "🇫🇷": {
-        "sidebar_text": "Débloquez tous les outils avec un paiement unique de 5 € !",
-        "sidebar_btn": "🔥 Obtenir Pro (5 €)",
+        "sidebar_text": "Débloquez tous les outils avec un paiement unique !",
+        "sidebar_btn": "🔥 Obtenir Pro",
         "success_pro": "✅ Accès Pro débloqué !",
         "settings": "⚙️ Paramètres du Créateur",
         "v_len": "Durée / Type de vidéo",
         "aud": "Public cible",
         "paywall": "🔒 **Fonctionnalité Pro :** Paiement unique requis pour utiliser cet outil.",
-        "unlock_all": "🔥 Débloquer tous les outils (5 € paiement unique)",
+        "unlock_all": "🔥 Débloquer tous les outils (Paiement unique)",
         "nav_title": "🛠️ Navigation des Outils",
         "cat_label": "Sélectionner la catégorie :",
         "cat_basics": "💡 Bases, Idées & Scripts",
@@ -199,14 +220,14 @@ translations = {
         "tool_prompt": "Sélectionner l'outil :",
     },
     "🇯🇵": {
-        "sidebar_text": "5 €の買い切り（単発）支払いですべてのAIツールを解除しよう！",
-        "sidebar_btn": "🔥 Proを購入 (5 €)",
+        "sidebar_text": "買い切り支払いですべてのAIツールを解除しよう！",
+        "sidebar_btn": "🔥 Proを購入",
         "success_pro": "✅ Proアクセスが解除されました！",
         "settings": "⚙️ クリエイター設定",
         "v_len": "動画の長さ / タイプ",
         "aud": "ターゲット層",
-        "paywall": "🔒 **Pro機能:** このツールを使用するには5 €の買い切り支払いが必要です。",
-        "unlock_all": "🔥 すべてのツールを解除 (5 € 買い切り)",
+        "paywall": "🔒 **Pro機能:** このツールを使用するには買い切り支払いが必要です。",
+        "unlock_all": "🔥 すべてのツールを解除 (買い切り)",
         "nav_title": "🛠️ ツールナビゲーション",
         "cat_label": "カテゴリを選択:",
         "cat_basics": "💡 基本・アイデア・台本",
@@ -301,7 +322,7 @@ content_data = {
 
 c_texts = content_data.get(lang_code, content_data["🇬🇧"])
 
-# --- PRO-KORTTI TAI OLEMASSAOLEVA PRO SIVUPALKISSA ---
+# --- PRO-KORTTI TAI KIRJAUTUMINEN SIVUPALKISSA ---
 if not is_pro:
     str_module.sidebar.markdown(f"""
     <div class="pro-sidebar-box">
@@ -310,8 +331,22 @@ if not is_pro:
         <a href="{stripe_link}" target="_blank" class="buy-button">{texts["sidebar_btn"]}</a>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Mahdollisuus kirjautua sisään aiemmin luodulla salasanalla
+    with str_module.sidebar.expander("🔑 Onko sinulla jo Pro? Kirjaudu"):
+        login_pass = str_module.text_input("Pro-salasana:", type="password", key="login_input")
+        if str_module.button("Kirjaudu sisään"):
+            if str_module.session_state.pro_password and login_pass == str_module.session_state.pro_password:
+                str_module.session_state.is_pro = True
+                str_module.success("Kirjauduttu sisään!")
+                str_module.rerun()
+            else:
+                str_module.error("Väärä salasana tai salasanaa ei ole luotu tällä istunnolla.")
 else:
     str_module.sidebar.success(texts["success_pro"])
+    if str_module.sidebar.button("Kirjaudu ulos Prosta"):
+        str_module.session_state.is_pro = False
+        str_module.rerun()
 
 # Kanavan asetukset sivupalkissa
 str_module.sidebar.markdown("---")
