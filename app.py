@@ -58,7 +58,7 @@ st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Avaa kaikki tekoälytyökalut ja rajoittamaton haku!")
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Hanki Pro-oikeudet (9 €)</a>', unsafe_allow_html=True)
 
-# Kielen valinta (Tallennetaan session_stateen, jotta ei nollaudu)
+# Kielen valinta (Tallennetaan session_stateen)
 st.sidebar.markdown("---")
 st.sidebar.subheader("🌍 Language / Kieli")
 
@@ -70,7 +70,7 @@ selected_language = st.sidebar.selectbox("Valitse kieli:", languages, index=lang
 st.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
-# --- KIELIAVAIMET JA KÄÄNNÖKSET (Synkronoitu täydellisesti) ---
+# --- KAIKKI KÄÄNNÖKSET (Kaikille 7 kielelle) ---
 translations = {
     "🇫🇮": {
         "dev_access": "🔐 Kehittäjä / Omistaja",
@@ -145,10 +145,195 @@ translations = {
             "voice": "🎙️ Script Voice Optimizer",
             "simulator": "💰 Growth & ROI Simulator"
         }
+    },
+    "🇸🇪": {
+        "dev_access": "🔐 Utvecklare / Ägare",
+        "pass_label": "Ange Pro-lösenord:",
+        "success_pro": "✅ Pro-åtkomst upplåst (Dev Mode)",
+        "settings": "⚙️ Skaparinställningar",
+        "v_len": "Videons längd / Typ",
+        "aud": "Målgrupp",
+        "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda detta verktyg.",
+        "unlock_all": "🔥 Lås upp alla verktyg för 9 €",
+        "nav_title": "🛠️ Verktygsnavigering",
+        "cat_label": "Välj kategori:",
+        "cat_basics": "💡 Grunderna, Idéer & Manus",
+        "cat_advanced": "🚀 Avancerad SEO, Tillväxt & Analys",
+        "tool_prompt": "Välj verktyg:",
+        "tools_basics": {
+            "search": "📊 Grundsökning & Trender",
+            "ideas": "💡 Viral idéer & Krokar",
+            "scripts": "✍️ Manus & Shorts",
+            "thumbnails": "🎯 Miniatyrer (Thumbnails)",
+            "seo": "🏷️ Taggar & SEO",
+            "comments": "💬 Kommentarsassistent",
+            "repurpose": "♻️ Innehållsåtervinning",
+            "sponsorship": "🤝 Sponsorpitchar"
+        },
+        "tools_advanced": {
+            "translator": "🌍 Global Översättare",
+            "competitor": "🏆 Konkurrentanalys",
+            "bulk": "⚡ Massredigering",
+            "analytics": "📈 Data & Analys",
+            "branding": "🎨 Kanalvarumärke",
+            "timestamps": "⏱️ Tidsstämplar & Kapitel",
+            "title_matrix": "🧠 Titel A/B Matris",
+            "ai_images": "🎨 AI Bildprompter",
+            "voice": "🎙️ Röst- & Taloptimering",
+            "simulator": "💰 Tillväxt- & ROI-simulator"
+        }
+    },
+    "🇪🇸": {
+        "dev_access": "🔐 Desarrollador / Propietario",
+        "pass_label": "Introduce contraseña Pro:",
+        "success_pro": "✅ Acceso Pro desbloqueado (Dev Mode)",
+        "settings": "⚙️ Configuración del Creador",
+        "v_len": "Duración del video / Tipo",
+        "aud": "Público objetivo",
+        "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
+        "unlock_all": "🔥 Desbloquear todas las herramientas por 9 €",
+        "nav_title": "🛠️ Navegación de Herramientas",
+        "cat_label": "Selecciona categoría:",
+        "cat_basics": "💡 Básicos, Ideas y Guiones",
+        "cat_advanced": "🚀 SEO Avanzado, Crecimiento y Analítica",
+        "tool_prompt": "Selecciona herramienta:",
+        "tools_basics": {
+            "search": "📊 Búsqueda Básica y Tendencias",
+            "ideas": "💡 Ideas Virales y ganchos",
+            "scripts": "✍️ Guiones y Shorts",
+            "thumbnails": "🎯 Miniaturas",
+            "seo": "🏷️ Etiquetas y SEO",
+            "comments": "💬 Asistente de Comentarios",
+            "repurpose": "♻️ Reutilizar Contenido",
+            "sponsorship": "🤝 Propuestas de Patrocinio"
+        },
+        "tools_advanced": {
+            "translator": "🌍 Traductor Global",
+            "competitor": "🏆 Auditoría de la Competencia",
+            "bulk": "⚡ Edición Masiva",
+            "analytics": "📈 Datos y Analítica",
+            "branding": "🎨 Imagen de Marca",
+            "timestamps": "⏱️ Generador de Marcas de Tiempo",
+            "title_matrix": "🧠 Matriz de Títulos A/B",
+            "ai_images": "🎨 Prompts de Imágenes IA",
+            "voice": "🎙️ Optimizador de Voz",
+            "simulator": "💰 Simulador de Crecimiento y ROI"
+        }
+    },
+    "🇩🇪": {
+        "dev_access": "🔐 Entwickler / Eigentümer",
+        "pass_label": "Pro-Passwort eingeben:",
+        "success_pro": "✅ Pro-Zugang freigeschaltet (Dev Mode)",
+        "settings": "⚙️ Creator-Einstellungen",
+        "v_len": "Videolänge / Typ",
+        "aud": "Zielgruppe",
+        "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugang, um dieses Tool zu nutzen.",
+        "unlock_all": "🔥 Alle Tools für 9 € freischalten",
+        "nav_title": "🛠️ Tool-Navigation",
+        "cat_label": "Kategorie auswählen:",
+        "cat_basics": "💡 Grundlagen, Ideen & Skripte",
+        "cat_advanced": "🚀 Fortgeschrittene SEO, Wachstum & Analytics",
+        "tool_prompt": "Tool auswählen:",
+        "tools_basics": {
+            "search": "📊 Grundsuche & Trends",
+            "ideas": "💡 Virale Ideen & Hooks",
+            "scripts": "✍️ Skripte & Shorts",
+            "thumbnails": "🎯 Thumbnails",
+            "seo": "🏷️ Tags & SEO",
+            "comments": "💬 Kommentar-Assistent",
+            "repurpose": "♻️ Content-Wiederverwertung",
+            "sponsorship": "🤝 Sponsoring-Pitches"
+        },
+        "tools_advanced": {
+            "translator": "🌍 Globaler Übersetzer",
+            "competitor": "🏆 Wettbewerbsanalyse",
+            "bulk": "⚡ Massenbearbeitung",
+            "analytics": "📈 Daten & Analytics",
+            "branding": "🎨 Kanal-Branding",
+            "timestamps": "⏱️ Zeitstempel-Generator",
+            "title_matrix": "🧠 Titel A/B Matrix",
+            "ai_images": "🎨 KI-Bildprompts",
+            "voice": "🎙️ Sprach- & Audio-Optimierer",
+            "simulator": "💰 Wachstums- & ROI-Simulator"
+        }
+    },
+    "🇫🇷": {
+        "dev_access": "🔐 Développeur / Propriétaire",
+        "pass_label": "Entrez le mot de passe Pro :",
+        "success_pro": "✅ Accès Pro déverrouillé (Dev Mode)",
+        "settings": "⚙️ Paramètres du Créateur",
+        "v_len": "Durée de la vidéo / Type",
+        "aud": "Public cible",
+        "paywall": "🔒 **Fonctionnalité Pro :** Vous avez besoin d'un accès Pro pour utiliser cet outil.",
+        "unlock_all": "🔥 Déverrouiller tous les outils pour 9 €",
+        "nav_title": "🛠️ Navigation des Outils",
+        "cat_label": "Sélectionnez la catégorie :",
+        "cat_basics": "💡 Bases, Idées & Scripts",
+        "cat_advanced": "🚀 SEO Avancé, Croissance & Analytique",
+        "tool_prompt": "Sélectionnez l'outil :",
+        "tools_basics": {
+            "search": "📊 Recherche de base & Tendances",
+            "ideas": "💡 Idées virales & Accroches",
+            "scripts": "✍️ Scripts & Shorts",
+            "thumbnails": "🎯 Miniatures",
+            "seo": "🏷️ Tags & SEO",
+            "comments": "💬 Assistant de Commentaires",
+            "repurpose": "♻️ Recyclage de Contenu",
+            "sponsorship": "🤝 Pitches de Sponsoring"
+        },
+        "tools_advanced": {
+            "translator": "🌍 Traducteur Global",
+            "competitor": "🏆 Analyse Concurrentielle",
+            "bulk": "⚡ Outils d'Édition en Masse",
+            "analytics": "📈 Données & Analytique",
+            "branding": "🎨 Image de Marque de la Chaîne",
+            "timestamps": "⏱️ Générateur de Horodatages",
+            "title_matrix": "🧠 Matrice de Titres A/B",
+            "ai_images": "🎨 Prompts d'Images IA",
+            "voice": "🎙️ Optimiseur de Voix",
+            "simulator": "💰 Simulateur de Croissance & ROI"
+        }
+    },
+    "🇯🇵": {
+        "dev_access": "🔐 開発者 / オーナーアクセス",
+        "pass_label": "Proパスワードを入力:",
+        "success_pro": "✅ Proアクセスが解放されました (Dev Mode)",
+        "settings": "⚙️ クリエイター設定",
+        "v_len": "動画の長さ / タイプ",
+        "aud": "ターゲット視聴者",
+        "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
+        "unlock_all": "🔥 9€ですべてのツールのロックを解除",
+        "nav_title": "🛠️ ツールナビゲーション",
+        "cat_label": "カテゴリを選択:",
+        "cat_basics": "💡 基本・アイデア・台本",
+        "cat_advanced": "🚀 高度なSEO・成長・アナリティクス",
+        "tool_prompt": "ツールを選択:",
+        "tools_basics": {
+            "search": "📊 基本検索とトレンド",
+            "ideas": "💡 バイラルアイデアとフック",
+            "scripts": "✍️ 台本とショート動画",
+            "thumbnails": "🎯 サムネイル",
+            "seo": "🏷️ タグとSEO",
+            "comments": "💬 コメントアシスタント",
+            "repurpose": "♻️ コンテンツのリパーパスポスト",
+            "sponsorship": "🤝 企業案件ピッチ"
+        },
+        "tools_advanced": {
+            "translator": "🌍 グローバル翻訳",
+            "competitor": "🏆 競合分析",
+            "bulk": "⚡ 一括編集ツール",
+            "analytics": "📈 データと分析",
+            "branding": "🎨 チャンネルブランディング",
+            "timestamps": "⏱️ タイムスタンプ生成",
+            "title_matrix": "🧠 タイトルA/Bマトリックス",
+            "ai_images": "🎨 AI画像プロンプト",
+            "voice": "🎙️ 音声最適化",
+            "simulator": "💰 成長・ROIシミュレーター"
+        }
     }
 }
 
-# Jos jokin muu kieli kuin Suomi tai Englanti valitaan, käytetään oletuksena englantia (tai suomea jos haluat)
+# Haetaan valitut tekstit turvallisesti (fallback englantiin, jos kieltä ei löydy)
 texts = translations.get(lang_code, translations["🇬🇧"])
 
 # Salasana-tarkistus (Dev mode)
