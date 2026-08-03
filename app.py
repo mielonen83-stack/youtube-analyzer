@@ -61,10 +61,7 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("🔐 Developer / Owner Access")
 entered_password = st.sidebar.text_input("Enter Pro Password:", type="password")
 
-# Määritä tästä oma salasanasi (voit vaihtaa sen halutessasi)
 SECRET_PASSWORD = "tubepro2026"
-
-# Tarkistetaan onko salasana oikein
 is_pro = (entered_password == SECRET_PASSWORD)
 
 if is_pro:
@@ -88,7 +85,10 @@ menu_choice = st.sidebar.selectbox("Choose Tool:", [
     "📈 Data & Analytics",
     "🎨 Channel Branding",
     "⏱️ Timestamp Generator",
-    "🧠 Title A/B Matrix"
+    "🧠 Title A/B Matrix",
+    "🎨 AI Image Prompts",
+    "🎙️ Script Voice Optimizer",
+    "💰 Growth & ROI Simulator"
 ])
 
 # --- CREATOR SETTINGS ---
@@ -116,7 +116,7 @@ if menu_choice == "📊 Basic Search":
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Unlock Pro to use all 15 advanced AI tools!")
+            st.info("💡 Tip: Unlock Pro to use all 18 advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -124,7 +124,7 @@ if menu_choice == "📊 Basic Search":
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to all 15 advanced AI generators and optimization suites!</p>
+            <p>Upgrading gives you complete access to all 18 advanced AI generators and optimization suites!</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -525,3 +525,99 @@ elif menu_choice == "🧠 Title A/B Matrix":
                 )
                 st.success("Title Matrix Generated!")
                 st.write(res.choices[0].message.content)
+
+# --- TAB 16: AI Image Prompts (PRO) ---
+elif menu_choice == "🎨 AI Image Prompts":
+    st.title("🎨 AI Thumbnail Image Prompt Generator")
+    st.markdown("Generate ready-to-use prompts for Midjourney, DALL-E, or Stable Diffusion to create high-CTR custom thumbnails.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        img_topic = st.text_input("What is the video subject or core visual element?")
+        img_mood = st.selectbox("Visual Mood & Style", ["Cinematic & Dramatic", "Bright & Vibrant Cartoon / 3D", "Tech / Cyberpunk Glow", "Dark & Mysterious Studio"])
+        
+        if st.button("Generate AI Image Prompts", type="primary") and img_topic:
+            with st.spinner("Crafting prompt engineering recipes..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are an expert AI prompt engineer specializing in high-CTR YouTube thumbnail imagery."},
+                        {"role": "user", "content": f"Create 3 distinct text-to-image prompts for a YouTube thumbnail about '{img_topic}' in a '{img_mood}' style. Make them extremely detailed, optimized for 16:9 aspect ratio, and visually striking. Include aspect ratio parameters (e.g. --ar 16:9) where applicable."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Prompts Ready!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 17: Script Voice Optimizer (PRO) ---
+elif menu_choice == "🎙️ Script Voice Optimizer":
+    st.title("🎙️ Script Voice & Audio Enhancer")
+    st.markdown("Transform written text into natural spoken speech rhythm with organic pauses and engaging delivery cues.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        raw_script = st.text_area("Paste your raw script section or paragraph here:")
+        
+        if st.button("Optimize for Voice Delivery", type="primary") and raw_script:
+            with st.spinner("Adjusting pacing, pauses, and natural speech patterns..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a professional voiceover coach and YouTube dialogue director. Your goal is to rewrite text so it sounds conversational, energetic, and natural when spoken aloud, complete with performance cues like [pause], [lean in], or [emphasis]."},
+                        {"role": "user", "content": f"Optimize this text for engaging spoken voice delivery: '{raw_script}'"}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Voice Script Optimized!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 18: Growth & ROI Simulator (PRO) ---
+elif menu_choice == "💰 Growth & ROI Simulator":
+    st.title("💰 YouTube Growth & Earnings Simulator")
+    st.markdown("Estimate ad revenue (AdSense), projected views, and channel milestone timelines based on key metrics.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar or enter your developer password.")
+    else:
+        st.markdown("Configure your expected video performance parameters:")
+        col_s1, col_s2 = st.columns(2)
+        with col_s1:
+            sim_views = st.number_input("Target View Count", min_value=100, max_value=10000000, value=10000, step=500)
+            sim_rpm = st.slider("Estimated RPM ($ per 1,000 views)", min_value=0.5, max_value=30.0, value=4.5, step=0.5)
+        with col_s2:
+            sim_ctr = st.slider("Expected Click-Through Rate (CTR %)", min_value=1.0, max_value=25.0, value=5.0, step=0.5)
+            sim_sub_conv = st.slider("Subscribers per 1,000 views", min_value=1, max_value=50, value=10, step=1)
+            
+        if st.button("Calculate Projections", type="primary"):
+            # Lasketaan arviot suoraan koodissa
+            estimated_earnings = (sim_views / 1000) * sim_rpm
+            estimated_subs = int((sim_views / 1000) * sim_sub_conv)
+            
+            st.success("Simulated Projections Complete!")
+            
+            col_res1, col_res2, col_res3 = st.columns(3)
+            with col_res1:
+                st.metric(label="Estimated Ad Revenue", value=f"${estimated_earnings:.2f}")
+            with col_res2:
+                st.metric(label="Projected New Subs", value=f"+{estimated_subs}")
+            with col_res3:
+                st.metric(label="Performance Score", value="Great 🚀" if sim_ctr >= 5.0 else "Needs Work ⚠️")
+                
+            if client:
+                with st.spinner("Generating AI growth strategy analysis..."):
+                    res = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": "You are a YouTube growth economist and strategist."},
+                            {"role": "user", "content": f"Analyze these projected stats for a video: {sim_views} views, {sim_ctr}% CTR, ${sim_rpm} RPM, yielding ${estimated_earnings:.2f} revenue and {estimated_subs} subs. Provide 3 short, punchy strategic recommendations to push these numbers even higher."}
+                        ],
+                        temperature=0.7
+                    )
+                    st.markdown("### 🤖 AI Strategic Feedback")
+                    st.write(res.choices[0].message.content)
