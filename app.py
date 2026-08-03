@@ -52,56 +52,142 @@ except Exception:
 # --- STRIPE OSTOPAINIKKEEN LINKKI ---
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
-# --- SIDEBAR: Management, Payments & Menu ---
+# --- SIDEBAR: Management, Payments & Settings ---
 st.sidebar.markdown("### 🚀 YouTube Pro Suite")
 st.sidebar.write("Unlock all AI tools and unlimited searches!")
 st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Buy Pro Access (9 €)</a>', unsafe_allow_html=True)
 
-# --- SALASANA-TARKISTUS (TESTAUSVAIHE) ---
+# --- KIELEN VALINTA (Language Picker) ---
 st.sidebar.markdown("---")
-st.sidebar.subheader("🔐 Developer / Owner Access")
-entered_password = st.sidebar.text_input("Enter Pro Password:", type="password")
+st.sidebar.subheader("🌍 Language / Kieli")
+selected_language = st.sidebar.selectbox("Choose Language:", [
+    "🇫🇮 Suomi", 
+    "🇬🇧 English", 
+    "🇸🇪 Svenska", 
+    "🇪🇸 Español", 
+    "🇩🇪 Deutsch", 
+    "🇫🇷 Français", 
+    "🇯🇵 日本語"
+])
+
+# Käännösapuri / tekstit valitun kielen mukaan
+lang_code = selected_language.split()[0]
+texts = {
+    "🇫🇮": {
+        "dev_access": "🔐 Kehittäjä / Omistaja",
+        "pass_label": "Syötä Pro-salasana:",
+        "success_pro": "✅ Pro-oikeudet avattu (Dev Mode)",
+        "settings": "⚙️ Sisällöntuottajan Asetukset",
+        "v_len": "Videon pituus / Tyyppi",
+        "aud": "Kohdeyleisö",
+        "paywall": "🔒 **Pro-ominaisuus:** Tarvitset Pro-oikeudet käyttääksesi tätä työkalua.",
+        "unlock_all": "🔥 Avaa kaikki 18 työkalua hintaan 9 €"
+    },
+    "🇬🇧": {
+        "dev_access": "🔐 Developer / Owner Access",
+        "pass_label": "Enter Pro Password:",
+        "success_pro": "✅ Pro Access Unlocked (Dev Mode)",
+        "settings": "⚙️ Creator Settings",
+        "v_len": "Video Length / Type",
+        "aud": "Target Audience",
+        "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
+        "unlock_all": "🔥 Unlock All 18 Tools for 9 €"
+    },
+    "🇸🇪": {
+        "dev_access": "🔐 Utvecklar / Ägaråtkomst",
+        "pass_label": "Ange Pro-lösenord:",
+        "success_pro": "✅ Pro-åtkomst upplåst (Dev-läge)",
+        "settings": "⚙️ Skaparinställningar",
+        "v_len": "Videons längd / Typ",
+        "aud": "Målgrupp",
+        "paywall": "🔒 **Pro-funktion:** Du behöver Pro-åtkomst för att använda det här verktyget.",
+        "unlock_all": "🔥 Lås upp alla 18 verktyg för 9 €"
+    },
+    "🇪🇸": {
+        "dev_access": "🔐 Acceso de Desarrollador",
+        "pass_label": "Ingrese contraseña Pro:",
+        "success_pro": "✅ Acceso Pro Desbloqueado",
+        "settings": "⚙️ Configuración del Creador",
+        "v_len": "Duración / Tipo de video",
+        "aud": "Público objetivo",
+        "paywall": "🔒 **Función Pro:** Necesitas acceso Pro para usar esta herramienta.",
+        "unlock_all": "🔥 Desbloquea las 18 herramientas por 9 €"
+    },
+    "🇩🇪": {
+        "dev_access": "🔐 Entwickler / Owner Zugriff",
+        "pass_label": "Pro-Passwort eingeben:",
+        "success_pro": "✅ Pro-Zugriff freigeschaltet",
+        "settings": "⚙️ Creator-Einstellungen",
+        "v_len": "Videolänge / Typ",
+        "aud": "Zielgruppe",
+        "paywall": "🔒 **Pro-Funktion:** Du benötigst Pro-Zugriff, um dieses Tool zu nutzen.",
+        "unlock_all": "🔥 Schalte alle 18 Tools für 9 € frei"
+    },
+    "🇫🇷": {
+        "dev_access": "🔐 Accès Développeur",
+        "pass_label": "Entrer le mot de passe Pro:",
+        "success_pro": "✅ Accès Pro déverrouillé",
+        "settings": "⚙️ Paramètres du Créateur",
+        "v_len": "Durée / Type de vidéo",
+        "aud": "Public cible",
+        "paywall": "🔒 **Fonctionnalité Pro:** Vous avez besoin d'un accès Pro pour utiliser cet outil.",
+        "unlock_all": "🔥 Déverrouillez les 18 outils pour 9 €"
+    },
+    "🇯🇵": {
+        "dev_access": "🔐 開発者 / オーナーアクセス",
+        "pass_label": "Proパスワードを入力:",
+        "success_pro": "✅ Proアクセスが有効化されました",
+        "settings": "⚙️ クリエイター設定",
+        "v_len": "動画の長さ / タイプ",
+        "aud": "ターゲット視聴者",
+        "paywall": "🔒 **Pro機能:** このツールを使用するにはProアクセスが必要です。",
+        "unlock_all": "🔥 18個のツールすべてを9€でアンロック"
+    }
+}[lang_code]
+
+# --- SALASANA-TARKISTUS ---
+st.sidebar.markdown("---")
+st.sidebar.subheader(texts["dev_access"])
+entered_password = st.sidebar.text_input(texts["pass_label"], type="password")
 
 SECRET_PASSWORD = "tubepro2026"
 is_pro = (entered_password == SECRET_PASSWORD)
 
 if is_pro:
-    st.sidebar.success("✅ Pro Access Unlocked (Dev Mode)")
-
-# --- MOBIILIYSTÄVÄLLINEN VALIKKO SIVUPALKISSA ---
-st.sidebar.markdown("---")
-st.sidebar.header("📱 Navigation Menu")
-menu_choice = st.sidebar.selectbox("Choose Tool:", [
-    "📊 Basic Search", 
-    "💡 Ideas & Hooks", 
-    "✍️ Scripts & Shorts", 
-    "🎯 Thumbnails", 
-    "🏷️ SEO & Tags",
-    "💬 Comments",
-    "♻️ Repurpose",
-    "🤝 Sponsorship",
-    "🌍 Translator",
-    "🏆 Competitor Audit",
-    "⚡ Bulk Edit Tools",
-    "📈 Data & Analytics",
-    "🎨 Channel Branding",
-    "⏱️ Timestamp Generator",
-    "🧠 Title A/B Matrix",
-    "🎨 AI Image Prompts",
-    "🎙️ Script Voice Optimizer",
-    "💰 Growth & ROI Simulator"
-])
+    st.sidebar.success(texts["success_pro"])
 
 # --- CREATOR SETTINGS ---
 st.sidebar.markdown("---")
-st.sidebar.header("⚙️ Creator Settings")
-video_length = st.sidebar.selectbox("Video Length / Type", ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
-target_audience = st.sidebar.selectbox("Target Audience", ["Beginners", "Advanced / Pro", "Entertainment / General"])
+st.sidebar.header(texts["settings"])
+video_length = st.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
+target_audience = st.sidebar.selectbox(texts["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
+
+# --- PÄÄVALIKKO (YLÄVALIKKO KAHDESSA RIVISSÄ) ---
+st.markdown("### 📱 Työkalut / Tools Navigation")
+row1_tools = [
+    "📊 Basic Search", "💡 Ideas & Hooks", "✍️ Scripts & Shorts", 
+    "🎯 Thumbnails", "🏷️ SEO & Tags", "💬 Comments", 
+    "♻️ Repurpose", "🤝 Sponsorship", "🌍 Translator"
+]
+row2_tools = [
+    "🏆 Competitor Audit", "⚡ Bulk Edit Tools", "📈 Data & Analytics", 
+    "🎨 Channel Branding", "⏱️ Timestamp Generator", "🧠 Title A/B Matrix", 
+    "🎨 AI Image Prompts", "🎙️ Script Voice Optimizer", "💰 Growth & ROI Simulator"
+]
+
+menu_row = st.radio("Valitse kategoria / Select category:", ["Päävalikko 1 (Perustyökalut & Ideat)", "Päävalikko 2 (Optimointi & Strategia)"], horizontal=True)
+
+if menu_row == "Päävalikko 1 (Perustyökalut & Ideat)":
+    menu_choice = st.selectbox("Valitse työkalu (1/2):", row1_tools)
+else:
+    menu_choice = st.selectbox("Valitse työkalu (2/2):", row2_tools)
+
+st.markdown("---")
 
 # --- APUFUNKTIO LUKITUILLE SIVUILLE ---
 def render_paywall_warning():
-    st.warning("🔒 **Pro Feature:** You need Pro Access to use this tool.")
-    st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Unlock All 18 Tools for 9 €</a>', unsafe_allow_html=True)
+    st.warning(texts["paywall"])
+    st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
 
 # --- TAB 1: Basic Searches & Trends (ILMAINEN) ---
 if menu_choice == "📊 Basic Search":
@@ -154,7 +240,7 @@ elif menu_choice == "💡 Ideas & Hooks":
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
-                            {"role": "system", "content": "You are a top YouTube strategist."},
+                            {"role": "system", "content": f"You are a top YouTube strategist. Respond in {selected_language}."},
                             {"role": "user", "content": f"Create 5 viral video concepts for niche '{niche}' tailored for {video_length} targeting {target_audience}."}
                         ],
                         temperature=0.7
@@ -169,7 +255,7 @@ elif menu_choice == "💡 Ideas & Hooks":
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
-                            {"role": "system", "content": "You are a retention psychology expert."},
+                            {"role": "system", "content": f"You are a retention psychology expert. Respond in {selected_language}."},
                             {"role": "user", "content": f"Create 3 powerful opening hooks (first 3-5 seconds) for a video about '{hook_topic}'."}
                         ],
                         temperature=0.7
@@ -184,7 +270,7 @@ elif menu_choice == "💡 Ideas & Hooks":
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
-                            {"role": "system", "content": "You are a YouTube branding expert."},
+                            {"role": "system", "content": f"You are a YouTube branding expert. Respond in {selected_language}."},
                             {"role": "user", "content": f"Create 3 catchy channel names and content strategies based on interests: '{passion}'."}
                         ],
                         temperature=0.7
@@ -211,7 +297,7 @@ elif menu_choice == "✍️ Scripts & Shorts":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a professional YouTube scriptwriter."},
+                        {"role": "system", "content": f"You are a professional YouTube scriptwriter. Respond in {selected_language}."},
                         {"role": "user", "content": prompt}
                     ],
                     temperature=0.7
@@ -237,7 +323,7 @@ elif menu_choice == "🎯 Thumbnails":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a YouTube CTR and graphic design expert."},
+                        {"role": "system", "content": f"You are a YouTube CTR and graphic design expert. Respond in {selected_language}."},
                         {"role": "user", "content": f"Create 3 visual concepts for a thumbnail about '{thumb_topic}' in style '{thumb_style}'. Include background, text (max 3 words), and colors."}
                     ],
                     temperature=0.7
@@ -261,7 +347,7 @@ elif menu_choice == "🏷️ SEO & Tags":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a YouTube SEO expert."},
+                        {"role": "system", "content": f"You are a YouTube SEO expert. Respond in {selected_language}."},
                         {"role": "user", "content": f"Provide comma-separated high-performing search tags and long-tail keywords for a video about: '{tag_topic}'."}
                     ],
                     temperature=0.7
@@ -287,7 +373,7 @@ elif menu_choice == "💬 Comments":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": f"You are a helpful YouTube creator responding in a {tone} tone."},
+                        {"role": "system", "content": f"You are a helpful YouTube creator responding in a {tone} tone. Respond in {selected_language}."},
                         {"role": "user", "content": f"Write a great reply to this comment: '{viewer_comment}'"}
                     ],
                     temperature=0.7
@@ -313,7 +399,7 @@ elif menu_choice == "♻️ Repurpose":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a multi-platform content strategist."},
+                        {"role": "system", "content": f"You are a multi-platform content strategist. Respond in {selected_language}."},
                         {"role": "user", "content": f"Convert this text into a {repurpose_target}: '{long_content}'"}
                     ],
                     temperature=0.7
@@ -339,7 +425,7 @@ elif menu_choice == "🤝 Sponsorship":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a professional talent manager."},
+                        {"role": "system", "content": f"You are a professional talent manager. Respond in {selected_language}."},
                         {"role": "user", "content": f"Write a high-converting sponsorship pitch email to '{brand_name}' highlighting my channel background: '{channel_stats}'."}
                     ],
                     temperature=0.7
@@ -358,7 +444,7 @@ elif menu_choice == "🌍 Translator":
         st.error("OpenAI API key is missing!")
     else:
         text_to_translate = st.text_area("Paste text, title or description to localize:")
-        target_lang = st.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese", "Swedish"])
+        target_lang = st.selectbox("Target Language:", ["English", "Finnish", "Spanish", "German", "French", "Japanese", "Swedish"])
         
         if st.button("Translate & Optimize", type="primary") and text_to_translate:
             with st.spinner("Translating and localizing for maximum reach..."):
@@ -391,7 +477,7 @@ elif menu_choice == "🏆 Competitor Audit":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are an elite YouTube growth strategist and algorithm expert."},
+                        {"role": "system", "content": f"You are an elite YouTube growth strategist and algorithm expert. Respond in {selected_language}."},
                         {"role": "user", "content": f"Perform a strategic competitor audit for a video about '{audit_topic}'. Standard approach to beat: '{competitor_style}'. Provide: 1) What is missing in current videos, 2) A unique angle to outsmart competitors, and 3) Recommendations for higher CTR and retention."}
                     ],
                     temperature=0.7
@@ -417,7 +503,7 @@ elif menu_choice == "⚡ Bulk Edit Tools":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a YouTube operations and automation expert."},
+                        {"role": "system", "content": f"You are a YouTube operations and automation expert. Respond in {selected_language}."},
                         {"role": "user", "content": f"Create a comprehensive, reusable {bulk_goal} optimized for a creator in the '{channel_niche_bulk}' niche to apply across multiple videos efficiently."}
                     ],
                     temperature=0.7
@@ -449,7 +535,7 @@ elif menu_choice == "📈 Data & Analytics":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a YouTube algorithm data scientist."},
+                        {"role": "system", "content": f"You are a YouTube algorithm data scientist. Respond in {selected_language}."},
                         {"role": "user", "content": f"Analyze these video stats: CTR {ctr_val}, AVD {avd_val}, Views {views_val}, Subs gained {sub_rate}. Explain what is working, what is failing based on YouTube benchmarks, and give 3 actionable steps to improve performance."}
                     ],
                     temperature=0.7
@@ -475,7 +561,7 @@ elif menu_choice == "🎨 Channel Branding":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are an elite YouTube brand strategist and creative director."},
+                        {"role": "system", "content": f"You are an elite YouTube brand strategist and creative director. Respond in {selected_language}."},
                         {"role": "user", "content": f"Create a full YouTube channel branding package based on interests: '{brand_interests}' targeting '{brand_audience}'. Include: 1) 5 Catchy Channel Names, 2) A powerful channel Slogan, 3) Profile picture visual concept, 4) Banner visual concept and color scheme, and 5) A compelling 'About' section description."}
                     ],
                     temperature=0.7
@@ -500,7 +586,7 @@ elif menu_choice == "⏱️ Timestamp Generator":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a YouTube video editor and chapter optimization expert."},
+                        {"role": "system", "content": f"You are a YouTube video editor and chapter optimization expert. Respond in {selected_language}."},
                         {"role": "user", "content": f"Analyze this script/outline and create professional, search-friendly video chapters with precise timestamps format (e.g. 00:00 Introduction). Ensure the first timestamp starts at 00:00. Text: '{script_input}'"}
                     ],
                     temperature=0.7
@@ -525,7 +611,7 @@ elif menu_choice == "🧠 Title A/B Matrix":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are an expert in YouTube click psychology, CTR optimization, and copywriting."},
+                        {"role": "system", "content": f"You are an expert in YouTube click psychology, CTR optimization, and copywriting. Respond in {selected_language}."},
                         {"role": "user", "content": f"Create 10 distinct video titles for the topic '{base_topic}', each using a different psychological angle (e.g., Curiosity Gap, Fear of Missing Out, Quick Hack/Shortcut, Contrast/Controversy, Authority, Question, Negative/Warning, Numbers/List, Simplicity, Storytelling). Clearly label the angle for each."}
                     ],
                     temperature=0.7
@@ -551,7 +637,7 @@ elif menu_choice == "🎨 AI Image Prompts":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are an expert AI prompt engineer specializing in high-CTR YouTube thumbnail imagery."},
+                        {"role": "system", "content": f"You are an expert AI prompt engineer specializing in high-CTR YouTube thumbnail imagery. Respond in {selected_language}."},
                         {"role": "user", "content": f"Create 3 distinct text-to-image prompts for a YouTube thumbnail about '{img_topic}' in a '{img_mood}' style. Make them extremely detailed, optimized for 16:9 aspect ratio, and visually striking. Include aspect ratio parameters (e.g. --ar 16:9) where applicable."}
                     ],
                     temperature=0.7
@@ -576,7 +662,7 @@ elif menu_choice == "🎙️ Script Voice Optimizer":
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are a professional voiceover coach and YouTube dialogue director. Your goal is to rewrite text so it sounds conversational, energetic, and natural when spoken aloud, complete with performance cues like [pause], [lean in], or [emphasis]."},
+                        {"role": "system", "content": f"You are a professional voiceover coach and YouTube dialogue director. Your goal is to rewrite text so it sounds conversational, energetic, and natural when spoken aloud, complete with performance cues like [pause], [lean in], or [emphasis]. Respond in {selected_language}."},
                         {"role": "user", "content": f"Optimize this text for engaging spoken voice delivery: '{raw_script}'"}
                     ],
                     temperature=0.7
@@ -620,7 +706,7 @@ elif menu_choice == "💰 Growth & ROI Simulator":
                     res = client.chat.completions.create(
                         model="gpt-4o",
                         messages=[
-                            {"role": "system", "content": "You are a YouTube growth economist and strategist."},
+                            {"role": "system", "content": f"You are a YouTube growth economist and strategist. Respond in {selected_language}."},
                             {"role": "user", "content": f"Analyze these projected stats for a video: {sim_views} views, {sim_ctr}% CTR, ${sim_rpm} RPM, yielding ${estimated_earnings:.2f} revenue and {estimated_subs} subs. Provide 3 short, punchy strategic recommendations to push these numbers even higher."}
                         ],
                         temperature=0.7
