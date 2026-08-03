@@ -57,16 +57,16 @@ with tab1:
         else:
             st.warning("Please enter a keyword first.")
 
-    # Lisätty: Myyntiä vauhdittava "How Pro Works" -esittely ilmaispuolelle
+    # Päivitetty: Englanninkielinen myyntiä vauhdittava esittely ilmaispuolelle
     st.markdown("---")
-    with st.expander("🚀 Miksi päivittää Pro-versioon? (Katso ominaisuudet)"):
+    with st.expander("🚀 Why upgrade to Pro? (Check out the features)"):
         st.write("""
-        Ilmaisversio auttaa sinua alkuun perustietojen ja hakusanojen kanssa, mutta **Pro-versio** avaa täyden arsenaalin sisällöntuotannon tekoälytyökaluja:
-        * **Viral Idea Generator:** Luo rajattomasti viraaliideoita kohderyhmällesi.
-        * **AI Metadata & Scriptwriter:** Kirjoittaa puolestasi klikkiotsikot, kuvaukset ja aloituskoukut.
-        * **Thumbnail Generator:** Antaa tarkat visuaaliset reseptit pikkukuville, jotka pysäyttävät selailun.
-        * **PDF Analyzer:** Analysoi käsikirjoitukset ja antaa parannusehdotuksia.
-        * **YouTube Tags & SEO:** Generoi valmiit optimoidut hakutagit suoraan YouTubeen sekunneissa!
+        The free version helps you get started with basic data and keywords, but the **Pro version** unlocks a complete arsenal of AI-powered content creation tools:
+        * **Viral Idea Generator:** Create endless viral ideas tailored for your target audience.
+        * **AI Metadata & Scriptwriter:** Writes click-worthy titles, descriptions, and intro hooks for you.
+        * **Thumbnail Generator:** Delivers precise visual recipes for scroll-stopping thumbnails.
+        * **PDF Analyzer:** Analyzes your scripts and provides actionable feedback.
+        * **YouTube Tags & SEO:** Generates fully optimized search tags directly for YouTube in seconds!
         """)
 
 # --- TAB 2: AI Tools & Viral Ideas ---
@@ -77,7 +77,6 @@ with tab2:
     if not client:
         st.error("OpenAI API key is missing! Please set it in Streamlit Cloud Secrets.")
     else:
-        # Päivitetty: Lisätty kolmas vaihtoehto valikkoon ("Video Title Improver")
         ai_tool_choice = st.selectbox("Select AI Feature:", [
             "Viral Idea Generator (Idea Machine)", 
             "AI Metadata & Script", 
@@ -135,17 +134,16 @@ with tab2:
                             st.error(f"Error: {e}")
 
         else:
-            # Uusi ominaisuus: Video Title Improver
             st.subheader("🔥 Video Title Improver & Roster")
-            existing_title = st.text_input("Syötä olemassa oleva tai suunnittelemasi otsikko:")
+            existing_title = st.text_input("Enter your existing or planned video title:")
             
-            if st.button("Paranna otsikkoa"):
+            if st.button("Improve Title"):
                 if not is_pro:
-                    st.warning("🔒 Tämä on Pro-ominaisuus. Osta Pro sivupalkista tai kytke testitila päälle!")
+                    st.warning("🔒 This is a Pro feature. Buy Pro access via the sidebar or enable test mode!")
                 elif not existing_title:
-                    st.warning("Syötä ensin jokin otsikko.")
+                    st.warning("Please enter a title first.")
                 else:
-                    with st.spinner("Analysoidaan ja parannetaan otsikkoa..."):
+                    with st.spinner("Analyzing and improving title..."):
                         try:
                             response = client.chat.completions.create(
                                 model="gpt-4o",
@@ -155,7 +153,7 @@ with tab2:
                                 ],
                                 temperature=0.7
                             )
-                            st.success("Otsikkoehdotukset luotu!")
+                            st.success("Title suggestions generated successfully!")
                             st.write(response.choices[0].message.content)
                         except Exception as e:
                             st.error(f"Error: {e}")
@@ -213,22 +211,22 @@ with tab4:
         else:
             st.success("PDF uploaded successfully!")
             if st.button("Analyze Script"):
-                st.info("Tähän voidaan kytkeä PDF-tekstin luku ja tekoälyanalyysi.")
+                st.info("PDF text reading and AI analysis integration point.")
 
 # --- TAB 5: YouTube Tags & SEO Generator ---
 with tab5:
     st.title("🏷️ YouTube Tags & SEO Generator")
-    st.write("Hanki optimoidut hakutagit ja avainsanat videollesi sekunneissa.")
+    st.write("Get optimized search tags and keywords for your video in seconds.")
     
-    tag_topic = st.text_input("Mistä aiheesta tai videosta haluat luoda tagit?")
+    tag_topic = st.text_input("What topic or video do you want to generate tags for?")
     
-    if st.button("Generoi tagit"):
+    if st.button("Generate Tags"):
         if not is_pro:
-            st.warning("🔒 Tagien generointi on Pro-ominaisuus. Osta Pro sivupalkista tai kytke testitila päälle!")
+            st.warning("🔒 Tag generation is a Pro feature. Buy Pro access via the sidebar or enable test mode!")
         elif not tag_topic:
-            st.warning("Syötä ensin videon aihe.")
+            st.warning("Please enter a video topic first.")
         else:
-            with st.spinner("Luodaan hakutageja ja SEO-avainsanoja..."):
+            with st.spinner("Generating search tags and SEO keywords..."):
                 try:
                     response = client.chat.completions.create(
                         model="gpt-4o",
@@ -238,7 +236,7 @@ with tab5:
                         ],
                         temperature=0.7
                     )
-                    st.success("Tagit generoitu onnistuneesti!")
+                    st.success("Tags generated successfully!")
                     st.write(response.choices[0].message.content)
                 except Exception as e:
                     st.error(f"Error: {e}")
