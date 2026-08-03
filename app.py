@@ -21,7 +21,30 @@ elif menu_choice == "translator":
                 except Exception as e:
                     str_module.error(f"Error: {e}")
 
-elif menu_choice in tools_advanced and menu_choice != "translator":
+elif menu_choice == "simulator":
+    str_module.title(c_texts["simulator"]["title"])
+    if not is_pro: 
+        render_paywall()
+    elif client:
+        sub1 = str_module.number_input(c_texts["simulator"]["sub1"], value=1000)
+        sub2 = str_module.number_input(c_texts["simulator"]["sub2"], value=5000)
+        if str_module.button(c_texts["simulator"]["btn"], type="primary"):
+            with str_module.spinner(c_texts["simulator"]["spinner"]):
+                try:
+                    res = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[
+                            {"role": "system", "content": f"You are a YouTube financial and growth analyst. Respond in {selected_language}."},
+                            {"role": "user", "content": f"Simulate growth and estimate ad revenue / sponsor potential for a channel with {sub1} subscribers and {sub2} average views per video."}
+                        ],
+                        temperature=0.7
+                    )
+                    str_module.success("Done!")
+                    str_module.markdown(f'<div class="result-box">{res.choices[0].message.content}</div>', unsafe_allow_html=True)
+                except Exception as e:
+                    str_module.error(f"Error: {e}")
+
+elif menu_choice in tools_advanced:
     if not is_pro:
         render_paywall()
     else:
