@@ -73,7 +73,10 @@ menu_choice = st.sidebar.selectbox("Choose Tool:", [
     "🌍 Translator",
     "🏆 Competitor Audit",
     "⚡ Bulk Edit Tools",
-    "📈 Data & Analytics"
+    "📈 Data & Analytics",
+    "🎨 Channel Branding",
+    "⏱️ Timestamp Generator",
+    "🧠 Title A/B Matrix"
 ])
 
 # --- CREATOR SETTINGS ---
@@ -101,7 +104,7 @@ if menu_choice == "📊 Basic Search":
             with col3:
                 st.metric(label="Average RPM", value="$4.50", delta="$0.2")
             
-            st.info("💡 Tip: Unlock Pro to use all 12 advanced AI tools!")
+            st.info("💡 Tip: Unlock Pro to use all 15 advanced AI tools!")
         else:
             st.warning("Please enter a keyword first.")
 
@@ -109,7 +112,7 @@ if menu_choice == "📊 Basic Search":
     st.markdown("""
         <div class="pro-card">
             <h3>🚀 Unlock the Full Power with Pro (9 €)</h3>
-            <p>Upgrading gives you complete access to all 12 advanced AI generators and optimization suites!</p>
+            <p>Upgrading gives you complete access to all 15 advanced AI generators and optimization suites!</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -428,9 +431,85 @@ elif menu_choice == "📈 Data & Analytics":
                     model="gpt-4o",
                     messages=[
                         {"role": "system", "content": "You are a YouTube algorithm data scientist."},
-                        {"role": "user", "content": f"Analyze these video stats: CTR {ctr_val}, AVD {avd_val}, Views {views_val}, Subs gained {sub_val if 'sub_val' in locals() else '15'}. Explain what is working, what is failing based on YouTube benchmarks, and give 3 actionable steps to improve performance."}
+                        {"role": "user", "content": f"Analyze these video stats: CTR {ctr_val}, AVD {avd_val}, Views {views_val}, Subs gained {sub_rate}. Explain what is working, what is failing based on YouTube benchmarks, and give 3 actionable steps to improve performance."}
                     ],
                     temperature=0.7
                 )
                 st.success("Analytics Diagnostic Ready!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 13: Channel Branding (PRO) ---
+elif menu_choice == "🎨 Channel Branding":
+    st.title("🎨 AI Channel Name & Branding Generator")
+    st.markdown("Input your interests and audience to generate a full visual and verbal branding package.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        brand_interests = st.text_input("Your passions, skills, or niche topics:")
+        brand_audience = st.text_input("Who is your target viewer?")
+        
+        if st.button("Generate Complete Branding Package", type="primary") and brand_interests:
+            with st.spinner("Designing brand identity..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are an elite YouTube brand strategist and creative director."},
+                        {"role": "user", "content": f"Create a full YouTube channel branding package based on interests: '{brand_interests}' targeting '{brand_audience}'. Include: 1) 5 Catchy Channel Names, 2) A powerful channel Slogan, 3) Profile picture visual concept, 4) Banner visual concept and color scheme, and 5) A compelling 'About' section description."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Branding Package Ready!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 14: Timestamp Generator (PRO) ---
+elif menu_choice == "⏱️ Timestamp Generator":
+    st.title("⏱️ Video Chapter & Timestamp Generator")
+    st.markdown("Paste your video script or rough notes to instantly generate SEO-friendly timestamps.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        script_input = st.text_area("Paste your video script, outline, or breakdown notes here:")
+        
+        if st.button("Generate Timestamps", type="primary") and script_input:
+            with st.spinner("Structuring chapters and timestamps..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are a YouTube video editor and chapter optimization expert."},
+                        {"role": "user", "content": f"Analyze this script/outline and create professional, search-friendly video chapters with precise timestamps format (e.g. 00:00 Introduction). Ensure the first timestamp starts at 00:00. Text: '{script_input}'"}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Timestamps Generated!")
+                st.write(res.choices[0].message.content)
+
+# --- TAB 15: Title A/B Matrix (PRO) ---
+elif menu_choice == "🧠 Title A/B Matrix":
+    st.title("🧠 Title A/B Testing Matrix")
+    st.markdown("Generate 10 psychologically optimized video title angles to maximize CTR.")
+    
+    if not is_pro:
+        st.warning("🔒 **Pro Feature:** Please purchase Pro Access from the sidebar to use this tool.")
+    elif not client:
+        st.error("OpenAI API key is missing!")
+    else:
+        base_topic = st.text_input("Enter your core video topic or raw idea:")
+        
+        if st.button("Generate Title Matrix", type="primary") and base_topic:
+            with st.spinner("Applying psychological triggers and title formulas..."):
+                res = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are an expert in YouTube click psychology, CTR optimization, and copywriting."},
+                        {"role": "user", "content": f"Create 10 distinct video titles for the topic '{base_topic}', each using a different psychological angle (e.g., Curiosity Gap, Fear of Missing Out, Quick Hack/Shortcut, Contrast/Controversy, Authority, Question, Negative/Warning, Numbers/List, Simplicity, Storytelling). Clearly label the angle for each."}
+                    ],
+                    temperature=0.7
+                )
+                st.success("Title Matrix Generated!")
                 st.write(res.choices[0].message.content)
