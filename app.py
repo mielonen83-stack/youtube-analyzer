@@ -1,51 +1,75 @@
-import streamlit as st
+import streamlit as str_module
 from openai import OpenAI
 
 # Sivun asetukset
-st.set_page_config(page_title="YouTube Pro Analyzer", page_icon="🎬", layout="wide")
+str_module.set_page_config(page_title="YouTube Pro Suite", page_icon="🎬", layout="wide")
 
-# --- KUSTOMOITU CSS ---
-st.markdown("""
+# --- KUSTOMOITU MODERNI CSS ---
+str_module.markdown("""
     <style>
+    /* Yleinen tyyli ja fontit */
+    .main {
+        background-color: #fafbfc;
+    }
     h1 {
-        color: #FF0000;
+        color: #111827;
         font-weight: 800;
+        letter-spacing: -0.025em;
     }
     h2, h3 {
-        color: #222222;
+        color: #1f2937;
+        font-weight: 700;
     }
+    
+    /* Sivupalkin tyylittely */
     [data-testid="stSidebar"] {
-        background-color: #f8f9fa;
+        background-color: #ffffff;
+        border-right: 1px solid #e5e7eb;
         padding-top: 20px;
     }
-    .pro-card {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #FF0000;
+    
+    /* Pro-kortti sivupalkissa */
+    .pro-sidebar-box {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid #fecaca;
         margin-bottom: 20px;
+        text-align: center;
     }
+    
+    /* Tyylikäs Osta-painike */
     .buy-button {
         display: block;
         width: 100%;
-        background-color: #FF0000;
+        background-color: #ef4444;
         color: white !important;
         text-align: center;
-        padding: 10px 15px;
-        border-radius: 5px;
-        font-weight: bold;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-weight: 700;
         text-decoration: none;
-        margin-bottom: 10px;
+        box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+        transition: background-color 0.2s;
     }
     .buy-button:hover {
-        background-color: #cc0000;
+        background-color: #dc2626;
+    }
+    
+    /* Sisältökortit */
+    .stCard {
+        background-color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid #f3f4f6;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # OpenAI Client alustus
 try:
-    openai_api_key = st.secrets["OPENAI_API_KEY"]
+    openai_api_key = str_module.secrets["OPENAI_API_KEY"]
     client = OpenAI(api_key=openai_api_key)
 except Exception:
     client = None
@@ -54,20 +78,24 @@ except Exception:
 stripe_link = "https://buy.stripe.com/aFa4gz2n20FH47K7TEebu00"
 
 # --- SIVUPALKKI (Sidebar) ---
-st.sidebar.markdown("### 🚀 YouTube Pro Suite")
-st.sidebar.write("Unlock all AI tools and unlimited search!")
-st.sidebar.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">🔥 Get Pro Access (9 €)</a>', unsafe_allow_html=True)
+str_module.sidebar.markdown("### 🚀 YouTube Pro Suite")
+str_module.sidebar.markdown("""
+<div class="pro-sidebar-box">
+    <p style="font-size: 14px; color: #7f1d1d; margin-bottom: 12px; font-weight: 500;">Unlock all AI tools and unlimited search!</p>
+    <a href="{}" target="_blank" class="buy-button">🔥 Get Pro Access (5 €)</a>
+</div>
+""".format(stripe_link), unsafe_allow_html=True)
 
 # Kielen valinta (Oletuksena englanti)
-st.sidebar.markdown("---")
-st.sidebar.subheader("🌍 Language / Kieli")
+str_module.sidebar.markdown("---")
+str_module.sidebar.subheader("🌍 Language / Kieli")
 
 languages = ["🇬🇧 English", "🇫🇮 Suomi", "🇸🇪 Svenska", "🇪🇸 Español", "🇩🇪 Deutsch", "🇫🇷 Français", "🇯🇵 日本語"]
-if "selected_language" not in st.session_state:
-    st.session_state.selected_language = "🇬🇧 English"
+if "selected_language" not in str_module.session_state:
+    str_module.session_state.selected_language = "🇬🇧 English"
 
-selected_language = st.sidebar.selectbox("Select Language:", languages, index=languages.index(st.session_state.selected_language))
-st.session_state.selected_language = selected_language
+selected_language = str_module.sidebar.selectbox("Select Language:", languages, index=languages.index(str_module.session_state.selected_language), label_visibility="collapsed")
+str_module.session_state.selected_language = selected_language
 lang_code = selected_language.split()[0]
 
 # --- KAIKKI KÄÄNNÖKSET JA TYÖKALUJEN SISÄLLÖT ---
@@ -80,7 +108,7 @@ translations = {
         "v_len": "Video Length / Type",
         "aud": "Target Audience",
         "paywall": "🔒 **Pro Feature:** You need Pro Access to use this tool.",
-        "unlock_all": "🔥 Unlock All Tools for 9 €",
+        "unlock_all": "🔥 Unlock All Tools for 5 €",
         "nav_title": "🛠️ Tools Navigation",
         "cat_label": "Select category:",
         "cat_basics": "💡 Basics, Ideas & Scripts",
@@ -137,7 +165,7 @@ translations = {
         "v_len": "Videon pituus / Tyyppi",
         "aud": "Kohdeyleisö",
         "paywall": "🔒 **Pro-ominaisuus:** Tarvitset Pro-oikeudet käyttääksesi tätä työkalua.",
-        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 9 €",
+        "unlock_all": "🔥 Avaa kaikki työkalut hintaan 5 €",
         "nav_title": "🛠️ Työkalujen Hallinta",
         "cat_label": "Valitse toiminta-alue:",
         "cat_basics": "💡 Perustyökalut, Ideat & Käsikirjoitukset",
@@ -188,7 +216,6 @@ translations = {
     }
 }
 
-# Varmistetaan tuki myös muille kielille yleisellä tasolla
 if lang_code not in translations:
     lang_code = "🇬🇧"
 
@@ -196,53 +223,53 @@ texts = translations[lang_code]
 c_texts = texts["content"]
 
 # Salasana-tarkistus (Dev mode)
-st.sidebar.markdown("---")
-st.sidebar.subheader(texts["dev_access"])
-entered_password = st.sidebar.text_input(texts["pass_label"], type="password")
+str_module.sidebar.markdown("---")
+str_module.sidebar.subheader(texts["dev_access"])
+entered_password = str_module.sidebar.text_input(texts["pass_label"], type="password")
 is_pro = (entered_password == "tubepro2026")
 if is_pro:
-    st.sidebar.success(texts["success_pro"])
+    str_module.sidebar.success(texts["success_pro"])
 
 # Kanavan asetukset sivupalkissa
-st.sidebar.markdown("---")
-st.sidebar.header(texts["settings"])
-video_length = st.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
-target_audience = st.sidebar.selectbox(texts["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
+str_module.sidebar.markdown("---")
+str_module.sidebar.header(texts["settings"])
+video_length = str_module.sidebar.selectbox(texts["v_len"], ["Shorts (< 60 sec)", "Standard Video (8-15 min)", "Deep Dive / Doc (> 20 min)"])
+target_audience = str_module.sidebar.selectbox(texts["aud"], ["Beginners", "Advanced / Pro", "Entertainment / General"])
 
 # --- PÄÄVALIKKO ---
-st.markdown(f"### {texts['nav_title']}")
+str_module.markdown(f"### {texts['nav_title']}")
 
-category_choice = st.radio(texts["cat_label"], [texts["cat_basics"], texts["cat_advanced"]], horizontal=True)
+category_choice = str_module.radio(texts["cat_label"], [texts["cat_basics"], texts["cat_advanced"]], horizontal=True)
 
 if category_choice == texts["cat_basics"]:
     tool_dict = texts["tools_basics"]
 else:
     tool_dict = texts["tools_advanced"]
 
-selected_tool_label = st.selectbox(texts["tool_prompt"], list(tool_dict.values()))
+selected_tool_label = str_module.selectbox(texts["tool_prompt"], list(tool_dict.values()))
 menu_choice = [k for k, v in tool_dict.items() if v == selected_tool_label][0]
 
-st.markdown("---")
+str_module.markdown("---")
 
 def render_paywall():
-    st.warning(texts["paywall"])
-    st.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
+    str_module.warning(texts["paywall"])
+    str_module.markdown(f'<a href="{stripe_link}" target="_blank" class="buy-button">{texts["unlock_all"]}</a>', unsafe_allow_html=True)
 
 # ==========================================
 # TYÖKALUJEN LOGIIKKA
 # ==========================================
 
 if menu_choice == "search":
-    st.title(c_texts["search"]["title"])
-    st.markdown(c_texts["search"]["desc"])
-    keyword = st.text_input(c_texts["search"]["input"])
+    str_module.title(c_texts["search"]["title"])
+    str_module.markdown(c_texts["search"]["desc"])
+    keyword = str_module.text_input(c_texts["search"]["input"])
     
-    if st.button(c_texts["search"]["btn"], type="primary"):
+    if str_module.button(c_texts["search"]["btn"], type="primary"):
         if keyword:
             if not client:
-                st.error("OpenAI API key is missing!")
+                str_module.error("OpenAI API key is missing!")
             else:
-                with st.spinner(c_texts["search"]["spinner"].format(keyword=keyword)):
+                with str_module.spinner(c_texts["search"]["spinner"].format(keyword=keyword)):
                     try:
                         res = client.chat.completions.create(
                             model="gpt-4o",
@@ -273,28 +300,28 @@ if menu_choice == "search":
                             elif "ANALYysi:" in line or "ANALYYSISI:" in line or "ANALYYSI:" in line:
                                 analyysi = line.split(":", 1)[1].strip()
 
-                        st.success(f"Results for keyword: **{keyword}**")
+                        str_module.success(f"Results for keyword: **{keyword}**")
                         
-                        col1, col2, col3 = st.columns(3)
+                        col1, col2, col3 = str_module.columns(3)
                         col1.metric("🔍 Est. Monthly Searches", haut)
                         col2.metric("⚔️ Competition Level", kilpailu)
                         col3.metric("💵 Estimated RPM", rpm)
                         
-                        st.markdown("### 💡 Strategic Insight")
-                        st.info(analyysi)
+                        str_module.markdown("### 💡 Strategic Insight")
+                        str_module.info(analyysi)
                         
                     except Exception as e:
-                        st.error(f"AI Search error: {e}")
+                        str_module.error(f"AI Search error: {e}")
         else:
-            st.warning("Please enter a keyword first.")
+            str_module.warning("Please enter a keyword first.")
 
 elif menu_choice == "ideas":
-    st.title(c_texts["ideas"]["title"])
+    str_module.title(c_texts["ideas"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        niche = st.text_input(c_texts["ideas"]["input"])
-        if st.button(c_texts["ideas"]["btn"], type="primary") and niche:
-            with st.spinner(c_texts["ideas"]["spinner"]):
+        niche = str_module.text_input(c_texts["ideas"]["input"])
+        if str_module.button(c_texts["ideas"]["btn"], type="primary") and niche:
+            with str_module.spinner(c_texts["ideas"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -303,16 +330,16 @@ elif menu_choice == "ideas":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "scripts":
-    st.title(c_texts["scripts"]["title"])
+    str_module.title(c_texts["scripts"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input(c_texts["scripts"]["input"])
-        if st.button(c_texts["scripts"]["btn"], type="primary") and topic:
-            with st.spinner(c_texts["scripts"]["spinner"]):
+        topic = str_module.text_input(c_texts["scripts"]["input"])
+        if str_module.button(c_texts["scripts"]["btn"], type="primary") and topic:
+            with str_module.spinner(c_texts["scripts"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -321,16 +348,16 @@ elif menu_choice == "scripts":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "thumbnails":
-    st.title(c_texts["thumbnails"]["title"])
+    str_module.title(c_texts["thumbnails"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input(c_texts["thumbnails"]["input"])
-        if st.button(c_texts["thumbnails"]["btn"], type="primary") and topic:
-            with st.spinner(c_texts["thumbnails"]["spinner"]):
+        topic = str_module.text_input(c_texts["thumbnails"]["input"])
+        if str_module.button(c_texts["thumbnails"]["btn"], type="primary") and topic:
+            with str_module.spinner(c_texts["thumbnails"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -339,16 +366,16 @@ elif menu_choice == "thumbnails":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "seo":
-    st.title(c_texts["seo"]["title"])
+    str_module.title(c_texts["seo"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        topic = st.text_input(c_texts["seo"]["input"])
-        if st.button(c_texts["seo"]["btn"], type="primary") and topic:
-            with st.spinner(c_texts["seo"]["spinner"]):
+        topic = str_module.text_input(c_texts["seo"]["input"])
+        if str_module.button(c_texts["seo"]["btn"], type="primary") and topic:
+            with str_module.spinner(c_texts["seo"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -357,16 +384,16 @@ elif menu_choice == "seo":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "comments":
-    st.title(c_texts["comments"]["title"])
+    str_module.title(c_texts["comments"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        comment = st.text_area(c_texts["comments"]["input"])
-        if st.button(c_texts["comments"]["btn"], type="primary") and comment:
-            with st.spinner(c_texts["comments"]["spinner"]):
+        comment = str_module.text_area(c_texts["comments"]["input"])
+        if str_module.button(c_texts["comments"]["btn"], type="primary") and comment:
+            with str_module.spinner(c_texts["comments"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -375,17 +402,17 @@ elif menu_choice == "comments":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "repurpose":
-    st.title(c_texts["repurpose"]["title"])
+    str_module.title(c_texts["repurpose"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        content = st.text_area(c_texts["repurpose"]["input"])
-        target = st.selectbox("Convert to format:", ["X (Twitter) Thread", "Community Post", "Newsletter"])
-        if st.button(c_texts["repurpose"]["btn"], type="primary") and content:
-            with st.spinner(c_texts["repurpose"]["spinner"]):
+        content = str_module.text_area(c_texts["repurpose"]["input"])
+        target = str_module.selectbox("Convert to format:", ["X (Twitter) Thread", "Community Post", "Newsletter"])
+        if str_module.button(c_texts["repurpose"]["btn"], type="primary") and content:
+            with str_module.spinner(c_texts["repurpose"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -394,17 +421,17 @@ elif menu_choice == "repurpose":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "sponsorship":
-    st.title(c_texts["sponsorship"]["title"])
+    str_module.title(c_texts["sponsorship"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        brand = st.text_input(c_texts["sponsorship"]["input_brand"])
-        stats = st.text_input(c_texts["sponsorship"]["input_stats"])
-        if st.button(c_texts["sponsorship"]["btn"], type="primary") and brand:
-            with st.spinner(c_texts["sponsorship"]["spinner"]):
+        brand = str_module.text_input(c_texts["sponsorship"]["input_brand"])
+        stats = str_module.text_input(c_texts["sponsorship"]["input_stats"])
+        if str_module.button(c_texts["sponsorship"]["btn"], type="primary") and brand:
+            with str_module.spinner(c_texts["sponsorship"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -413,17 +440,17 @@ elif menu_choice == "sponsorship":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "translator":
-    st.title(c_texts["translator"]["title"])
+    str_module.title(c_texts["translator"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        txt = st.text_area(c_texts["translator"]["input"])
-        t_lang = st.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese"])
-        if st.button(c_texts["translator"]["btn"], type="primary") and txt:
-            with st.spinner(c_texts["translator"]["spinner"]):
+        txt = str_module.text_area(c_texts["translator"]["input"])
+        t_lang = str_module.selectbox("Target Language:", ["English", "Spanish", "German", "French", "Japanese"])
+        if str_module.button(c_texts["translator"]["btn"], type="primary") and txt:
+            with str_module.spinner(c_texts["translator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -432,16 +459,16 @@ elif menu_choice == "translator":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "competitor":
-    st.title(c_texts["competitor"]["title"])
+    str_module.title(c_texts["competitor"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        comp_topic = st.text_input(c_texts["competitor"]["input"])
-        if st.button(c_texts["competitor"]["btn"], type="primary") and comp_topic:
-            with st.spinner(c_texts["competitor"]["spinner"]):
+        comp_topic = str_module.text_input(c_texts["competitor"]["input"])
+        if str_module.button(c_texts["competitor"]["btn"], type="primary") and comp_topic:
+            with str_module.spinner(c_texts["competitor"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -450,16 +477,16 @@ elif menu_choice == "competitor":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "bulk":
-    st.title(c_texts["bulk"]["title"])
+    str_module.title(c_texts["bulk"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        niche_b = st.text_input(c_texts["bulk"]["input"])
-        if st.button(c_texts["bulk"]["btn"], type="primary") and niche_b:
-            with st.spinner(c_texts["bulk"]["spinner"]):
+        niche_b = str_module.text_input(c_texts["bulk"]["input"])
+        if str_module.button(c_texts["bulk"]["btn"], type="primary") and niche_b:
+            with str_module.spinner(c_texts["bulk"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -468,18 +495,18 @@ elif menu_choice == "bulk":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "analytics":
-    st.title(c_texts["analytics"]["title"])
+    str_module.title(c_texts["analytics"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        c1, c2 = st.columns(2)
+        c1, c2 = str_module.columns(2)
         ctr = c1.text_input("CTR %", "5.0%")
         avd = c2.text_input("Average View Duration", "3:30")
-        if st.button(c_texts["analytics"]["btn"], type="primary"):
-            with st.spinner(c_texts["analytics"]["spinner"]):
+        if str_module.button(c_texts["analytics"]["btn"], type="primary"):
+            with str_module.spinner(c_texts["analytics"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -488,16 +515,16 @@ elif menu_choice == "analytics":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "branding":
-    st.title(c_texts["branding"]["title"])
+    str_module.title(c_texts["branding"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        interests = st.text_input(c_texts["branding"]["input"])
-        if st.button(c_texts["branding"]["btn"], type="primary") and interests:
-            with st.spinner(c_texts["branding"]["spinner"]):
+        interests = str_module.text_input(c_texts["branding"]["input"])
+        if str_module.button(c_texts["branding"]["btn"], type="primary") and interests:
+            with str_module.spinner(c_texts["branding"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -506,16 +533,16 @@ elif menu_choice == "branding":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "timestamps":
-    st.title(c_texts["timestamps"]["title"])
+    str_module.title(c_texts["timestamps"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        script_txt = st.text_area(c_texts["timestamps"]["input"])
-        if st.button(c_texts["timestamps"]["btn"], type="primary") and script_txt:
-            with st.spinner(c_texts["timestamps"]["spinner"]):
+        script_txt = str_module.text_area(c_texts["timestamps"]["input"])
+        if str_module.button(c_texts["timestamps"]["btn"], type="primary") and script_txt:
+            with str_module.spinner(c_texts["timestamps"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -524,16 +551,16 @@ elif menu_choice == "timestamps":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "title_matrix":
-    st.title(c_texts["title_matrix"]["title"])
+    str_module.title(c_texts["title_matrix"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        top = st.text_input(c_texts["title_matrix"]["input"])
-        if st.button(c_texts["title_matrix"]["btn"], type="primary") and top:
-            with st.spinner(c_texts["title_matrix"]["spinner"]):
+        top = str_module.text_input(c_texts["title_matrix"]["input"])
+        if str_module.button(c_texts["title_matrix"]["btn"], type="primary") and top:
+            with str_module.spinner(c_texts["title_matrix"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -542,16 +569,16 @@ elif menu_choice == "title_matrix":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "ai_images":
-    st.title(c_texts["ai_images"]["title"])
+    str_module.title(c_texts["ai_images"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        img_t = st.text_input(c_texts["ai_images"]["input"])
-        if st.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
-            with st.spinner(c_texts["ai_images"]["spinner"]):
+        img_t = str_module.text_input(c_texts["ai_images"]["input"])
+        if str_module.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
+            with str_module.spinner(c_texts["ai_images"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -560,16 +587,16 @@ elif menu_choice == "ai_images":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "voice":
-    st.title(c_texts["voice"]["title"])
+    str_module.title(c_texts["voice"]["title"])
     if not is_pro: render_paywall()
     elif client:
-        v_txt = st.text_area(c_texts["voice"]["input"])
-        if st.button(c_texts["voice"]["btn"], type="primary") and v_txt:
-            with st.spinner(c_texts["voice"]["spinner"]):
+        v_txt = str_module.text_area(c_texts["voice"]["input"])
+        if str_module.button(c_texts["voice"]["btn"], type="primary") and v_txt:
+            with str_module.spinner(c_texts["voice"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -578,18 +605,18 @@ elif menu_choice == "voice":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
 
 elif menu_choice == "simulator":
-    st.title(c_texts["simulator"]["title"])
+    str_module.title(c_texts["simulator"]["title"])
     if not is_pro: 
         render_paywall()
     elif client:
-        subs = st.number_input(c_texts["simulator"]["sub1"], min_value=0, value=1000)
-        views = st.number_input(c_texts["simulator"]["sub2"], min_value=0, value=5000)
-        if st.button(c_texts["simulator"]["btn"], type="primary"):
-            with st.spinner(c_texts["simulator"]["spinner"]):
+        subs = str_module.number_input(c_texts["simulator"]["sub1"], min_value=0, value=1000)
+        views = str_module.number_input(c_texts["simulator"]["sub2"], min_value=0, value=5000)
+        if str_module.button(c_texts["simulator"]["btn"], type="primary"):
+            with str_module.spinner(c_texts["simulator"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
@@ -598,5 +625,5 @@ elif menu_choice == "simulator":
                     ],
                     temperature=0.7
                 )
-                st.success("Done!")
-                st.write(res.choices[0].message.content)
+                str_module.success("Done!")
+                str_module.write(res.choices[0].message.content)
