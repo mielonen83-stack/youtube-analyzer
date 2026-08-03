@@ -4,3 +4,4 @@ pytrends
 fpdf2
 requests
 openai
+stripe
