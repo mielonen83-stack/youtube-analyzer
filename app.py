@@ -258,7 +258,6 @@ t_dicts = tools_data.get(lang_code, tools_data["🇬🇧"])
 tools_basics = t_dicts["tools_basics"]
 tools_advanced = t_dicts["tools_advanced"]
 
-# Sisältötekstien käännökset (content dictionary)
 content_data = {
     "🇬🇧": {
         "search": {"title": "📊 Basic Search & Trends", "desc": "Search keywords, explore trends, and estimate earnings using AI.", "input": "🔍 Enter keyword or topic:", "btn": "Search & Analyze", "spinner": "Analyzing keyword '{keyword}' with AI..."},
@@ -302,10 +301,9 @@ content_data = {
     }
 }
 
-# Otetaan muille kielille oletuksena englannin sisällöt, ellei erikseen käännetty
 c_texts = content_data.get(lang_code, content_data["🇬🇧"])
 
-# --- PRO-KORTTI SIVUPALKISSA (MUKAUTUU KIELEEN) ---
+# --- PRO-KORTTI SIVUPALKISSA ---
 str_module.sidebar.markdown(f"""
 <div class="pro-sidebar-box">
     <div style="font-size: 24px; margin-bottom: 8px;">🚀</div>
@@ -669,7 +667,7 @@ elif menu_choice == "ai_images":
     if not is_pro: render_paywall()
     elif client:
         img_t = str_module.text_input(c_texts["ai_images"]["input"])
-                    if str_module.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
+        if str_module.button(c_texts["ai_images"]["btn"], type="primary") and img_t:
             with str_module.spinner(c_texts["ai_images"]["spinner"]):
                 res = client.chat.completions.create(
                     model="gpt-4o",
